@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dental-lab.com/sitemap.xml

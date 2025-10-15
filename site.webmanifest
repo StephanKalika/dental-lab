@@ -1,0 +1,16 @@
+{
+  "name": "Dental Lab",
+  "short_name": "DentalLab",
+  "description": "Стоматологічна клініка в Києві",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#A8E6CF",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
