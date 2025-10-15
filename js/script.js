@@ -188,7 +188,7 @@ const formValidation = {
             if (!value || value.trim().length < 2) {
                 return 'Будь ласка, введіть ваше ім\'я (мінімум 2 символи)';
             }
-            if (!/^[А-ЯІЇЄҐа-яіїєґA-Za-z\s'-]+$/.test(value)) {
+            if (!/^[A-Za-zА-ЯІЇЄҐа-яіїєґ'’ -]+$/.test(value)) {
                 return 'Ім\'я може містити тільки літери, пробіли, апостроф та дефіс';
             }
             if (value.trim().length > 50) {
@@ -463,7 +463,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-console.log('✅ Dental Lab website loaded successfully!');
+try {
+    const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    if (isDev) {
+        console.log('✅ Dental Lab website loaded successfully!');
+    }
+} catch (_) {}
 
 (function setFooterCopyright(){
     try {
