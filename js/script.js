@@ -152,6 +152,18 @@ bookingForm.addEventListener('submit', async (e) => {
                 formSuccess.style.display = 'none';
             }, 8000);
         } else {
+            // Try to log server details for easier debugging
+            let details = '';
+            try {
+                const ct = response.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const j = await response.json();
+                    details = JSON.stringify(j);
+                } else {
+                    details = await response.text();
+                }
+            } catch(_) {}
+            console.error('Form submit failed:', { status: response.status, details });
             throw new Error('Помилка відправки');
         }
         

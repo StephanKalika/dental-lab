@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dental-lab.com/sitemap.xml
+Sitemap: https://dental-lab.site/sitemap.xml
