@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Burger Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .burger-test {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #333;
+            cursor: pointer;
+            padding: 10px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+        }
+        
+        .burger-test span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .burger-test.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        
+        .burger-test.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .burger-test.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-content {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <button class="burger-test" id="testBurger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+    <div class="test-content">
+        <h1>Тест бургер-меню</h1>
+        <p>Цей файл створено для тестування бургер-меню на мобільних пристроях.</p>
+        
+        <h2>Інструкції для тестування:</h2>
+        <ol>
+            <li>Відкрийте цю сторінку в мобільному браузері</li>
+            <li>Спробуйте натиснути на бургер-кнопку (три лінії) у верхньому правому куті</li>
+            <li>Перевірте, чи змінюється анімація кнопки</li>
+            <li>Дивіться на статус внизу екрану</li>
+        </ol>
+        
+        <p><strong>Очікуваний результат:</strong> При натисканні кнопка має змінити анімацію (три лінії перетворюються на хрестик)</p>
+    </div>
+    
+    <div class="status" id="status">Статус: Готово до тестування</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const burger = document.getElementById('testBurger');
+            const status = document.getElementById('status');
+            let isActive = false;
+            
+            function updateStatus(message) {
+                status.textContent = 'Статус: ' + message;
+                console.log(message);
+            }
+            
+            function toggleBurger(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                isActive = !isActive;
+                burger.classList.toggle('active', isActive);
+                
+                updateStatus(isActive ? 'Меню відкрито' : 'Меню закрито');
+            }
+            
+            // Додаємо різні обробники для максимальної сумісності
+            burger.addEventListener('click', toggleBurger);
+            burger.addEventListener('touchstart', function(e) {
+                updateStatus('Touch start зареєстровано');
+            });
+            burger.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                updateStatus('Touch end зареєстровано');
+                toggleBurger(e);
+            });
+            
+            updateStatus('Скрипт завантажено, тест готовий');
+        });
+    </script>
+</body>
+</html>

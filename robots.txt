@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
+# Sitemap
 Sitemap: https://dental-lab.site/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Disallow sensitive paths (if any in future)
+# Disallow: /admin/
+# Disallow: /private/

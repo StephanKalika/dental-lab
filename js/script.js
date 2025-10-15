@@ -4,7 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const navMenu = document.getElementById('navMenu');
     const body = document.body;
     
-    if (!burgerBtn || !navMenu) return;
+    if (!burgerBtn || !navMenu) {
+        console.log('Burger menu elements not found:', {
+            burgerBtn: !!burgerBtn,
+            navMenu: !!navMenu
+        });
+        return;
+    }
     
     let overlay = document.querySelector('.nav-overlay');
     if (!overlay) {
@@ -33,14 +39,21 @@ document.addEventListener('DOMContentLoaded', function() {
         try { burgerBtn.setAttribute('aria-expanded', 'false'); } catch(e){}
     }
     
-    burgerBtn.addEventListener('click', function(e) {
+    function toggleMenu(e) {
         e.preventDefault();
         e.stopPropagation();
+        console.log('Burger menu toggled, isOpen:', isOpen);
         if (isOpen) {
             closeMenu();
         } else {
             openMenu();
         }
+    }
+
+    burgerBtn.addEventListener('click', toggleMenu);
+    burgerBtn.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        toggleMenu(e);
     });
     
     overlay.addEventListener('click', function(e) {
@@ -92,11 +105,6 @@ bookingForm.addEventListener('submit', async (e) => {
     
     if (!validateField('phone')) isValid = false;
     
-    const emailValue = document.getElementById('email')?.value;
-    if (emailValue && emailValue.trim().length > 0) {
-        if (!validateField('email')) isValid = false;
-    }
-    
     const dateValue = document.getElementById('date')?.value;
     if (dateValue) {
         if (!validateField('date')) isValid = false;
@@ -115,7 +123,6 @@ bookingForm.addEventListener('submit', async (e) => {
     const data = {
         name: formData.get('name'),
         phone: formData.get('phone'),
-        email: formData.get('email'),
         service: formData.get('service'),
         date: formData.get('date'),
         comment: formData.get('comment'),
@@ -205,17 +212,6 @@ const formValidation = {
             const phoneDigits = value.replace(/\D/g, '');
             if (phoneDigits.length !== 12 || !phoneDigits.startsWith('380')) {
                 return 'Введіть коректний номер телефону (+380XXXXXXXXX)';
-            }
-            return '';
-        }
-    },
-    email: {
-        validate: (value) => {
-            if (value && value.trim().length > 0) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(value)) {
-                    return 'Введіть коректну email адресу';
-                }
             }
             return '';
         }
@@ -344,10 +340,7 @@ if (nameInput) {
     nameInput.addEventListener('blur', () => validateField('name'));
 }
 
-const emailInput = document.getElementById('email');
-if (emailInput) {
-    emailInput.addEventListener('blur', () => validateField('email'));
-}
+
 
 const commentInput = document.getElementById('comment');
 const commentCount = document.getElementById('commentCount');
@@ -364,13 +357,28 @@ if (commentInput && commentCount) {
     });
 }
 
-document.querySelectorAll('.btn-primary, .btn-cta').forEach(btn => {
+document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta').forEach(btn => {
     btn.addEventListener('click', () => {
-        const target = document.getElementById('контакти') || document.getElementById('bookingForm') || null;
+        const target = document.getElementById('booking-section') || document.getElementById('bookingForm');
         if (target && typeof target.scrollIntoView === 'function') {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Додатковий скрол для кращого позиціонування на мобільному
+            setTimeout(() => {
+                window.scrollBy(0, -20);
+            }, 500);
+            // Закрити мобільне меню після кліку
+            const burgerBtn = document.getElementById('burgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            const overlay = document.querySelector('.nav-overlay');
+            const body = document.body;
+            if (burgerBtn && navMenu) {
+                burgerBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+                if (overlay) overlay.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
         } else {
-            console.warn('Scroll target not found: #контакти or #bookingForm');
+            console.warn('Booking section not found');
         }
     });
 });
@@ -463,12 +471,249 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// FAQ Accordion functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        
+        if (question && answer) {
+            question.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                
+                // Close all other FAQ items
+                faqItems.forEach(otherItem => {
+                    const otherQuestion = otherItem.querySelector('.faq-question');
+                    const otherAnswer = otherItem.querySelector('.faq-answer');
+                    
+                    if (otherQuestion && otherAnswer && otherItem !== item) {
+                        otherQuestion.setAttribute('aria-expanded', 'false');
+                        otherAnswer.setAttribute('aria-hidden', 'true');
+                    }
+                });
+                
+                // Toggle current item
+                if (isExpanded) {
+                    this.setAttribute('aria-expanded', 'false');
+                    answer.setAttribute('aria-hidden', 'true');
+                } else {
+                    this.setAttribute('aria-expanded', 'true');
+                    answer.setAttribute('aria-hidden', 'false');
+                }
+            });
+            
+            // Keyboard navigation
+            question.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        }
+    });
+});
+
 try {
-    const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:';
     if (isDev) {
         console.log('✅ Dental Lab website loaded successfully!');
+        console.log('🔄 Версія: 2.1');
+        
+        // Debug function to clear cache
+        window.clearSiteCache = function() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                    console.log('🗑️ Кеш очищено');
+                    location.reload(true);
+                });
+            }
+        };
+        console.log('💡 Виконайте clearSiteCache() для очищення кешу');
     }
 } catch (_) {}
+
+// Floating CTA
+document.addEventListener('DOMContentLoaded', function() {
+    const floatingCta = document.getElementById('floatingCta');
+    
+    // Show floating elements after user scrolls past hero
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const heroHeight = document.querySelector('.hero').offsetHeight || 600;
+        
+        if (scrolled > heroHeight / 2) {
+            floatingCta.classList.add('visible');
+        } else {
+            floatingCta.classList.remove('visible');
+        }
+    });
+
+    // Floating CTA click handler
+    floatingCta.addEventListener('click', function() {
+        const target = document.getElementById('booking-section') || document.getElementById('bookingForm');
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Додатковий скрол для кращого позиціонування на мобільному
+            setTimeout(() => {
+                window.scrollBy(0, -20);
+            }, 500);
+        } else {
+            console.warn('Booking section not found');
+        }
+    });
+});
+
+// Callback Form Modal
+document.addEventListener('DOMContentLoaded', function() {
+    const callbackOverlay = document.getElementById('callbackOverlay');
+    const closeCallbackBtn = document.getElementById('closeCallbackPopup');
+    const callbackForm = document.getElementById('callbackForm');
+    const callbackPhone = document.getElementById('callbackPhone');
+    
+    // Close callback popup
+    closeCallbackBtn.addEventListener('click', function() {
+        callbackOverlay.classList.remove('active');
+    });
+    
+    // Close on outside click
+    callbackOverlay.addEventListener('click', function(e) {
+        if (e.target === callbackOverlay) {
+            callbackOverlay.classList.remove('active');
+        }
+    });
+    
+    // Phone formatting for callback
+    callbackPhone.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        
+        if (value.length > 0) {
+            if (!value.startsWith('380')) {
+                if (value.startsWith('80')) {
+                    value = '3' + value;
+                } else if (value.startsWith('0')) {
+                    value = '38' + value;
+                } else if (!value.startsWith('3')) {
+                    value = '380' + value;
+                }
+            }
+            
+            let formatted = '+380';
+            if (value.length > 3) formatted += ' ' + value.slice(3, 5);
+            if (value.length > 5) formatted += ' ' + value.slice(5, 8);
+            if (value.length > 8) formatted += ' ' + value.slice(8, 10);
+            if (value.length > 10) formatted += ' ' + value.slice(10, 12);
+            
+            e.target.value = formatted;
+        } else {
+            e.target.value = '';
+        }
+    });
+    
+    // Callback form submission
+    callbackForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const phone = callbackPhone.value;
+        const phoneDigits = phone.replace(/\D/g, '');
+        
+        if (phoneDigits.length !== 12 || !phoneDigits.startsWith('380')) {
+            document.getElementById('callbackPhoneError').textContent = 'Введіть коректний номер телефону';
+            return;
+        }
+        
+        const submitBtn = callbackForm.querySelector('.btn-callback-submit');
+        submitBtn.disabled = true;
+        submitBtn.querySelector('.btn-text').style.display = 'none';
+        submitBtn.querySelector('.btn-loader').style.display = 'inline-flex';
+        
+        try {
+            const response = await fetch(FUNCTION_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: 'Зворотний дзвінок',
+                    phone: phone,
+                    service: 'callback',
+                    comment: 'Запит на зворотний дзвінок',
+                    website: ''
+                })
+            });
+            
+            if (response.ok) {
+                document.getElementById('callbackSuccess').style.display = 'flex';
+                callbackForm.style.display = 'none';
+                
+                setTimeout(() => {
+                    callbackOverlay.classList.remove('active');
+                    callbackForm.style.display = 'block';
+                    document.getElementById('callbackSuccess').style.display = 'none';
+                    callbackForm.reset();
+                }, 3000);
+            } else {
+                throw new Error('Помилка відправки');
+            }
+        } catch (error) {
+            document.getElementById('callbackPhoneError').textContent = 'Помилка відправки. Спробуйте ще раз.';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.querySelector('.btn-text').style.display = 'inline';
+            submitBtn.querySelector('.btn-loader').style.display = 'none';
+        }
+    });
+});
+
+// Form Progress Indicator
+document.addEventListener('DOMContentLoaded', function() {
+    const formFields = ['name', 'phone', 'service', 'date'];
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    
+    function updateProgress() {
+        let completedFields = 0;
+        
+        formFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field && field.value.trim() !== '') {
+                completedFields++;
+            }
+        });
+        
+        const progress = Math.round((completedFields / formFields.length) * 100);
+        progressFill.style.width = progress + '%';
+        progressText.textContent = progress + '% заповнено';
+        
+        // Change color based on progress
+        if (progress === 100) {
+            progressFill.style.background = 'linear-gradient(90deg, #22c55e, #16a34a)';
+            progressText.style.color = '#16a34a';
+        } else {
+            progressFill.style.background = 'linear-gradient(90deg, var(--mint), #7ed4ad)';
+            progressText.style.color = 'var(--text-gray)';
+        }
+    }
+    
+    // Add event listeners to form fields
+    formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', updateProgress);
+            field.addEventListener('change', updateProgress);
+        }
+    });
+    
+    // Initial update
+    updateProgress();
+});
+
+// Escape key handlers
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.getElementById('callbackOverlay').classList.remove('active');
+    }
+});
 
 (function setFooterCopyright(){
     try {

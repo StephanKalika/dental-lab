@@ -29,7 +29,7 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers: jsonHeaders, body: JSON.stringify({ ok: true }) };
     }
 
-    const { name, phone, email, service, date, comment } = body || {};
+    const { name, phone, service, date, comment } = body || {};
     if (!name || !phone) {
       return { statusCode: 400, headers: jsonHeaders, body: JSON.stringify({ error: 'Missing required fields' }) };
     }
@@ -57,7 +57,7 @@ exports.handler = async (event) => {
       formattedDate = dateObj.toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
     }
 
-    const message = `\n🦷 <b>Нова заявка з сайту Dental Lab</b>\n\n👤 <b>Ім'я:</b> ${name}\n📞 <b>Телефон:</b> ${phone}\n${email ? `📧 <b>Email:</b> ${email}` : ''}\n🏥 <b>Послуга:</b> ${service ? (serviceNames[service] || service) : 'Не вказано'}\n📅 <b>Бажана дата:</b> ${formattedDate}\n${comment ? `💬 <b>Коментар:</b> ${comment}` : ''}`.trim();
+    const message = `\n🦷 <b>Нова заявка з сайту Dental Lab</b>\n\n👤 <b>Ім'я:</b> ${name}\n📞 <b>Телефон:</b> ${phone}\n🏥 <b>Послуга:</b> ${service ? (serviceNames[service] || service) : 'Не вказано'}\n📅 <b>Бажана дата:</b> ${formattedDate}\n${comment ? `💬 <b>Коментар:</b> ${comment}` : ''}`.trim();
 
     const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',

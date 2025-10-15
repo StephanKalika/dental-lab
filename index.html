@@ -16,9 +16,9 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Dental Lab — Стоматологічна клініка у Києві">
     <meta property="og:description" content="Якість, підтверджена вашою усмішкою. Професійна стоматологія з персональним підходом.">
-    <meta property="og:image" content="images/hero-image.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="845">
+    <!-- <meta property="og:image" content="images/hero-image.png"> -->
+    <!-- <meta property="og:image:width" content="1200"> -->
+    <!-- <meta property="og:image:height" content="845"> -->
     <meta property="og:url" content="https://dental-lab.site/">
     <meta property="og:site_name" content="Dental Lab">
     
@@ -26,7 +26,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dental Lab — Стоматологічна клініка">
     <meta name="twitter:description" content="Якість, підтверджена вашою усмішкою.">
-    <meta name="twitter:image" content="images/hero-image.png">
+    <!-- <meta name="twitter:image" content="images/hero-image.png"> -->
     
     <!-- Form endpoint for serverless submission (hosted on Netlify) -->
     <meta name="form-endpoint" content="https://dentalab.netlify.app/.netlify/functions/send-telegram">
@@ -47,16 +47,29 @@
     <!-- Preconnect for fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Preload hero image -->
-        <link rel="preload" as="image" href="images/hero-image.png">
+
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2.2">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Skip Navigation Links for Accessibility -->
+    <a href="#main-content" class="skip-link">Перейти до основного контенту</a>
+    <a href="#nav-menu" class="skip-link">Перейти до навігації</a>
+    <a href="#kontakti" class="skip-link">Перейти до контактів</a>
+    
+    <!-- Sticky Floating Button -->
+    <div class="floating-cta" id="floatingCta">
+        <button class="floating-btn" aria-label="Записатися на прийом">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span>Записатися</span>
+        </button>
+    </div>
     
     <!-- HEADER -->
     <header class="header">
@@ -72,20 +85,76 @@
                 </div>
                 
                 <!-- Navigation -->
-                <nav class="nav" id="navMenu">
+                <nav class="nav" id="navMenu" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
                     <a href="#переваги" class="nav-link">Переваги</a>
                     <a href="#послуги" class="nav-link">Послуги</a>
                     <a href="#ціни" class="nav-link">Ціни</a>
-                    <!-- Team removed -->
+                    <a href="#faq" class="nav-link">Запитання</a>
                     <a href="#контакти" class="nav-link">Контакти</a>
-                    <a href="tel:+380661829540" class="phone-mobile">+38 (066) 182-95-40</a>
+                    
+                    <!-- Mobile CTA buttons -->
+                    <div class="mobile-cta-buttons">
+                        <button class="btn-mobile-cta">Записатися онлайн</button>
+                        <div class="mobile-phone-text">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>або телефонуйте:</span>
+                            <a href="tel:+380661829540" class="mobile-phone-link">+38 (066) 182-95-40</a>
+                        </div>
+                        
+                        <div class="mobile-address-menu">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <a href="https://maps.google.com/?q=Київ,+Лабораторний+провулок,+6" target="_blank" rel="noopener" class="mobile-address-link">Київ, Лабораторний провулок, 6</a>
+                        </div>
+                    </div>
                 </nav>
                 
-                <!-- Phone (desktop) -->
-                <a href="tel:+380661829540" class="phone phone-desktop">+38 (066) 182-95-40</a>
+                <!-- Contact Info Container (desktop) -->
+                <div class="contact-info">
+                    <!-- Address (desktop) -->
+                    <a href="https://maps.google.com/?q=Київ,+Лабораторний+провулок,+6" class="address address-desktop" target="_blank" rel="noopener">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>Київ, Лабораторний провулок, 6</span>
+                    </a>
+                    
+                    <!-- Phone (desktop) -->
+                    <a href="tel:+380661829540" class="phone phone-desktop">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span>+38 (066) 182-95-40</span>
+                    </a>
+                </div>
                 
                 <!-- CTA (desktop) -->
-                            <button class="btn-primary btn-desktop">Записатися</button>
+                <button class="btn-primary btn-desktop">Записатися</button>
+                
+                <!-- Mobile contact info -->
+                <div class="mobile-contact-info">
+                    <!-- Mobile address -->
+                    <a href="https://maps.google.com/?q=Київ,+Лабораторний+провулок,+6" class="mobile-address" target="_blank" rel="noopener">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>Київ, Лабораторний провулок, 6</span>
+                    </a>
+                    
+                    <!-- Mobile phone -->
+                    <a href="tel:+380661829540" class="mobile-phone">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span>+38 (066) 182-95-40</span>
+                    </a>
+                </div>
                 
                 <!-- Burger button -->
                 <button class="burger" id="burgerBtn" aria-label="Меню" aria-controls="navMenu" aria-expanded="false">
@@ -98,24 +167,30 @@
     </header>
 
     <!-- HERO -->
-    <section class="hero">
+    <main id="main-content">
+    <section class="hero" role="banner">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">Турбота про вашу усмішку<br>без зайвого</h1>
-                <p class="hero-subtitle">Якість, підтверджена вашою усмішкою.</p>
+                <div class="hero-text">
+                    <h1 class="hero-title">Турбота про вашу усмішку у кожній деталі</h1>
+                    <p class="hero-subtitle">Якість, підтверджена вашою усмішкою.</p>
                 <button class="btn-cta">Записатися онлайн</button>
-            </div>
-                <div class="hero-image">
-                    <!-- Hero image (1200x845) -->
-                    <img src="images/hero-image.png" width="1200" height="845" alt="Dental Lab — фото клініки" decoding="async" fetchpriority="high" data-remove-bg="auto">
+                <p class="hero-contact">або телефонуйте: <a href="tel:+380661829540">+38 (066) 182-95-40</a></p>
                 </div>
+                <div class="hero-image">
+                    <picture>
+                        <source srcset="images/hero-image.webp" type="image/webp">
+                        <img src="images/hero-image.jpg" alt="Сучасна стоматологічна лабораторія Dental Lab" loading="lazy">
+                    </picture>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- ADVANTAGES -->
-    <section class="advantages" id="переваги">
+    <section class="advantages" id="переваги" role="region" aria-labelledby="advantages-title">
         <div class="container">
-            <h2 class="section-title">Чому Dental Lab?</h2>
+            <h2 class="section-title" id="advantages-title">Чому Dental Lab?</h2>
             <div class="advantages-grid">
                 
                 <div class="advantage-card">
@@ -170,9 +245,9 @@
     </section>
 
     <!-- SERVICES -->
-    <section class="services" id="послуги">
+    <section class="services" id="послуги" role="region" aria-labelledby="services-title">
         <div class="container">
-            <h2 class="section-title">Наші послуги</h2>
+            <h2 class="section-title" id="services-title">Наші послуги</h2>
             <p class="section-subtitle">Комплексний догляд за здоров'ям ваших зубів</p>
             
             <div class="services-grid">
@@ -461,6 +536,62 @@
         </div>
     </section>
 
+    <!-- FAQ SECTION -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">Поширені запитання</h2>
+            <p class="section-subtitle">Відповіді на найпоширеніші питання пацієнтів</p>
+            
+            <div class="faq-container">
+                
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+                        <span>Чи безболісне лікування в вашій клініці?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-1" aria-hidden="true">
+                        <p>Так, ми використовуємо сучасні методи знеболення. Всі процедури проводяться з якісною місцевою анестезією. Для особливо чутливих пацієнтів доступна седація.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+                        <span>Скільки триває лікування карієсу?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-2" aria-hidden="true">
+                        <p>Залежно від складності: поверхневий карієс - 30-45 хвилин, середній - 45-60 хвилин, глибокий - може потребувати 2-3 візити. Точний час визначається після огляду.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+                        <span>Як часто потрібно проходити профілактичний огляд?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-3" aria-hidden="true">
+                        <p>Рекомендуємо відвідувати стоматолога кожні 6 місяців для профілактичного огляду та професійної гігієни. При схильності до карієсу - кожні 4 місяці.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+                        <span>Чи лікуєте ви дітей? З якого віку?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-4" aria-hidden="true">
+                        <p>Так, ми приймаємо дітей з 3 років. Маємо спеціального дитячого стоматолога та створюємо комфортну атмосферу для маленьких пацієнтів.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="contacts" id="контакти">
+        <div class="container">
+            <h2 class="section-title">Контакти</h2>
             <p class="section-subtitle">Ми завжди раді вам допомогти</p>
             
             <div class="contacts-wrapper">
@@ -507,18 +638,7 @@
                         </div>
                     </div>
 
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4>Email</h4>
-                            <p><a href="mailto:info@dental-lab.ua">info@dental-lab.ua</a></p>
-                        </div>
-                    </div>
+
 
                     <!-- Map -->
                     <div class="map-container">
@@ -537,14 +657,21 @@
                 </div>
 
                 <!-- Right column: Form -->
-                <div class="booking-form-wrapper">
+                <div class="booking-form-wrapper" id="booking-section">
                     <div class="booking-form-card">
                         <div class="form-header">
-                            <h3>Записатися на прийом</h3>
+                            <h3 id="booking-form-title">Записатися на прийом</h3>
                             <p class="form-description">Залиште заявку і ми зв'яжемося з вами протягом 15 хвилин</p>
+                            <!-- Progress Indicator -->
+                            <div class="form-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <span class="progress-text" id="progressText">0% заповнено</span>
+                            </div>
                         </div>
                         
-                        <form id="bookingForm" class="booking-form" novalidate>
+                        <form id="bookingForm" class="booking-form" novalidate role="form" aria-labelledby="booking-form-title">
                             <!-- spam honeypot -->
                             <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
                             <div class="form-group">
@@ -582,22 +709,7 @@
                                 <span class="error-message" id="phoneError"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <div class="input-wrapper">
-                     <input type="email" id="email" name="email" 
-                                           placeholder="example@email.com"
-                         autocomplete="email"
-                                           aria-describedby="emailError">
-                                    <span class="input-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                            <polyline points="22,6 12,13 2,6"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <span class="error-message" id="emailError"></span>
-                            </div>
+
 
                             <div class="form-group">
                                 <label for="service">Оберіть послугу</label>
@@ -695,9 +807,54 @@
             </div>
         </div>
     </section>
+    </main>
+
+    <!-- Callback Form Modal -->
+    <div class="callback-overlay" id="callbackOverlay">
+        <div class="callback-popup">
+            <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити">×</button>
+            <div class="callback-content">
+                <h3>Передзвоніть мені</h3>
+                <p>Залиште номер телефону і ми зателефонуємо вам протягом 5 хвилин</p>
+                <form id="callbackForm" class="callback-form">
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <input type="tel" id="callbackPhone" name="phone" required 
+                                   placeholder="+380 XX XXX XX XX"
+                                   pattern="^\+?380\d{9}$"
+                                   autocomplete="tel">
+                            <span class="input-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                            </span>
+                        </div>
+                        <span class="error-message" id="callbackPhoneError"></span>
+                    </div>
+                    <button type="submit" class="btn-callback-submit">
+                        <span class="btn-text">Передзвоніть мені</span>
+                        <span class="btn-loader" style="display: none;">
+                            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </form>
+                <div id="callbackSuccess" class="form-message success" style="display: none;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <div>
+                        <strong>Дякуємо!</strong>
+                        <p>Ми зателефонуємо вам найближчим часом.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
-    <footer class="footer" id="контакти">
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 
@@ -712,7 +869,7 @@
                         <li><a href="#переваги">Переваги</a></li>
                         <li><a href="#послуги">Послуги</a></li>
                         <li><a href="#ціни">Ціни</a></li>
-                        <!-- Team removed from the site -->
+                        <li><a href="#faq">Запитання</a></li>
                         <li><a href="#контакти">Контакти</a></li>
                     </ul>
                 </div>
@@ -721,7 +878,6 @@
                     <h4>Контакти</h4>
                     <ul class="footer-contacts">
                         <li><a href="tel:+380661829540">+38 (066) 182-95-40</a></li>
-                        <li><a href="mailto:info@dental-lab.ua">info@dental-lab.ua</a></li>
                         <li>Київ, Лабораторний провулок, 6</li>
                     </ul>
                 </div>
@@ -741,7 +897,7 @@
     "@context": "https://schema.org",
     "@type": "Dentist",
     "name": "Dental Lab",
-    "image": "images/hero-image.png",
+    // "image": "images/hero-image.png", // Add when you have an image
     "description": "Стоматологічна клініка в Києві. Якість, підтверджена вашою усмішкою.",
     "address": {
         "@type": "PostalAddress",
@@ -751,7 +907,6 @@
         "addressCountry": "UA"
     },
     "telephone": "+380661829540",
-    "email": "info@dental-lab.ua",
     "url": "https://dental-lab.site",
     "openingHoursSpecification": [
         {
@@ -779,6 +934,21 @@
 
 
 <!-- JavaScript -->
-<script src="js/script.js"></script>
+<script src="js/script.js?v=2.1"></script>
+
+<!-- Service Worker Registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+</script>
 </body>
 </html>
