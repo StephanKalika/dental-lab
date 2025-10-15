@@ -24,6 +24,13 @@ body {
     color: var(--graphite);
     line-height: 1.6;
     background: var(--white);
+    border: none;
+    outline: none;
+}
+
+html {
+    border: none;
+    outline: none;
 }
 
 .container {
@@ -36,7 +43,6 @@ body {
 .header {
     background: var(--white);
     padding: 20px 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -265,6 +271,10 @@ body {
     display: none;
 }
 
+.mobile-contact-top {
+    display: none;
+}
+
 .address-desktop {
     display: flex;
 }
@@ -327,6 +337,41 @@ body {
     
     /* Показуємо мобільні елементи на мобільних пристроях */
     
+    .mobile-contact-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        margin-bottom: 10px;
+    }
+    
+    .mobile-address-top,
+    .mobile-phone-top {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 10px;
+        font-weight: 400;
+        color: var(--text-gray);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+    
+    .mobile-address-top:hover,
+    .mobile-phone-top:hover {
+        color: var(--mint);
+    }
+    
+    .mobile-address-top svg,
+    .mobile-phone-top svg {
+        flex-shrink: 0;
+        width: 10px;
+        height: 10px;
+        vertical-align: middle;
+    }
+    
     .burger {
         display: flex;
         background: rgba(255, 255, 255, 0.95);
@@ -348,45 +393,7 @@ body {
         position: relative;
     }
     
-    .mobile-contact-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 3px;
-        position: absolute;
-        right: 65px;
-        top: 50%;
-        transform: translateY(-50%);
-        text-align: right;
-    }
-    
-    .mobile-address,
-    .mobile-phone {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 4px;
-        font-size: 11px;
-        font-weight: 400;
-        color: var(--text-gray);
-        text-decoration: none;
-        transition: color 0.3s ease;
-        line-height: 1.2;
-        white-space: nowrap;
-    }
-    
-    .mobile-address:hover,
-    .mobile-phone:hover {
-        color: var(--mint);
-    }
-    
-    .mobile-address svg,
-    .mobile-phone svg {
-        flex-shrink: 0;
-        width: 11px;
-        height: 11px;
-        vertical-align: middle;
-    }
+
     
     .nav {
         position: fixed;
@@ -394,15 +401,17 @@ body {
         right: -100%;
         width: 280px;
         height: 100vh;
+        max-height: 100vh;
         background: var(--white);
         flex-direction: column;
         align-items: flex-start;
-        padding: 100px 30px 30px;
+        padding: 50px 25px 30px;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
         transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         z-index: 1003;
         gap: 0;
         overflow-y: auto;
+        overflow-x: hidden;
         pointer-events: auto;
         opacity: 1;
         visibility: visible;
@@ -414,9 +423,9 @@ body {
     
     .nav a {
         width: 100%;
-        padding: 18px 0;
+        padding: 12px 0;
         border-bottom: 1px solid var(--light-gray);
-        font-size: 18px;
+        font-size: 16px;
         display: block;
         transition: all 0.3s;
     }
@@ -440,13 +449,13 @@ body {
     
     .btn-mobile-cta {
         width: 100%;
-        padding: 16px;
+        padding: 12px;
         background: var(--mint);
         color: var(--graphite);
         border: none;
-        border-radius: 8px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 14px;
         cursor: pointer;
         transition: all 0.3s ease;
     }
@@ -458,19 +467,19 @@ body {
     
     .mobile-phone-text {
         width: 100%;
-        padding: 8px 20px;
+        padding: 4px 15px;
         color: var(--text-gray);
-        font-size: 14px;
+        font-size: 13px;
         text-align: center;
         font-weight: 400;
-        line-height: 1.4;
-        margin-top: 15px;
-        padding-top: 15px;
+        line-height: 1.2;
+        margin-top: 8px;
+        padding-top: 8px;
         border-top: 1px solid rgba(0,0,0,0.08);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 4px;
         flex-wrap: wrap;
     }
     
@@ -493,18 +502,18 @@ body {
     
     .mobile-address-menu {
         width: 100%;
-        padding: 8px 20px;
+        padding: 4px 15px;
         color: var(--text-gray);
-        font-size: 14px;
+        font-size: 12px;
         text-align: center;
         font-weight: 400;
-        line-height: 1.4;
-        margin-top: 5px;
-        padding-top: 5px;
+        line-height: 1.1;
+        margin-top: 2px;
+        padding-top: 2px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 3px;
     }
     
     .mobile-address-menu svg {
@@ -515,8 +524,9 @@ body {
         color: var(--graphite);
         text-decoration: none;
         font-weight: 500;
-        font-size: 14px;
+        font-size: 12px;
         transition: all 0.3s ease;
+        white-space: nowrap;
     }
     
     .mobile-address-link:hover {
@@ -525,9 +535,33 @@ body {
     }
 }
 
+/* ===== TABLET ===== */
+@media (max-width: 768px) and (min-width: 481px) {
+    .nav {
+        width: 320px;
+        padding: 40px 20px 30px;
+    }
+    
+    .nav a {
+        padding: 10px 0;
+        font-size: 15px;
+    }
+    
+    .mobile-cta-buttons {
+        padding: 0 15px;
+        margin-top: 5px;
+    }
+    
+    .btn-mobile-cta {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
 @media (max-width: 480px) {
     .nav {
         width: 85%;
+        padding: 80px 20px 20px;
     }
     
     .burger.active {
@@ -603,12 +637,12 @@ body {
     }
     
     .mobile-address-menu {
-        padding: 6px 15px !important;
-        font-size: 13px !important;
+        padding: 6px 10px !important;
+        font-size: 11px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 5px !important;
+        gap: 3px !important;
     }
     
     .mobile-address-menu svg {
@@ -618,7 +652,8 @@ body {
     }
     
     .mobile-address-link {
-        font-size: 13px !important;
+        font-size: 11px !important;
+        white-space: nowrap !important;
     }
 }
 
@@ -667,6 +702,13 @@ body {
     border-radius: 0;
     box-shadow: none;
     object-fit: contain;
+}
+
+.hero-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .hero-title {
@@ -767,38 +809,62 @@ body {
 }
 
 @media (max-width: 968px) {
+    .hero {
+        padding: 80px 0 60px 0;
+        min-height: 50vh;
+    }
+    
+    .hero .container {
+        min-height: auto;
+        gap: 30px;
+    }
+    
     .hero-content {
         flex-direction: column;
-        gap: 40px;
+        gap: 30px;
         text-align: center;
     }
     
     .hero-text {
         max-width: 100%;
-        order: 2;
+        order: 1;
         text-align: center;
     }
     
     .hero-image {
-        max-width: 400px;
-        order: 1;
-        justify-content: center;
+        max-width: 350px;
+        order: 2;
+    }
+    
+    .hero-cta {
+        order: 3;
+        text-align: center;
     }
 }
 
 @media (max-width: 768px) {
+    .hero {
+        padding: 60px 0 40px 0;
+        min-height: 40vh;
+    }
+    
     .hero .container {
-        min-height: 50vh;
-        padding-top: 40px;
-        padding-bottom: 40px;
+        min-height: auto;
+        gap: 25px;
+    }
+    
+    .hero-content {
+        gap: 25px;
     }
     
     .hero-image {
-        max-width: 350px;
+        max-width: 300px;
     }
     
     .hero-title {
-        font-size: 36px;
+        font-size: 28px;
+        line-height: 1.3;
+        margin-bottom: 15px;
     }
     
     .hero-features {
@@ -809,6 +875,22 @@ body {
     
     .hero-feature {
         justify-content: center;
+    }
+    
+    .hero-cta .btn-cta {
+        padding: 14px 28px;
+        font-size: 16px;
+        margin: 10px 0 15px 0;
+    }
+    
+    .hero-subtitle {
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    
+    .hero-contact {
+        margin-top: 10px;
+        font-size: 14px;
     }
 }
 
@@ -1996,7 +2078,7 @@ section {
 /* ===== MOBILE RESPONSIVENESS ===== */
 @media (max-width: 768px) {
     .floating-cta {
-        bottom: 15px;
+        bottom: 80px;
         right: 15px;
     }
     
@@ -2012,5 +2094,17 @@ section {
     
     .callback-content h3 {
         font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-cta {
+        bottom: 90px;
+        right: 10px;
+    }
+    
+    .floating-btn {
+        padding: 10px 14px;
+        font-size: 13px;
     }
 }
