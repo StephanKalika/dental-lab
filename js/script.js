@@ -545,16 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const titleEl = card.querySelector('.card-title');
         if (titleEl) {
             if (!titleEl.id) titleEl.id = `price-card-title-${idx+1}`;
-            if (!titleEl.querySelector('.card-icon')) {
-                const icon = document.createElement('span');
-                icon.className = 'card-icon';
-                icon.innerHTML = `
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                        <path d="M12 2C8 2 5 5 5 9c0 4 7 11 7 11s7-7 7-11c0-4-3-7-7-7z"></path>
-                    </svg>
-                `;
-                titleEl.insertBefore(icon, titleEl.firstChild);
-            }
         }
 
         const actions = document.createElement('div');
@@ -639,50 +629,79 @@ document.addEventListener('DOMContentLoaded', function() {
     const pricesSection = document.querySelector('.prices');
     if (!pricesSection) return;
 
-    const slides = Array.from(pricesSection.querySelectorAll('.price-section'));
-    const sliderTrack = pricesSection.querySelector('.price-list');
+    const viewport = pricesSection.querySelector('#priceViewport');
+    const sliderTrack = pricesSection.querySelector('#priceTrack');
     const prevBtn = document.getElementById('pricePrev');
     const nextBtn = document.getElementById('priceNext');
+    const dotsWrap = document.getElementById('priceSliderDots');
+    const progressFill = document.getElementById('priceSliderProgressFill');
     const counter = document.getElementById('priceSliderCounter');
+    if (!viewport || !sliderTrack || !dotsWrap || !prevBtn || !nextBtn) return;
 
-    if (slides.length < 2 || !prevBtn || !nextBtn || !counter) return;
+    const sections = Array.from(sliderTrack.querySelectorAll(':scope > .price-section'));
+    const allCards = [];
 
-    pricesSection.classList.add('is-slider');
+    sections.forEach(function(section) {
+        const titleEl = section.querySelector('.price-section-title');
+        const category = titleEl ? titleEl.textContent.trim() : '';
+        const sectionCards = Array.from(section.querySelectorAll('.price-card'));
+
+        sectionCards.forEach(function(card) {
+            if (category && !card.querySelector('.price-card-category')) {
+                const badge = document.createElement('span');
+                badge.className = 'price-card-category';
+                badge.textContent = category;
+                card.prepend(badge);
+            }
+            allCards.push(card);
+        });
+    });
+
+    if (allCards.length < 2) return;
+
+    sliderTrack.replaceChildren(...allCards);
+    pricesSection.classList.add('is-carousel');
 
     let activeIndex = 0;
-    let autoplayTimer = null;
-    const AUTOPLAY_MS = 4500;
     let touchStartX = 0;
     let touchEndX = 0;
-    const SWIPE_THRESHOLD = 50;
+    const SWIPE_THRESHOLD = 40;
     let hasInteracted = false;
 
-    const sliderMeta = document.createElement('div');
-    sliderMeta.className = 'price-slider-meta';
-
-    const dots = document.createElement('div');
-    dots.className = 'price-slider-dots';
-    dots.setAttribute('role', 'tablist');
-    dots.setAttribute('aria-label', 'Індикатори слайдів цін');
-
-    const dotButtons = slides.map(function(_, idx) {
+    const dotButtons = allCards.map(function(_, idx) {
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'price-slider-dot';
         dot.setAttribute('role', 'tab');
-        dot.setAttribute('aria-label', `Слайд ${idx + 1}`);
+        dot.setAttribute('aria-label', `Картка ${idx + 1}`);
         dot.addEventListener('click', function() {
-            goToSlide(idx);
+            goToCard(idx);
             markInteracted();
         });
-        dots.appendChild(dot);
+        dotsWrap.appendChild(dot);
         return dot;
     });
 
-    sliderMeta.appendChild(dots);
-    const controlsParent = prevBtn.parentElement;
-    if (controlsParent && controlsParent.parentElement) {
-        controlsParent.parentElement.insertBefore(sliderMeta, controlsParent.nextSibling);
+    function getCardsPerView() {
+        if (window.innerWidth <= 640) return 1;
+        if (window.innerWidth <= 968) return 2;
+        return 3;
+    }
+
+    function getStep() {
+        const firstCard = sliderTrack.querySelector('.price-card');
+        if (!firstCard) return 0;
+        const gap = parseFloat(window.getComputedStyle(sliderTrack).columnGap || window.getComputedStyle(sliderTrack).gap || '0');
+        return firstCard.getBoundingClientRect().width + gap;
+    }
+
+    function getTargetTranslate(index) {
+        const step = getStep();
+        const perView = getCardsPerView();
+        const centerOffset = ((perView - 1) / 2) * step;
+        const maxTranslate = Math.max(0, sliderTrack.scrollWidth - viewport.clientWidth);
+        const rawTranslate = Math.max(0, (index * step) - centerOffset);
+        return Math.min(rawTranslate, maxTranslate);
     }
 
     function markInteracted() {
@@ -691,10 +710,9 @@ document.addEventListener('DOMContentLoaded', function() {
         pricesSection.classList.add('slider-interacted');
     }
 
-    function renderSlide() {
-        slides.forEach((slide, idx) => {
-            slide.classList.toggle('is-active', idx === activeIndex);
-        });
+    function render() {
+        const translate = getTargetTranslate(activeIndex);
+        sliderTrack.style.transform = `translate3d(${-translate}px, 0, 0)`;
 
         dotButtons.forEach(function(dot, idx) {
             const isActive = idx === activeIndex;
@@ -703,99 +721,79 @@ document.addEventListener('DOMContentLoaded', function() {
             dot.setAttribute('tabindex', isActive ? '0' : '-1');
         });
 
-        counter.textContent = `${activeIndex + 1} / ${slides.length}`;
-        prevBtn.disabled = activeIndex === 0;
-        nextBtn.disabled = activeIndex === slides.length - 1;
-    }
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
 
-    function goToSlide(index) {
-        activeIndex = Math.max(0, Math.min(index, slides.length - 1));
-        renderSlide();
-    }
-
-    function startAutoplay() {
-        stopAutoplay();
-        autoplayTimer = setInterval(function() {
-            const nextIndex = (activeIndex + 1) % slides.length;
-            activeIndex = nextIndex;
-            renderSlide();
-        }, AUTOPLAY_MS);
-    }
-
-    function stopAutoplay() {
-        if (autoplayTimer) {
-            clearInterval(autoplayTimer);
-            autoplayTimer = null;
+        if (counter) {
+            counter.textContent = `Картка ${activeIndex + 1} з ${allCards.length}`;
         }
+
+        if (progressFill) {
+            const percent = ((activeIndex + 1) / allCards.length) * 100;
+            progressFill.style.width = `${percent}%`;
+        }
+    }
+
+    function normalizeIndex(index) {
+        if (index < 0) return allCards.length - 1;
+        if (index >= allCards.length) return 0;
+        return index;
+    }
+
+    function goToCard(index) {
+        activeIndex = normalizeIndex(index);
+        render();
     }
 
     prevBtn.addEventListener('click', function() {
-        if (activeIndex > 0) {
-            goToSlide(activeIndex - 1);
-            markInteracted();
-        }
+        goToCard(activeIndex - 1);
+        markInteracted();
     });
 
     nextBtn.addEventListener('click', function() {
-        if (activeIndex < slides.length - 1) {
-            goToSlide(activeIndex + 1);
+        goToCard(activeIndex + 1);
+        markInteracted();
+    });
+
+    viewport.setAttribute('tabindex', '0');
+    viewport.setAttribute('aria-label', 'Карусель цін. Використовуйте стрілки клавіатури або свайп для навігації.');
+
+    viewport.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+
+        if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+
+        if (deltaX < 0) {
+            goToCard(activeIndex + 1);
+            markInteracted();
+        } else {
+            goToCard(activeIndex - 1);
+            markInteracted();
+        }
+    }, { passive: true });
+
+    viewport.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            goToCard(activeIndex - 1);
+            markInteracted();
+        }
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            goToCard(activeIndex + 1);
             markInteracted();
         }
     });
 
-    pricesSection.addEventListener('mouseenter', stopAutoplay);
-    pricesSection.addEventListener('mouseleave', startAutoplay);
-    pricesSection.addEventListener('focusin', stopAutoplay);
-    pricesSection.addEventListener('focusout', startAutoplay);
+    window.addEventListener('resize', render);
 
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            stopAutoplay();
-        } else {
-            startAutoplay();
-        }
-    });
-
-    if (sliderTrack) {
-        sliderTrack.setAttribute('tabindex', '0');
-        sliderTrack.setAttribute('aria-label', 'Список цін. Використовуйте свайп або клавіші стрілок для переходу між слайдами.');
-
-        sliderTrack.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].clientX;
-        }, { passive: true });
-
-        sliderTrack.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].clientX;
-            const deltaX = touchEndX - touchStartX;
-
-            if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
-
-            if (deltaX < 0 && activeIndex < slides.length - 1) {
-                goToSlide(activeIndex + 1);
-                markInteracted();
-            } else if (deltaX > 0 && activeIndex > 0) {
-                goToSlide(activeIndex - 1);
-                markInteracted();
-            }
-        }, { passive: true });
-
-        sliderTrack.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft' && activeIndex > 0) {
-                e.preventDefault();
-                goToSlide(activeIndex - 1);
-                markInteracted();
-            }
-
-            if (e.key === 'ArrowRight' && activeIndex < slides.length - 1) {
-                e.preventDefault();
-                goToSlide(activeIndex + 1);
-                markInteracted();
-            }
-        });
-    }
-
-    renderSlide();
-    startAutoplay();
+    render();
 });
 
 // FAQ Accordion functionality

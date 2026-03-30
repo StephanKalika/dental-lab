@@ -305,15 +305,10 @@
         <h2 class="section-title">Ціни на послуги</h2>
             <p class="section-subtitle">Підбір основних послуг та орієнтовні ціни</p>
 
-            <div class="price-slider-controls" aria-label="Навігація слайдів цін">
-                <button type="button" class="price-slider-btn" id="pricePrev" aria-label="Попередній слайд">←</button>
-                <span class="price-slider-counter" id="priceSliderCounter" aria-live="polite">1 / 1</span>
-                <button type="button" class="price-slider-btn" id="priceNext" aria-label="Наступний слайд">→</button>
-            </div>
-
-            <p class="price-disclaimer">Орієнтовні ціни. Остаточна вартість після огляду та діагностики.</p>
-
-            <div class="price-list">
+            <div class="price-carousel-shell" aria-label="Навігація слайдів цін">
+                <button type="button" class="price-slider-btn" id="pricePrev" aria-label="Попередні картки">←</button>
+                <div class="price-list" id="priceViewport">
+                    <div class="price-track" id="priceTrack">
                 <!-- Diagnostics and consultations -->
                 <div class="price-section">
                     <h4 class="price-section-title">Діагностика та консультації</h4>
@@ -345,7 +340,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <!-- Professional hygiene and prevention -->
                 <div class="price-section">
                     <h4 class="price-section-title">Професійна гігієна та профілактика</h4>
@@ -542,7 +537,20 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
+                <button type="button" class="price-slider-btn" id="priceNext" aria-label="Наступні картки">→</button>
             </div>
+
+            <div class="price-slider-meta" id="priceSliderMeta">
+                <div class="price-slider-dots" id="priceSliderDots" role="tablist" aria-label="Індикатори карток цін"></div>
+                <div class="price-mobile-progress" aria-hidden="true">
+                    <span class="price-mobile-progress-fill" id="priceSliderProgressFill"></span>
+                </div>
+                <span class="price-slider-counter sr-only" id="priceSliderCounter" aria-live="polite">Картка 1 з 1</span>
+            </div>
+
+            <p class="price-disclaimer">Орієнтовні ціни. Остаточна вартість після огляду та діагностики.</p>
         </div>
     </section>
 
