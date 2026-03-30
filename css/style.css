@@ -1307,9 +1307,7 @@ section {
     }
 
     .price-slider-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 19px;
+        display: none;
     }
 
     .price-slider-meta {
@@ -1328,18 +1326,24 @@ section {
 
     .prices.is-carousel .price-list::before,
     .prices.is-carousel .price-list::after {
+        display: block;
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
         opacity: 0.86;
     }
 
     .prices.is-carousel .price-list::before {
         content: '‹';
-        left: 4px;
+        left: 8px;
         animation: swipeCueLeft 1.4s ease-in-out infinite;
     }
 
     .prices.is-carousel .price-list::after {
         content: '›';
-        right: 4px;
+        right: 8px;
         animation: swipeCueRight 1.4s ease-in-out infinite;
     }
 
@@ -1348,10 +1352,6 @@ section {
         opacity: 0;
         animation: none;
         transition: opacity 0.2s ease;
-    }
-
-    .price-slider-btn {
-        display: none;
     }
 
     .price-slider-dots {
