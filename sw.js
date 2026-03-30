@@ -20,11 +20,10 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('SW: Caching files');
         return cache.addAll(urlsToCache);
       })
       .catch(err => {
-        console.log('SW: Cache failed', err);
+        console.warn('SW: Cache failed', err);
       })
   );
 });
@@ -36,7 +35,6 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('SW: Deleting old cache', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -47,6 +45,11 @@ self.addEventListener('activate', event => {
 
 // Fetch event - serve from cache with network fallback
 self.addEventListener('fetch', event => {
+  // Never intercept serverless/API endpoints.
+  if (event.request.url.includes('/.netlify/functions/')) {
+    return;
+  }
+
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin) && 
       !event.request.url.startsWith('https://fonts.googleapis.com')) {
@@ -58,7 +61,6 @@ self.addEventListener('fetch', event => {
       .then(response => {
         // Return cached version or fetch from network
         if (response) {
-          console.log('SW: Serving from cache:', event.request.url);
           return response;
         }
 
@@ -81,7 +83,7 @@ self.addEventListener('fetch', event => {
 
           return fetchResponse;
         }).catch(err => {
-          console.log('SW: Fetch failed:', err);
+          console.warn('SW: Fetch failed:', err);
           
           // Return offline fallback for navigation requests
           if (event.request.mode === 'navigate') {
@@ -95,7 +97,6 @@ self.addEventListener('fetch', event => {
 // Background sync for form submissions (future enhancement)
 self.addEventListener('sync', event => {
   if (event.tag === 'background-sync') {
-    console.log('SW: Background sync triggered');
     // Handle offline form submissions
   }
 });

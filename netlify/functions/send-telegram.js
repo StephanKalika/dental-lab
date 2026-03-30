@@ -1,11 +1,50 @@
 // Netlify Function: send-telegram
 // Securely forwards booking form data to Telegram without exposing bot token to the client
 
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 5;
+const rateStore = new Map();
+
+function getClientIp(event) {
+  const xff = event.headers['x-forwarded-for'] || event.headers['X-Forwarded-For'] || '';
+  return xff.split(',')[0].trim() || 'unknown';
+}
+
+function isRateLimited(key) {
+  const now = Date.now();
+  const history = rateStore.get(key) || [];
+  const recent = history.filter((ts) => now - ts < RATE_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_MAX) {
+    rateStore.set(key, recent);
+    return true;
+  }
+  recent.push(now);
+  rateStore.set(key, recent);
+  return false;
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 exports.handler = async (event) => {
+  const origin = event.headers.origin || event.headers.Origin || '';
+  const allowedOrigins = new Set([
+    'https://dental-lab.site',
+    'https://www.dental-lab.site',
+    'https://dentalab.netlify.app',
+  ]);
+  const allowOrigin = allowedOrigins.has(origin) ? origin : 'https://dental-lab.site';
   const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': allowOrigin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
   };
   const jsonHeaders = { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders };
   try {
@@ -34,6 +73,17 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers: jsonHeaders, body: JSON.stringify({ error: 'Missing required fields' }) };
     }
 
+    const normalizedPhone = String(phone).replace(/\D/g, '');
+    if (!/^380\d{9}$/.test(normalizedPhone)) {
+      return { statusCode: 400, headers: jsonHeaders, body: JSON.stringify({ error: 'Invalid phone number' }) };
+    }
+
+    const clientIp = getClientIp(event);
+    const rateKey = `${clientIp}:${normalizedPhone}`;
+    if (isRateLimited(rateKey)) {
+      return { statusCode: 429, headers: jsonHeaders, body: JSON.stringify({ error: 'Too many requests' }) };
+    }
+
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     if (!token || !chatId) {
@@ -57,7 +107,13 @@ exports.handler = async (event) => {
       formattedDate = dateObj.toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
     }
 
-    const message = `\n🦷 <b>Нова заявка з сайту Dental Lab</b>\n\n👤 <b>Ім'я:</b> ${name}\n📞 <b>Телефон:</b> ${phone}\n🏥 <b>Послуга:</b> ${service ? (serviceNames[service] || service) : 'Не вказано'}\n📅 <b>Бажана дата:</b> ${formattedDate}\n${comment ? `💬 <b>Коментар:</b> ${comment}` : ''}`.trim();
+    const safeName = escapeHtml(name);
+    const safePhone = escapeHtml(phone);
+    const safeService = escapeHtml(service ? (serviceNames[service] || service) : 'Не вказано');
+    const safeDate = escapeHtml(formattedDate);
+    const safeComment = escapeHtml(comment || '');
+
+    const message = `\n🦷 <b>Нова заявка з сайту Dental Lab</b>\n\n👤 <b>Ім'я:</b> ${safeName}\n📞 <b>Телефон:</b> ${safePhone}\n🏥 <b>Послуга:</b> ${safeService}\n📅 <b>Бажана дата:</b> ${safeDate}\n${safeComment ? `💬 <b>Коментар:</b> ${safeComment}` : ''}`.trim();
 
     const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',

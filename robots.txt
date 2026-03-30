@@ -10,3 +10,6 @@ Crawl-delay: 1
 # Disallow sensitive paths (if any in future)
 # Disallow: /admin/
 # Disallow: /private/
+
+# Test pages
+Disallow: /test-burger.html

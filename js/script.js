@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     const burgerBtn = document.getElementById('burgerBtn');
-    const navMenu = document.getElementById('navMenu');
+    const navMenu = document.getElementById('nav-menu') || document.getElementById('navMenu');
     const body = document.body;
     
     if (!burgerBtn || !navMenu) {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         navMenu.classList.add('active');
         overlay.classList.add('active');
         body.classList.add('menu-open');
-        try { burgerBtn.setAttribute('aria-expanded', 'true'); } catch(e){}
+        try { burgerBtn.setAttribute('aria-expanded', 'true'); } catch (e) { console.warn('aria-expanded update failed', e); }
     }
     
     function closeMenu() {
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         navMenu.classList.remove('active');
         overlay.classList.remove('active');
         body.classList.remove('menu-open');
-        try { burgerBtn.setAttribute('aria-expanded', 'false'); } catch(e){}
+        try { burgerBtn.setAttribute('aria-expanded', 'false'); } catch (e) { console.warn('aria-expanded update failed', e); }
     }
     
     function toggleMenu(e) {
@@ -80,10 +80,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    let resizeTimer;
     window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
         if (window.innerWidth > 968 && isOpen) {
             closeMenu();
         }
+        }, 100);
     });
 });
 
@@ -96,7 +100,7 @@ const FUNCTION_ENDPOINT = (endpointMeta && endpointMeta.content && endpointMeta.
     ? endpointMeta.content.trim()
     : '/.netlify/functions/send-telegram';
 
-bookingForm.addEventListener('submit', async (e) => {
+if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     let isValid = true;
@@ -104,11 +108,6 @@ bookingForm.addEventListener('submit', async (e) => {
     if (!validateField('name')) isValid = false;
     
     if (!validateField('phone')) isValid = false;
-    
-    const dateValue = document.getElementById('date')?.value;
-    if (dateValue) {
-        if (!validateField('date')) isValid = false;
-    }
     
     if (!isValid) {
         const firstError = bookingForm.querySelector('.input-wrapper.error input, .input-wrapper.error select, .input-wrapper.error textarea');
@@ -123,9 +122,9 @@ bookingForm.addEventListener('submit', async (e) => {
     const data = {
         name: formData.get('name'),
         phone: formData.get('phone'),
-        service: formData.get('service'),
-        date: formData.get('date'),
-        comment: formData.get('comment'),
+        service: formData.get('service') || '',
+        date: formData.get('date') || '',
+        comment: formData.get('comment') || '',
         // spam honeypot
         website: formData.get('website') || ''
     };
@@ -150,7 +149,7 @@ bookingForm.addEventListener('submit', async (e) => {
 
         if (response.ok) {
             formSuccess.style.display = 'flex';
-            try { formSuccess.focus(); } catch(e){}
+            try { formSuccess.focus(); } catch (e) { console.warn('Success focus failed', e); }
             bookingForm.reset();
             
             if (commentCount) commentCount.textContent = '0/500';
@@ -169,7 +168,7 @@ bookingForm.addEventListener('submit', async (e) => {
                 } else {
                     details = await response.text();
                 }
-            } catch(_) {}
+            } catch (_) {}
             console.error('Form submit failed:', { status: response.status, details });
             throw new Error('Помилка відправки');
         }
@@ -177,7 +176,7 @@ bookingForm.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Error:', error);
         formError.style.display = 'flex';
-        try { formError.focus(); } catch(e){}
+        try { formError.focus(); } catch (e) { console.warn('Error focus failed', e); }
         
         setTimeout(() => {
             formError.style.display = 'none';
@@ -357,28 +356,175 @@ if (commentInput && commentCount) {
     });
 }
 
-document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const target = document.getElementById('booking-section') || document.getElementById('bookingForm');
-        if (target && typeof target.scrollIntoView === 'function') {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Додатковий скрол для кращого позиціонування на мобільному
-            setTimeout(() => {
-                window.scrollBy(0, -20);
-            }, 500);
-            // Закрити мобільне меню після кліку
-            const burgerBtn = document.getElementById('burgerBtn');
-            const navMenu = document.getElementById('navMenu');
-            const overlay = document.querySelector('.nav-overlay');
-            const body = document.body;
-            if (burgerBtn && navMenu) {
-                burgerBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-                if (overlay) overlay.classList.remove('active');
-                body.classList.remove('menu-open');
+function closeMobileMenuState() {
+    const burgerBtn = document.getElementById('burgerBtn');
+    const navMenu = document.getElementById('nav-menu') || document.getElementById('navMenu');
+    const overlay = document.querySelector('.nav-overlay');
+    const body = document.body;
+
+    if (burgerBtn && navMenu) {
+        burgerBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+    }
+    if (overlay) overlay.classList.remove('active');
+    body.classList.remove('menu-open');
+}
+
+function scrollToBookingSection() {
+    const target = document.getElementById('booking-section') || document.getElementById('bookingForm');
+    if (!(target && typeof target.scrollIntoView === 'function')) {
+        console.warn('Booking section not found');
+        return;
+    }
+
+    setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+            window.scrollBy(0, -20);
+        }, 280);
+    }, 60);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const bookingOverlay = document.getElementById('bookingOverlay');
+    const closeBookingBtn = document.getElementById('closeBookingPopup');
+    const bookingPopupForm = document.getElementById('bookingPopupForm');
+    const bookingPopupName = document.getElementById('bookingPopupName');
+    const bookingPopupPhone = document.getElementById('bookingPopupPhone');
+    const openBookingButtons = document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta:not(.open-callback)');
+
+    function openBookingFlow() {
+        closeMobileMenuState();
+
+        if (!bookingOverlay) {
+            scrollToBookingSection();
+            return;
+        }
+
+        bookingOverlay.classList.add('active');
+        setTimeout(function() {
+            if (bookingPopupName) bookingPopupName.focus();
+        }, 100);
+    }
+
+    openBookingButtons.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openBookingFlow();
+        });
+    });
+
+    if (!bookingOverlay || !closeBookingBtn || !bookingPopupForm || !bookingPopupPhone || !bookingPopupName) {
+        return;
+    }
+
+    closeBookingBtn.addEventListener('click', function() {
+        bookingOverlay.classList.remove('active');
+    });
+
+    bookingOverlay.addEventListener('click', function(e) {
+        if (e.target === bookingOverlay) {
+            bookingOverlay.classList.remove('active');
+        }
+    });
+
+    bookingPopupPhone.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (value.length > 0) {
+            if (!value.startsWith('380')) {
+                if (value.startsWith('80')) {
+                    value = '3' + value;
+                } else if (value.startsWith('0')) {
+                    value = '38' + value;
+                } else if (!value.startsWith('3')) {
+                    value = '380' + value;
+                }
             }
+
+            let formatted = '+380';
+            if (value.length > 3) formatted += ' ' + value.slice(3, 5);
+            if (value.length > 5) formatted += ' ' + value.slice(5, 8);
+            if (value.length > 8) formatted += ' ' + value.slice(8, 10);
+            if (value.length > 10) formatted += ' ' + value.slice(10, 12);
+
+            e.target.value = formatted;
         } else {
-            console.warn('Booking section not found');
+            e.target.value = '';
+        }
+    });
+
+    bookingPopupForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const nameValue = bookingPopupName.value.trim();
+        const phoneValue = bookingPopupPhone.value.trim();
+        const phoneDigits = phoneValue.replace(/\D/g, '');
+
+        const nameError = document.getElementById('bookingPopupNameError');
+        const phoneError = document.getElementById('bookingPopupPhoneError');
+        const successBox = document.getElementById('bookingPopupSuccess');
+        const errorBox = document.getElementById('bookingPopupError');
+
+        if (nameError) nameError.textContent = '';
+        if (phoneError) phoneError.textContent = '';
+        if (successBox) successBox.style.display = 'none';
+        if (errorBox) errorBox.style.display = 'none';
+
+        let valid = true;
+        if (nameValue.length < 2) {
+            valid = false;
+            if (nameError) nameError.textContent = 'Введіть ім\'я (мінімум 2 символи)';
+        }
+
+        if (phoneDigits.length !== 12 || !phoneDigits.startsWith('380')) {
+            valid = false;
+            if (phoneError) phoneError.textContent = 'Введіть коректний номер телефону';
+        }
+
+        if (!valid) return;
+
+        const submitBtn = bookingPopupForm.querySelector('.btn-callback-submit');
+        if (!submitBtn) return;
+
+        submitBtn.disabled = true;
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoader = submitBtn.querySelector('.btn-loader');
+        if (btnText) btnText.style.display = 'none';
+        if (btnLoader) btnLoader.style.display = 'inline-flex';
+
+        try {
+            const response = await fetch(FUNCTION_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: nameValue,
+                    phone: phoneValue,
+                    service: 'booking_popup',
+                    comment: 'Запис через поп-ап форму',
+                    website: ''
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Booking popup send failed');
+            }
+
+            bookingPopupForm.reset();
+            if (successBox) successBox.style.display = 'flex';
+
+            setTimeout(function() {
+                if (successBox) successBox.style.display = 'none';
+                bookingOverlay.classList.remove('active');
+            }, 1800);
+        } catch (error) {
+            console.error('Booking popup error:', error);
+            if (errorBox) errorBox.style.display = 'flex';
+        } finally {
+            submitBtn.disabled = false;
+            if (btnText) btnText.style.display = 'inline';
+            if (btnLoader) btnLoader.style.display = 'none';
         }
     });
 });
@@ -433,6 +579,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = 'Записатися';
 
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
+
             const titleEl2 = card.querySelector('.card-title');
             const serviceName = titleEl2 ? titleEl2.textContent.trim() : '';
 
@@ -450,15 +598,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try { btn.setAttribute('aria-label', `Записатися на ${serviceName}`); } catch(e){}
 
+            const bookingOverlay = document.getElementById('bookingOverlay');
+            const bookingPopupName = document.getElementById('bookingPopupName');
+            if (bookingOverlay) {
+                closeMobileMenuState();
+                bookingOverlay.classList.add('active');
+                setTimeout(() => {
+                    if (bookingPopupName) bookingPopupName.focus();
+                }, 100);
+
+                if (titleEl && titleEl.id) {
+                    btn.setAttribute('aria-labelledby', titleEl.id);
+                }
+                return;
+            }
+
             const target = document.getElementById('контакти') || bookingForm || null;
             if (target && typeof target.scrollIntoView === 'function') {
                 target.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 console.warn('Scroll target not found for card CTA: #контакти or bookingForm');
             }
-                if (titleEl && titleEl.id) {
-                    btn.setAttribute('aria-labelledby', titleEl.id);
-                }
+
+            if (titleEl && titleEl.id) {
+                btn.setAttribute('aria-labelledby', titleEl.id);
+            }
 
             setTimeout(() => {
                 if (phoneInput) phoneInput.focus();
@@ -469,6 +633,169 @@ document.addEventListener('DOMContentLoaded', () => {
         actions.appendChild(btn);
         card.appendChild(actions);
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const pricesSection = document.querySelector('.prices');
+    if (!pricesSection) return;
+
+    const slides = Array.from(pricesSection.querySelectorAll('.price-section'));
+    const sliderTrack = pricesSection.querySelector('.price-list');
+    const prevBtn = document.getElementById('pricePrev');
+    const nextBtn = document.getElementById('priceNext');
+    const counter = document.getElementById('priceSliderCounter');
+
+    if (slides.length < 2 || !prevBtn || !nextBtn || !counter) return;
+
+    pricesSection.classList.add('is-slider');
+
+    let activeIndex = 0;
+    let autoplayTimer = null;
+    const AUTOPLAY_MS = 4500;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const SWIPE_THRESHOLD = 50;
+    let hasInteracted = false;
+
+    const sliderMeta = document.createElement('div');
+    sliderMeta.className = 'price-slider-meta';
+
+    const dots = document.createElement('div');
+    dots.className = 'price-slider-dots';
+    dots.setAttribute('role', 'tablist');
+    dots.setAttribute('aria-label', 'Індикатори слайдів цін');
+
+    const dotButtons = slides.map(function(_, idx) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'price-slider-dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `Слайд ${idx + 1}`);
+        dot.addEventListener('click', function() {
+            goToSlide(idx);
+            markInteracted();
+        });
+        dots.appendChild(dot);
+        return dot;
+    });
+
+    sliderMeta.appendChild(dots);
+    const controlsParent = prevBtn.parentElement;
+    if (controlsParent && controlsParent.parentElement) {
+        controlsParent.parentElement.insertBefore(sliderMeta, controlsParent.nextSibling);
+    }
+
+    function markInteracted() {
+        if (hasInteracted) return;
+        hasInteracted = true;
+        pricesSection.classList.add('slider-interacted');
+    }
+
+    function renderSlide() {
+        slides.forEach((slide, idx) => {
+            slide.classList.toggle('is-active', idx === activeIndex);
+        });
+
+        dotButtons.forEach(function(dot, idx) {
+            const isActive = idx === activeIndex;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            dot.setAttribute('tabindex', isActive ? '0' : '-1');
+        });
+
+        counter.textContent = `${activeIndex + 1} / ${slides.length}`;
+        prevBtn.disabled = activeIndex === 0;
+        nextBtn.disabled = activeIndex === slides.length - 1;
+    }
+
+    function goToSlide(index) {
+        activeIndex = Math.max(0, Math.min(index, slides.length - 1));
+        renderSlide();
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(function() {
+            const nextIndex = (activeIndex + 1) % slides.length;
+            activeIndex = nextIndex;
+            renderSlide();
+        }, AUTOPLAY_MS);
+    }
+
+    function stopAutoplay() {
+        if (autoplayTimer) {
+            clearInterval(autoplayTimer);
+            autoplayTimer = null;
+        }
+    }
+
+    prevBtn.addEventListener('click', function() {
+        if (activeIndex > 0) {
+            goToSlide(activeIndex - 1);
+            markInteracted();
+        }
+    });
+
+    nextBtn.addEventListener('click', function() {
+        if (activeIndex < slides.length - 1) {
+            goToSlide(activeIndex + 1);
+            markInteracted();
+        }
+    });
+
+    pricesSection.addEventListener('mouseenter', stopAutoplay);
+    pricesSection.addEventListener('mouseleave', startAutoplay);
+    pricesSection.addEventListener('focusin', stopAutoplay);
+    pricesSection.addEventListener('focusout', startAutoplay);
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            stopAutoplay();
+        } else {
+            startAutoplay();
+        }
+    });
+
+    if (sliderTrack) {
+        sliderTrack.setAttribute('tabindex', '0');
+        sliderTrack.setAttribute('aria-label', 'Список цін. Використовуйте свайп або клавіші стрілок для переходу між слайдами.');
+
+        sliderTrack.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].clientX;
+        }, { passive: true });
+
+        sliderTrack.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].clientX;
+            const deltaX = touchEndX - touchStartX;
+
+            if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+
+            if (deltaX < 0 && activeIndex < slides.length - 1) {
+                goToSlide(activeIndex + 1);
+                markInteracted();
+            } else if (deltaX > 0 && activeIndex > 0) {
+                goToSlide(activeIndex - 1);
+                markInteracted();
+            }
+        }, { passive: true });
+
+        sliderTrack.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft' && activeIndex > 0) {
+                e.preventDefault();
+                goToSlide(activeIndex - 1);
+                markInteracted();
+            }
+
+            if (e.key === 'ArrowRight' && activeIndex < slides.length - 1) {
+                e.preventDefault();
+                goToSlide(activeIndex + 1);
+                markInteracted();
+            }
+        });
+    }
+
+    renderSlide();
+    startAutoplay();
 });
 
 // FAQ Accordion functionality
@@ -552,17 +879,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Floating CTA click handler
-    floatingCta.addEventListener('click', function() {
-        const target = document.getElementById('booking-section') || document.getElementById('bookingForm');
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Додатковий скрол для кращого позиціонування на мобільному
-            setTimeout(() => {
-                window.scrollBy(0, -20);
-            }, 500);
-        } else {
-            console.warn('Booking section not found');
+    floatingCta.addEventListener('click', function(e) {
+        e.preventDefault();
+        const bookingOverlay = document.getElementById('bookingOverlay');
+        if (bookingOverlay) {
+            bookingOverlay.classList.add('active');
+            setTimeout(function() {
+                const nameInput = document.getElementById('bookingPopupName');
+                if (nameInput) nameInput.focus();
+            }, 100);
+            return;
         }
+        scrollToBookingSection();
     });
 });
 
@@ -572,6 +900,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeCallbackBtn = document.getElementById('closeCallbackPopup');
     const callbackForm = document.getElementById('callbackForm');
     const callbackPhone = document.getElementById('callbackPhone');
+    const openCallbackButtons = document.querySelectorAll('.open-callback');
+
+    if (!callbackOverlay || !closeCallbackBtn || !callbackForm || !callbackPhone) {
+        return;
+    }
+
+    openCallbackButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            callbackOverlay.classList.add('active');
+            setTimeout(function() {
+                callbackPhone.focus();
+            }, 100);
+        });
+    });
     
     // Close callback popup
     closeCallbackBtn.addEventListener('click', function() {
@@ -623,6 +965,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('callbackPhoneError').textContent = 'Введіть коректний номер телефону';
             return;
         }
+        document.getElementById('callbackPhoneError').textContent = '';
         
         const submitBtn = callbackForm.querySelector('.btn-callback-submit');
         submitBtn.disabled = true;
@@ -667,9 +1010,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Form Progress Indicator
 document.addEventListener('DOMContentLoaded', function() {
-    const formFields = ['name', 'phone', 'service', 'date'];
+    const formFields = ['name', 'phone'];
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
+    if (!progressFill || !progressText) return;
     
     function updateProgress() {
         let completedFields = 0;
@@ -681,7 +1025,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        const progress = Math.round((completedFields / formFields.length) * 100);
+        const progress = formFields.length > 0 ? Math.round((completedFields / formFields.length) * 100) : 0;
         progressFill.style.width = progress + '%';
         progressText.textContent = progress + '% заповнено';
         
@@ -711,7 +1055,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Escape key handlers
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        document.getElementById('callbackOverlay').classList.remove('active');
+        const overlay = document.getElementById('callbackOverlay');
+        if (overlay) overlay.classList.remove('active');
     }
 });
 
