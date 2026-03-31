@@ -1262,6 +1262,27 @@ section {
     .promo-price-inline .promo-old-price {
         font-size: 13px;
     }
+    
+    .advantage-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 16px;
+    }
+    
+    .advantage-icon img {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .advantage-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .advantage-card p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
 }
 
 .section-title {
@@ -1286,7 +1307,7 @@ section {
 
 .advantages-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 40px;
     margin-top: 60px;
 }
@@ -1297,27 +1318,46 @@ section {
 }
 
 .advantage-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 20px;
-    background: var(--light-gray);
-    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 24px;
+    background: var(--white);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--mint);
     stroke-width: 1.5;
+    box-shadow: 0 4px 12px rgba(168, 230, 207, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(217, 237, 226, 0.5);
+}
+
+.advantage-card:hover .advantage-icon {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(168, 230, 207, 0.2);
+}
+
+.advantage-icon img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
 }
 
 .advantage-card h3 {
     font-size: 20px;
     margin-bottom: 12px;
     color: var(--graphite);
+    font-weight: 600;
 }
 
 .advantage-card p {
-    color: var(--text-gray);
+    color: #5a6b6b;
     line-height: 1.6;
+    font-size: 15px;
 }
 
 /* ===== SERVICES ===== */
@@ -1903,6 +1943,13 @@ section {
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 968px) {
+    .advantages-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+    }
+}
+
 @media (max-width: 768px) {
     .section-title {
         font-size: 32px;
@@ -1912,6 +1959,21 @@ section {
     .services-grid,
     .reviews-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .advantage-card {
+        padding: 24px 16px;
+    }
+    
+    .advantage-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 20px;
+    }
+    
+    .advantage-icon img {
+        width: 70px;
+        height: 70px;
     }
 }
 
