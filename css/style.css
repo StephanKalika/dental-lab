@@ -1275,7 +1275,7 @@ section {
     }
     
     .advantage-icon {
-        max-width: 170px;
+        max-width: 138px;
         margin: 0 auto 16px;
     }
     
@@ -1324,8 +1324,8 @@ section {
 
 .advantage-icon {
     width: 100%;
-    max-width: 220px;
-    aspect-ratio: 16 / 9;
+    max-width: 176px;
+    aspect-ratio: 1 / 1;
     margin: 0 auto 24px;
     background: #eef3f1;
     border-radius: 14px;
@@ -1866,7 +1866,7 @@ section {
     }
     
     .advantage-icon {
-        max-width: 200px;
+        max-width: 160px;
         margin: 0 auto 20px;
     }
 }
