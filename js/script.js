@@ -605,271 +605,80 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const priceCards = document.querySelectorAll('.price-card');
+function openBookingForService(serviceName) {
+    const bookingOverlay = document.getElementById('bookingOverlay');
+    const bookingPopupName = document.getElementById('bookingPopupName');
     const bookingForm = document.getElementById('bookingForm');
-    const serviceSelect = document.getElementById('service');
     const phoneInput = document.getElementById('phone');
 
-    if (!bookingForm) return;
+    if (bookingOverlay) {
+        closeMobileMenuState();
+        bookingOverlay.classList.add('active');
+        setTimeout(function() {
+            if (bookingPopupName) bookingPopupName.focus();
+        }, 100);
+        return;
+    }
 
-    priceCards.forEach((card, idx) => {
-        if (card.querySelector('.card-actions')) return;
+    const target = document.getElementById('контакти') || bookingForm || null;
+    if (target && typeof target.scrollIntoView === 'function') {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        console.warn('Scroll target not found for booking CTA');
+    }
 
-        card.setAttribute('role', 'group');
-
-        const titleEl = card.querySelector('.card-title');
-        if (titleEl) {
-            if (!titleEl.id) titleEl.id = `price-card-title-${idx+1}`;
+    if (serviceName) {
+        try {
+            const nameField = document.getElementById('name');
+            if (nameField) {
+                nameField.setAttribute('data-requested-service', serviceName);
+            }
+        } catch (error) {
+            console.warn('Failed to save selected service name:', error);
         }
+    }
 
-        const actions = document.createElement('div');
-        actions.className = 'card-actions';
+    setTimeout(function() {
+        if (phoneInput) phoneInput.focus();
+    }, 700);
+}
 
-        const existingPriceEl = card.querySelector('.card-price');
-        let priceSmall = null;
-        if (existingPriceEl) {
-            priceSmall = existingPriceEl;
-            try { existingPriceEl.parentElement && existingPriceEl.parentElement.removeChild(existingPriceEl); } catch(e){}
-            priceSmall.classList.add('card-price-small');
-        } else {
-            priceSmall = document.createElement('div');
-            priceSmall.className = 'card-price-small';
-            const priceText = '';
-            priceSmall.textContent = priceText;
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    const priceButtons = document.querySelectorAll('.price-book-btn');
+    if (!priceButtons.length) return;
 
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'card-cta';
-        btn.textContent = 'Записатися';
-
-        btn.addEventListener('click', (e) => {
+    priceButtons.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
             e.preventDefault();
-
-            const titleEl2 = card.querySelector('.card-title');
-            const serviceName = titleEl2 ? titleEl2.textContent.trim() : '';
-
-            if (serviceSelect) {
-                let opt = Array.from(serviceSelect.options).find(o => o.text === serviceName || o.value === serviceName);
-                if (!opt) {
-                    const slug = serviceName.toLowerCase().replace(/[^a-z0-9а-яіїєґ\s]/g, '').replace(/\s+/g, '_');
-                    opt = document.createElement('option');
-                    opt.value = slug || serviceName;
-                    opt.text = serviceName;
-                    serviceSelect.appendChild(opt);
-                }
-                serviceSelect.value = opt.value;
-            }
-
-            try { btn.setAttribute('aria-label', `Записатися на ${serviceName}`); } catch(e){}
-
-            const bookingOverlay = document.getElementById('bookingOverlay');
-            const bookingPopupName = document.getElementById('bookingPopupName');
-            if (bookingOverlay) {
-                closeMobileMenuState();
-                bookingOverlay.classList.add('active');
-                setTimeout(() => {
-                    if (bookingPopupName) bookingPopupName.focus();
-                }, 100);
-
-                if (titleEl && titleEl.id) {
-                    btn.setAttribute('aria-labelledby', titleEl.id);
-                }
-                return;
-            }
-
-            const target = document.getElementById('контакти') || bookingForm || null;
-            if (target && typeof target.scrollIntoView === 'function') {
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                console.warn('Scroll target not found for card CTA: #контакти or bookingForm');
-            }
-
-            if (titleEl && titleEl.id) {
-                btn.setAttribute('aria-labelledby', titleEl.id);
-            }
-
-            setTimeout(() => {
-                if (phoneInput) phoneInput.focus();
-            }, 700);
+            const serviceName = btn.getAttribute('data-service') || btn.textContent.trim();
+            openBookingForService(serviceName);
         });
-
-    actions.appendChild(priceSmall);
-        actions.appendChild(btn);
-        card.appendChild(actions);
     });
+
+    const estimateBtn = document.querySelector('.price-estimate-btn');
+    if (estimateBtn) {
+        estimateBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openBookingForService('Індивідуальний прорахунок');
+        });
+    }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const pricesSection = document.querySelector('.prices');
-    if (!pricesSection) return;
+    const accordionItems = document.querySelectorAll('#priceAccordion .price-group');
+    if (!accordionItems.length) return;
 
-    const viewport = pricesSection.querySelector('#priceViewport');
-    const sliderTrack = pricesSection.querySelector('#priceTrack');
-    const prevBtn = document.getElementById('pricePrev');
-    const nextBtn = document.getElementById('priceNext');
-    const dotsWrap = document.getElementById('priceSliderDots');
-    const progressFill = document.getElementById('priceSliderProgressFill');
-    const counter = document.getElementById('priceSliderCounter');
-    if (!viewport || !sliderTrack || !dotsWrap || !prevBtn || !nextBtn) return;
+    accordionItems.forEach(function(item) {
+        item.addEventListener('toggle', function() {
+            if (!item.open) return;
 
-    const sections = Array.from(sliderTrack.querySelectorAll(':scope > .price-section'));
-    const allCards = [];
-
-    sections.forEach(function(section) {
-        const titleEl = section.querySelector('.price-section-title');
-        const category = titleEl ? titleEl.textContent.trim() : '';
-        const sectionCards = Array.from(section.querySelectorAll('.price-card'));
-
-        sectionCards.forEach(function(card) {
-            if (category && !card.querySelector('.price-card-category')) {
-                const badge = document.createElement('span');
-                badge.className = 'price-card-category';
-                badge.textContent = category;
-                card.prepend(badge);
-            }
-            allCards.push(card);
+            accordionItems.forEach(function(otherItem) {
+                if (otherItem !== item) {
+                    otherItem.open = false;
+                }
+            });
         });
     });
-
-    if (allCards.length < 2) return;
-
-    sliderTrack.replaceChildren(...allCards);
-    pricesSection.classList.add('is-carousel');
-
-    let activeIndex = 0;
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const SWIPE_THRESHOLD = 40;
-    let hasInteracted = false;
-
-    const dotButtons = allCards.map(function(_, idx) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'price-slider-dot';
-        dot.setAttribute('role', 'tab');
-        dot.setAttribute('aria-label', `Картка ${idx + 1}`);
-        dot.addEventListener('click', function() {
-            goToCard(idx);
-            markInteracted();
-        });
-        dotsWrap.appendChild(dot);
-        return dot;
-    });
-
-    function getCardsPerView() {
-        if (window.innerWidth <= 640) return 1;
-        if (window.innerWidth <= 968) return 2;
-        return 3;
-    }
-
-    function getStep() {
-        const firstCard = sliderTrack.querySelector('.price-card');
-        if (!firstCard) return 0;
-        const gap = parseFloat(window.getComputedStyle(sliderTrack).columnGap || window.getComputedStyle(sliderTrack).gap || '0');
-        return firstCard.getBoundingClientRect().width + gap;
-    }
-
-    function getTargetTranslate(index) {
-        const step = getStep();
-        const perView = getCardsPerView();
-        const centerOffset = ((perView - 1) / 2) * step;
-        const maxTranslate = Math.max(0, sliderTrack.scrollWidth - viewport.clientWidth);
-        const rawTranslate = Math.max(0, (index * step) - centerOffset);
-        return Math.min(rawTranslate, maxTranslate);
-    }
-
-    function markInteracted() {
-        if (hasInteracted) return;
-        hasInteracted = true;
-        pricesSection.classList.add('slider-interacted');
-    }
-
-    function render() {
-        const translate = getTargetTranslate(activeIndex);
-        sliderTrack.style.transform = `translate3d(${-translate}px, 0, 0)`;
-
-        dotButtons.forEach(function(dot, idx) {
-            const isActive = idx === activeIndex;
-            dot.classList.toggle('is-active', isActive);
-            dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            dot.setAttribute('tabindex', isActive ? '0' : '-1');
-        });
-
-        prevBtn.disabled = false;
-        nextBtn.disabled = false;
-
-        if (counter) {
-            counter.textContent = `Картка ${activeIndex + 1} з ${allCards.length}`;
-        }
-
-        if (progressFill) {
-            const percent = ((activeIndex + 1) / allCards.length) * 100;
-            progressFill.style.width = `${percent}%`;
-        }
-    }
-
-    function normalizeIndex(index) {
-        if (index < 0) return allCards.length - 1;
-        if (index >= allCards.length) return 0;
-        return index;
-    }
-
-    function goToCard(index) {
-        activeIndex = normalizeIndex(index);
-        render();
-    }
-
-    prevBtn.addEventListener('click', function() {
-        goToCard(activeIndex - 1);
-        markInteracted();
-    });
-
-    nextBtn.addEventListener('click', function() {
-        goToCard(activeIndex + 1);
-        markInteracted();
-    });
-
-    viewport.setAttribute('tabindex', '0');
-    viewport.setAttribute('aria-label', 'Карусель цін. Використовуйте стрілки клавіатури або свайп для навігації.');
-
-    viewport.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].clientX;
-    }, { passive: true });
-
-    viewport.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].clientX;
-        const deltaX = touchEndX - touchStartX;
-
-        if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
-
-        if (deltaX < 0) {
-            goToCard(activeIndex + 1);
-            markInteracted();
-        } else {
-            goToCard(activeIndex - 1);
-            markInteracted();
-        }
-    }, { passive: true });
-
-    viewport.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            goToCard(activeIndex - 1);
-            markInteracted();
-        }
-
-        if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            goToCard(activeIndex + 1);
-            markInteracted();
-        }
-    });
-
-    window.addEventListener('resize', render);
-
-    render();
 });
 
 // FAQ Accordion functionality
