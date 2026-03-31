@@ -104,6 +104,7 @@
                 <nav class="nav" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
                     <a href="#переваги" class="nav-link">Переваги</a>
                     <a href="#послуги" class="nav-link">Послуги</a>
+                    <a href="#акції" class="nav-link">Акції</a>
                     <a href="#ціни" class="nav-link">Ціни</a>
                     <a href="#faq" class="nav-link">Запитання</a>
                     <a href="#контакти" class="nav-link">Контакти</a>
@@ -165,6 +166,26 @@
 
     <!-- HERO -->
     <main id="main-content">
+    <section class="promo-strip" aria-label="Акційна пропозиція">
+        <div class="container">
+            <div class="promo-strip-card promo-open-booking" role="button" tabindex="0" aria-label="Відкрити форму запису по акції">
+                <div class="promo-strip-text">
+                    <p class="promo-strip-label">🔥 Акція до кінця місяця</p>
+                    <h2 class="promo-strip-title">Комплексна профгігієна зубів: -50%</h2>
+                    <p class="promo-strip-bullets">✓ Ультразвук ✓ AirFlow ✓ Полірування ✓ Огляд лікаря</p>
+                    <div class="promo-price-line">
+                        <span class="promo-old-price">2200 грн</span>
+                        <span class="promo-new-price">1100 грн</span>
+                    </div>
+                    <button class="btn-cta promo-strip-btn" type="button">Забронювати час</button>
+                </div>
+                <div class="promo-strip-visual" aria-hidden="true">
+                    <img class="promo-tooth-visual" src="images/shchaslyva-patsiientka-profhigiyena.png" alt="" loading="lazy" decoding="async">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="hero" role="banner">
         <div class="container">
             <div class="hero-content">
@@ -182,6 +203,30 @@
                     <button class="btn-cta">Записатися онлайн</button>
                     <p class="hero-contact">або телефонуйте: <a href="tel:+380661829540">+38 (066) 182-95-40</a></p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="promotions" id="акції" role="region" aria-labelledby="promotions-title">
+        <div class="container">
+            <h2 class="section-title" id="promotions-title">Акції</h2>
+            <p class="section-subtitle">Спеціальна пропозиція для нових та постійних пацієнтів</p>
+
+            <div class="promo-card promo-open-booking" role="button" tabindex="0" aria-label="Відкрити форму запису по акції">
+                <span class="promo-card-badge">-50%</span>
+                <h3>Комплексна профгігієна зубів: -50%</h3>
+                <div class="promo-price-line">
+                    <span class="promo-old-price">2200 грн</span>
+                    <span class="promo-new-price">1100 грн</span>
+                </div>
+                <p class="promo-includes-title">Що входить у ціну 1100 грн:</p>
+                <ul class="promo-includes">
+                    <li>Огляд лікаря-стоматолога</li>
+                    <li>Зняття зубного каменю ультразвуком</li>
+                    <li>Чистка AirFlow</li>
+                    <li>Полірування зубів</li>
+                </ul>
+                <button class="btn-cta promo-card-cta" type="button">Забронювати час</button>
             </div>
         </div>
     </section>
@@ -255,6 +300,14 @@
                 <div class="service-card">
                     <div class="service-number">01</div>
                     <h3>Гігієна та профілактика</h3>
+                    <div class="hygiene-promo">
+                        <div class="promo-price-line">
+                            <span class="promo-old-price">2200 грн</span>
+                            <span class="promo-new-price">1100 грн</span>
+                            <span class="promo-note">-50%</span>
+                        </div>
+                        <button class="btn-cta hygiene-promo-cta" type="button">Забронювати час</button>
+                    </div>
                     <ul class="service-list">
                         <li>Професійна чистка зубів</li>
                         <li>Ультразвукове видалення каменю</li>
@@ -343,7 +396,11 @@
                         <div class="price-card">
                             <h5 class="card-title">Комплексна професійна чистка зубів</h5>
                             <p class="card-desc">Ультразвукове зняття каменю, чистка Air-Flow, полірування пастою.</p>
-                            <div class="card-price">1600 грн</div>
+                            <div class="card-price promo-price-line promo-price-inline">
+                                <span class="promo-old-price">2200 грн</span>
+                                <span class="promo-new-price">1100 грн</span>
+                                <span class="promo-note">(Акція)</span>
+                            </div>
                         </div>
                         <div class="price-card">
                             <h5 class="card-title">Професійна чистка для чутливих зубів</h5>
@@ -899,6 +956,7 @@
                     <ul class="footer-links">
                         <li><a href="#переваги">Переваги</a></li>
                         <li><a href="#послуги">Послуги</a></li>
+                        <li><a href="#акції">Акції</a></li>
                         <li><a href="#ціни">Ціни</a></li>
                         <li><a href="#faq">Запитання</a></li>
                         <li><a href="#контакти">Контакти</a></li>

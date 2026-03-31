@@ -715,6 +715,11 @@ body.menu-open {
     min-height: 70vh;
 }
 
+.promo-strip + .hero {
+    padding-top: 56px;
+    min-height: 62vh;
+}
+
 .hero .container {
     display: flex;
     align-items: center;
@@ -893,6 +898,11 @@ body.menu-open {
         padding: 80px 0 60px 0;
         min-height: 50vh;
     }
+
+    .promo-strip + .hero {
+        padding-top: 36px;
+        min-height: 46vh;
+    }
     
     .hero .container {
         min-height: auto;
@@ -926,6 +936,11 @@ body.menu-open {
     .hero {
         padding: 60px 0 40px 0;
         min-height: 40vh;
+    }
+
+    .promo-strip + .hero {
+        padding-top: 26px;
+        min-height: 36vh;
     }
     
     .hero .container {
@@ -993,6 +1008,260 @@ body.menu-open {
 /* ===== GENERIC SECTION STYLES ===== */
 section {
     padding: 80px 0;
+}
+.promo-price-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+}
+.promo-old-price {
+    color: #8c9aa3;
+    font-size: 18px;
+    text-decoration: line-through;
+    opacity: 0.8;
+}
+.promo-discount,
+.promo-note {
+    font-size: 14px;
+    font-weight: 700;
+    color: #de4d43;
+    letter-spacing: 0.02em;
+}
+.promo-new-price {
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1;
+    font-weight: 800;
+    color: #d9363e;
+}
+.promo-deadline {
+    margin-top: 8px;
+    color: #56656f;
+    font-size: 14px;
+    font-weight: 500;
+}
+.promo-strip {
+    padding: 24px 0 8px;
+}
+.promo-strip-card {
+    background: linear-gradient(135deg, #f7fbfd 0%, #e9f5ef 100%);
+    border: 1px solid #d4e7dc;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(26, 51, 68, 0.08);
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(180px, 0.55fr);
+    align-items: center;
+    gap: 20px;
+}
+
+.promo-open-booking {
+    cursor: pointer;
+}
+
+.promo-open-booking:hover {
+    transform: translateY(-2px);
+}
+
+.promo-open-booking:focus {
+    outline: 2px solid rgba(217, 54, 62, 0.4);
+    outline-offset: 3px;
+}
+.promo-strip-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #4f616d;
+}
+.promo-strip-title {
+    font-size: clamp(22px, 3.2vw, 34px);
+    line-height: 1.2;
+    color: var(--graphite);
+}
+.promo-strip-text {
+    display: grid;
+    gap: 10px;
+}
+
+.promo-strip-bullets {
+    font-size: 13px;
+    color: #5f6f79;
+    line-height: 1.6;
+}
+
+.promo-strip-btn {
+    width: fit-content;
+    min-width: 230px;
+}
+
+.promo-strip-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid #d9ede2;
+    background: #f2fbf6;
+    overflow: hidden;
+}
+
+.promo-tooth-visual {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    filter: drop-shadow(0 8px 14px rgba(64, 99, 77, 0.14));
+}
+.promotions {
+    background: linear-gradient(180deg, #f8fbfd 0%, #ffffff 100%);
+}
+.promo-card {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #e3ecef;
+    box-shadow: 0 12px 36px rgba(24, 49, 67, 0.12);
+    padding: 30px;
+    position: relative;
+}
+.promo-card-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #d9363e;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+.promo-card h3 {
+    font-size: clamp(24px, 3vw, 34px);
+    margin-bottom: 12px;
+    color: var(--graphite);
+    max-width: 92%;
+}
+.promo-includes-title {
+    margin-top: 14px;
+    font-size: 16px;
+    color: #304757;
+    font-weight: 600;
+}
+.promo-includes {
+    margin: 10px 0 20px;
+    padding-left: 20px;
+    color: #4d5f6b;
+    display: grid;
+    gap: 6px;
+}
+.promo-card-cta {
+    min-width: 220px;
+}
+.hygiene-promo {
+    background: #f7fbf8;
+    border: 1px solid #d8e9df;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+}
+.hygiene-promo-cta {
+    margin-top: 12px;
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 15px;
+}
+.promo-price-inline .promo-old-price {
+    font-size: 14px;
+}
+.promo-price-inline .promo-new-price {
+    font-size: 30px;
+}
+.promo-price-inline .promo-note {
+    font-size: 13px;
+    color: #5f6f79;
+}
+
+@media (max-width: 768px) {
+    .promo-strip {
+        padding-top: 16px;
+    }
+
+    .promo-strip-card {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+
+    .promo-strip-visual {
+        order: -1;
+        width: 138px;
+        height: 138px;
+        justify-self: center;
+        margin: 0 auto;
+    }
+
+    .promo-tooth-visual {
+        width: 100%;
+    }
+
+    .promo-strip-btn {
+        width: auto;
+        min-width: 170px;
+        padding: 10px 22px;
+        font-size: 15px;
+        margin: 0 auto;
+    }
+
+    .promo-card-cta {
+        width: 100%;
+        min-width: 0;
+        text-align: center;
+    }
+
+    .promo-card {
+        padding: 22px 18px;
+    }
+
+    .promo-card h3 {
+        max-width: 100%;
+        margin-right: 0;
+    }
+
+    .promo-old-price {
+        font-size: 16px;
+    }
+
+    .promo-new-price {
+        font-size: 34px;
+    }
+
+    .promo-price-inline .promo-new-price {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 420px) {
+    .promo-price-line {
+        gap: 6px 10px;
+    }
+
+    .promo-strip-bullets {
+        font-size: 12px;
+    }
+
+    .promo-price-inline {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .promo-price-inline .promo-new-price {
+        font-size: 24px;
+    }
+
+    .promo-price-inline .promo-old-price {
+        font-size: 13px;
+    }
 }
 
 .section-title {
@@ -1746,6 +2015,10 @@ section {
     .faq-question {
         padding: 16px;
         font-size: 15px;
+
+    .promo-strip-bullets {
+        font-size: 12px;
+    }
     }
 }
 
@@ -2641,5 +2914,33 @@ section {
     .callback-popup {
         padding: 20px 16px;
         max-height: calc(100vh - 16px);
+    }
+}
+
+/* Unified sizing for all booking CTAs (excluding price cards and floating button) */
+.btn-primary,
+.btn-cta,
+.btn-mobile-cta:not(.btn-mobile-secondary),
+.promo-strip-btn,
+.promo-card-cta,
+.hygiene-promo-cta,
+.btn-submit {
+    min-height: 52px;
+    padding: 12px 26px;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .btn-primary,
+    .btn-cta,
+    .btn-mobile-cta:not(.btn-mobile-secondary),
+    .promo-strip-btn,
+    .promo-card-cta,
+    .hygiene-promo-cta,
+    .btn-submit {
+        min-height: 48px;
+        padding: 10px 20px;
+        font-size: 15px;
     }
 }

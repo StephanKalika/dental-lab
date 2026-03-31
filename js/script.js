@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookingPopupForm = document.getElementById('bookingPopupForm');
     const bookingPopupName = document.getElementById('bookingPopupName');
     const bookingPopupPhone = document.getElementById('bookingPopupPhone');
-    const openBookingButtons = document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta:not(.open-callback)');
+    const openBookingButtons = document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta:not(.open-callback), .promo-open-booking');
 
     function openBookingFlow() {
         closeMobileMenuState();
@@ -485,6 +485,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             openBookingFlow();
+        });
+
+        btn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openBookingFlow();
+            }
         });
     });
 
