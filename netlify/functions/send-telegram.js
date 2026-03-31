@@ -34,13 +34,7 @@ function escapeHtml(value) {
 
 exports.handler = async (event) => {
   const origin = event.headers.origin || event.headers.Origin || '';
-  const allowedOrigins = new Set([
-    'https://dental-lab.site',
-    'https://www.dental-lab.site',
-    'https://dental-lab.netlify.app',
-    'https://dentalab.netlify.app',
-  ]);
-  const allowOrigin = allowedOrigins.has(origin) ? origin : 'https://dental-lab.site';
+  const allowOrigin = origin || '*';
   const corsHeaders = {
     'Access-Control-Allow-Origin': allowOrigin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -58,11 +52,16 @@ exports.handler = async (event) => {
     }
 
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || '';
-    if (!contentType.includes('application/json')) {
+    let body = {};
+
+    if (contentType.includes('application/json')) {
+      body = JSON.parse(event.body || '{}');
+    } else if (contentType.includes('application/x-www-form-urlencoded')) {
+      const parsed = new URLSearchParams(event.body || '');
+      body = Object.fromEntries(parsed.entries());
+    } else {
       return { statusCode: 400, headers: jsonHeaders, body: JSON.stringify({ error: 'Invalid content type' }) };
     }
-
-    const body = JSON.parse(event.body || '{}');
 
     // basic honeypot / spam check
     if (body.website) {

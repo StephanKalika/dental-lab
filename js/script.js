@@ -93,9 +93,13 @@ const formError = document.getElementById('formError');
 // Determine serverless endpoint (GitHub Pages friendly): use meta[name="form-endpoint"] if set
 const endpointMeta = document.querySelector('meta[name="form-endpoint"]');
 const SAME_ORIGIN_ENDPOINT = '/.netlify/functions/send-telegram';
+const PRIMARY_REMOTE_ENDPOINT = 'https://dentalab.netlify.app/.netlify/functions/send-telegram';
+const FALLBACK_ENDPOINTS = [
+    PRIMARY_REMOTE_ENDPOINT
+];
 const FUNCTION_ENDPOINT = (endpointMeta && endpointMeta.content && endpointMeta.content.trim().length > 0)
     ? endpointMeta.content.trim()
-    : SAME_ORIGIN_ENDPOINT;
+    : PRIMARY_REMOTE_ENDPOINT;
 
 function getFriendlySubmitError(errorPayload, statusCode) {
     const raw = (typeof errorPayload === 'string' ? errorPayload : (errorPayload && errorPayload.error) || '').toLowerCase();
@@ -118,25 +122,44 @@ function getFriendlySubmitError(errorPayload, statusCode) {
     if (statusCode >= 500) {
         return 'Помилка сервера. Спробуйте ще раз через кілька хвилин.';
     }
+    if (statusCode === 404) {
+        return 'Сервіс відправки недоступний на цьому домені. Спробуйте ще раз пізніше або зателефонуйте нам.';
+    }
     return 'Помилка відправки. Спробуйте ще раз або зателефонуйте нам: +38 (066) 182-95-40';
 }
 
 async function sendFormRequest(payload) {
-    const endpoints = [FUNCTION_ENDPOINT];
-    if (FUNCTION_ENDPOINT !== SAME_ORIGIN_ENDPOINT) {
-        endpoints.push(SAME_ORIGIN_ENDPOINT);
-    }
+    const currentHost = window.location.hostname;
+    const isLocalHost = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost === '::1';
+
+    const endpoints = isLocalHost
+        ? Array.from(new Set([
+            FUNCTION_ENDPOINT,
+            PRIMARY_REMOTE_ENDPOINT,
+            ...FALLBACK_ENDPOINTS,
+            SAME_ORIGIN_ENDPOINT
+        ].filter(Boolean)))
+        : Array.from(new Set([
+            FUNCTION_ENDPOINT,
+            SAME_ORIGIN_ENDPOINT,
+            PRIMARY_REMOTE_ENDPOINT,
+            ...FALLBACK_ENDPOINTS
+        ].filter(Boolean)));
 
     let lastError = null;
 
     for (const endpoint of endpoints) {
         try {
+            const encodedBody = new URLSearchParams(
+                Object.entries(payload || {}).map(([key, value]) => [key, value == null ? '' : String(value)])
+            ).toString();
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                 },
-                body: JSON.stringify(payload)
+                body: encodedBody
             });
 
             if (response.ok) {
@@ -159,6 +182,7 @@ async function sendFormRequest(payload) {
             });
         } catch (error) {
             lastError = error;
+            lastError.userMessage = 'Не вдалося підключитися до сервісу відправки. Перевірте з\'єднання або зателефонуйте нам: +38 (066) 182-95-40';
             console.error('Form endpoint network error', { endpoint, error });
         }
     }
