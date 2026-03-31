@@ -51,10 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     burgerBtn.addEventListener('click', toggleMenu);
-    burgerBtn.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        toggleMenu(e);
-    });
     
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) {
@@ -96,9 +92,79 @@ const formSuccess = document.getElementById('formSuccess');
 const formError = document.getElementById('formError');
 // Determine serverless endpoint (GitHub Pages friendly): use meta[name="form-endpoint"] if set
 const endpointMeta = document.querySelector('meta[name="form-endpoint"]');
+const SAME_ORIGIN_ENDPOINT = '/.netlify/functions/send-telegram';
 const FUNCTION_ENDPOINT = (endpointMeta && endpointMeta.content && endpointMeta.content.trim().length > 0)
     ? endpointMeta.content.trim()
-    : '/.netlify/functions/send-telegram';
+    : SAME_ORIGIN_ENDPOINT;
+
+function getFriendlySubmitError(errorPayload, statusCode) {
+    const raw = (typeof errorPayload === 'string' ? errorPayload : (errorPayload && errorPayload.error) || '').toLowerCase();
+
+    if (raw.includes('server misconfigured')) {
+        return 'Сервіс тимчасово недоступний. Будь ласка, зателефонуйте нам: +38 (066) 182-95-40';
+    }
+    if (raw.includes('too many requests') || statusCode === 429) {
+        return 'Забагато спроб. Спробуйте ще раз через 10 хвилин.';
+    }
+    if (raw.includes('invalid phone')) {
+        return 'Введіть коректний номер телефону у форматі +380 XX XXX XX XX.';
+    }
+    if (raw.includes('missing required')) {
+        return 'Заповніть обов\'язкові поля: ім\'я та телефон.';
+    }
+    if (raw.includes('telegram error') || statusCode === 502) {
+        return 'Помилка сервісу повідомлень. Спробуйте ще раз або зателефонуйте нам.';
+    }
+    if (statusCode >= 500) {
+        return 'Помилка сервера. Спробуйте ще раз через кілька хвилин.';
+    }
+    return 'Помилка відправки. Спробуйте ще раз або зателефонуйте нам: +38 (066) 182-95-40';
+}
+
+async function sendFormRequest(payload) {
+    const endpoints = [FUNCTION_ENDPOINT];
+    if (FUNCTION_ENDPOINT !== SAME_ORIGIN_ENDPOINT) {
+        endpoints.push(SAME_ORIGIN_ENDPOINT);
+    }
+
+    let lastError = null;
+
+    for (const endpoint of endpoints) {
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                return response;
+            }
+
+            const contentType = response.headers.get('content-type') || '';
+            const details = contentType.includes('application/json')
+                ? await response.json().catch(() => ({}))
+                : await response.text().catch(() => '');
+
+            lastError = new Error(`HTTP ${response.status} from ${endpoint}`);
+            lastError.status = response.status;
+            lastError.details = details;
+            lastError.userMessage = getFriendlySubmitError(details, response.status);
+            console.error('Form endpoint returned error', {
+                endpoint,
+                status: response.status,
+                details
+            });
+        } catch (error) {
+            lastError = error;
+            console.error('Form endpoint network error', { endpoint, error });
+        }
+    }
+
+    throw lastError || new Error('Form submission failed');
+}
 
 if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -138,16 +204,9 @@ if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
     formError.style.display = 'none';
     
     try {
-        // Send to serverless function (Netlify or external) — configurable via meta[name="form-endpoint"]
-        const response = await fetch(FUNCTION_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
+        // Send to serverless function (Netlify or external) with same-origin fallback.
+        await sendFormRequest(data);
+        {
             formSuccess.style.display = 'flex';
             try { formSuccess.focus(); } catch (e) { console.warn('Success focus failed', e); }
             bookingForm.reset();
@@ -157,24 +216,14 @@ if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
             setTimeout(() => {
                 formSuccess.style.display = 'none';
             }, 8000);
-        } else {
-            // Try to log server details for easier debugging
-            let details = '';
-            try {
-                const ct = response.headers.get('content-type') || '';
-                if (ct.includes('application/json')) {
-                    const j = await response.json();
-                    details = JSON.stringify(j);
-                } else {
-                    details = await response.text();
-                }
-            } catch (_) {}
-            console.error('Form submit failed:', { status: response.status, details });
-            throw new Error('Помилка відправки');
         }
         
     } catch (error) {
         console.error('Error:', error);
+        const errorText = formError?.querySelector('p');
+        if (errorText) {
+            errorText.textContent = error?.userMessage || 'Помилка відправки. Спробуйте ще раз або зателефонуйте нам: +38 (066) 182-95-40';
+        }
         formError.style.display = 'flex';
         try { formError.focus(); } catch (e) { console.warn('Error focus failed', e); }
         
@@ -243,7 +292,7 @@ function showError(fieldId, message) {
     
     if (errorElement && message) {
         errorElement.textContent = message;
-        errorElement.style.display = 'block';
+        errorElement.classList.add('has-error');
         inputWrapper?.classList.add('error');
         inputElement?.setAttribute('aria-invalid', 'true');
     }
@@ -256,7 +305,7 @@ function hideError(fieldId) {
     
     if (errorElement) {
         errorElement.textContent = '';
-        errorElement.style.display = 'none';
+        errorElement.classList.remove('has-error');
         inputWrapper?.classList.remove('error');
         inputElement?.setAttribute('aria-invalid', 'false');
     }
@@ -495,21 +544,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btnLoader) btnLoader.style.display = 'inline-flex';
 
         try {
-            const response = await fetch(FUNCTION_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: nameValue,
-                    phone: phoneValue,
-                    service: 'booking_popup',
-                    comment: 'Запис через поп-ап форму',
-                    website: ''
-                })
+            await sendFormRequest({
+                name: nameValue,
+                phone: phoneValue,
+                service: 'booking_popup',
+                comment: 'Запис через поп-ап форму',
+                website: ''
             });
-
-            if (!response.ok) {
-                throw new Error('Booking popup send failed');
-            }
 
             bookingPopupForm.reset();
             if (successBox) successBox.style.display = 'flex';
@@ -520,6 +561,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1800);
         } catch (error) {
             console.error('Booking popup error:', error);
+            const popupErrorText = errorBox?.querySelector('p');
+            if (popupErrorText) {
+                popupErrorText.textContent = error?.userMessage || 'Помилка відправки. Спробуйте ще раз або зателефонуйте нам: +38 (066) 182-95-40';
+            }
             if (errorBox) errorBox.style.display = 'flex';
         } finally {
             submitBtn.disabled = false;
@@ -799,6 +844,21 @@ document.addEventListener('DOMContentLoaded', function() {
 // FAQ Accordion functionality
 document.addEventListener('DOMContentLoaded', function() {
     const faqItems = document.querySelectorAll('.faq-item');
+
+    function setFaqHeight(answer) {
+        if (!answer) return;
+        answer.style.setProperty('--faq-content-height', `${answer.scrollHeight}px`);
+    }
+
+    function refreshOpenFaqHeights() {
+        faqItems.forEach(item => {
+            const answer = item.querySelector('.faq-answer');
+            if (!answer) return;
+            if (answer.getAttribute('aria-hidden') === 'false') {
+                setFaqHeight(answer);
+            }
+        });
+    }
     
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
@@ -825,6 +885,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     answer.setAttribute('aria-hidden', 'true');
                 } else {
                     this.setAttribute('aria-expanded', 'true');
+                    setFaqHeight(answer);
                     answer.setAttribute('aria-hidden', 'false');
                 }
             });
@@ -838,6 +899,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    window.addEventListener('resize', refreshOpenFaqHeights);
 });
 
 try {
@@ -971,33 +1034,25 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.querySelector('.btn-loader').style.display = 'inline-flex';
         
         try {
-            const response = await fetch(FUNCTION_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: 'Зворотний дзвінок',
-                    phone: phone,
-                    service: 'callback',
-                    comment: 'Запит на зворотний дзвінок',
-                    website: ''
-                })
+            await sendFormRequest({
+                name: 'Зворотний дзвінок',
+                phone: phone,
+                service: 'callback',
+                comment: 'Запит на зворотний дзвінок',
+                website: ''
             });
+
+            document.getElementById('callbackSuccess').style.display = 'flex';
+            callbackForm.style.display = 'none';
             
-            if (response.ok) {
-                document.getElementById('callbackSuccess').style.display = 'flex';
-                callbackForm.style.display = 'none';
-                
-                setTimeout(() => {
-                    callbackOverlay.classList.remove('active');
-                    callbackForm.style.display = 'block';
-                    document.getElementById('callbackSuccess').style.display = 'none';
-                    callbackForm.reset();
-                }, 3000);
-            } else {
-                throw new Error('Помилка відправки');
-            }
+            setTimeout(() => {
+                callbackOverlay.classList.remove('active');
+                callbackForm.style.display = 'block';
+                document.getElementById('callbackSuccess').style.display = 'none';
+                callbackForm.reset();
+            }, 3000);
         } catch (error) {
-            document.getElementById('callbackPhoneError').textContent = 'Помилка відправки. Спробуйте ще раз.';
+            document.getElementById('callbackPhoneError').textContent = error?.userMessage || 'Помилка відправки. Спробуйте ще раз.';
         } finally {
             submitBtn.disabled = false;
             submitBtn.querySelector('.btn-text').style.display = 'inline';

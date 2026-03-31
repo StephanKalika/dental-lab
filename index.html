@@ -30,7 +30,7 @@
     <meta name="twitter:image" content="https://dental-lab.site/images/hero-image.jpg">
     
     <!-- Form endpoint for serverless submission (hosted on Netlify) -->
-    <meta name="form-endpoint" content="https://dentalab.netlify.app/.netlify/functions/send-telegram">
+    <meta name="form-endpoint" content="/.netlify/functions/send-telegram">
     
     <!-- Favicon -->
     <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" sizes="any">
@@ -57,11 +57,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Skip Navigation Links for Accessibility -->
-    <a href="#main-content" class="skip-link">Перейти до основного контенту</a>
-    <a href="#nav-menu" class="skip-link">Перейти до навігації</a>
-    <a href="#контакти" class="skip-link">Перейти до контактів</a>
-    
     <!-- Sticky Floating Button -->
     <div class="floating-cta" id="floatingCta">
         <button class="floating-btn" aria-label="Записатися на прийом">
@@ -83,7 +78,7 @@
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
                     </svg>
-                    <span>м. Київ, Предславинська вулиця, 49</span>
+                    <span>м. Київ, вул. Предславинська, 49</span>
                 </a>
                 
                 <!-- Mobile phone -->
@@ -130,7 +125,7 @@
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                 <circle cx="12" cy="10" r="3"></circle>
                             </svg>
-                            <a href="https://www.google.com/maps/place/%D1%83%D0%BB.+%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F,+49,+%D0%9A%D0%B8%D0%B5%D0%B2,+02000/@50.4180447,30.5245842,18.97z" target="_blank" rel="noopener" class="mobile-address-link">м. Київ, Предславинська вулиця, 49</a>
+                            <a href="https://www.google.com/maps/place/%D1%83%D0%BB.+%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F,+49,+%D0%9A%D0%B8%D0%B5%D0%B2,+02000/@50.4180447,30.5245842,18.97z" target="_blank" rel="noopener" class="mobile-address-link">м. Київ, вул. Предславинська, 49</a>
                         </div>
                     </div>
                 </nav>
@@ -143,7 +138,7 @@
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                             <circle cx="12" cy="10" r="3"></circle>
                         </svg>
-                        <span>м. Київ, Предславинська вулиця, 49</span>
+                        <span>м. Київ, вул. Предславинська, 49</span>
                     </a>
                     
                     <!-- Phone (desktop) -->
@@ -180,7 +175,7 @@
                 <div class="hero-image">
                     <picture>
                         <source srcset="images/hero-image.webp" type="image/webp">
-                        <img src="images/hero-image.jpg" alt="Сучасна стоматологічна лабораторія Dental Lab" loading="lazy">
+                        <img src="images/hero-image.jpg" alt="Сучасна стоматологічна лабораторія Dental Lab" loading="eager" fetchpriority="high" decoding="async" width="960" height="720">
                     </picture>
                 </div>
                 <div class="hero-cta">
@@ -625,7 +620,7 @@
                         </div>
                         <div>
                             <h4>Адреса</h4>
-                            <p>м. Київ, Предславинська вулиця, 49</p>
+                            <p>м. Київ, вул. Предславинська, 49</p>
                         </div>
                     </div>
 
@@ -660,17 +655,16 @@
 
                     <!-- Map -->
                     <div class="map-container">
-                        <iframe 
+                        <iframe class="map-embed"
                             src="https://www.google.com/maps?q=50.4182255,30.525489&hl=uk&z=18&output=embed" 
-                            title="Google Map: Dental Lab, м. Київ, Предславинська вулиця, 49"
-                            width="100%" 
-                            height="300" 
-                            style="border:0; border-radius: 12px;" 
+                            title="Google Map: Dental Lab, м. Київ, вул. Предславинська, 49"
+                            width="100%"
+                            height="300"
                             allowfullscreen 
                             loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
-                        <p style="margin-top:8px;">
-                          <a href="https://www.google.com/maps/place/%D1%83%D0%BB.+%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F,+49,+%D0%9A%D0%B8%D0%B5%D0%B2,+02000/@50.4180447,30.5245842,18.97z" target="_blank" rel="noopener">Відкрити на Google Картах</a>
+                        <p class="map-open-wrap">
+                          <a class="map-open-link" href="https://www.google.com/maps/place/%D1%83%D0%BB.+%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F,+49,+%D0%9A%D0%B8%D0%B5%D0%B2,+02000/@50.4180447,30.5245842,18.97z" target="_blank" rel="noopener">Відкрити на Google Картах</a>
                         </p>
                     </div>
                 </div>
@@ -692,6 +686,7 @@
                          placeholder="Введіть ваше ім'я" 
                          minlength="2" maxlength="50"
                          autocomplete="name"
+                         inputmode="text"
                          aria-describedby="nameError">
                                     <span class="input-icon">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -700,7 +695,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <span class="error-message" id="nameError"></span>
+                                <span class="error-message" id="nameError" role="alert"></span>
                             </div>
 
                             <div class="form-group">
@@ -710,6 +705,7 @@
                                            placeholder="+380 66 182 95 40"
                                            pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
                          autocomplete="tel"
+                         inputmode="tel"
                                            aria-describedby="phoneError">
                                     <span class="input-icon">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -717,7 +713,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <span class="error-message" id="phoneError"></span>
+                                <span class="error-message" id="phoneError" role="alert"></span>
                             </div>
 
                             <button type="submit" class="btn-submit">
@@ -780,7 +776,8 @@
                             <input type="text" id="bookingPopupName" name="name" required
                                    placeholder="Ваше ім'я"
                                    minlength="2" maxlength="50"
-                                   autocomplete="name">
+                                autocomplete="name"
+                                inputmode="text">
                             <span class="input-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -788,7 +785,7 @@
                                 </svg>
                             </span>
                         </div>
-                        <span class="error-message" id="bookingPopupNameError"></span>
+                        <span class="error-message" id="bookingPopupNameError" role="alert"></span>
                     </div>
 
                     <div class="form-group">
@@ -796,14 +793,15 @@
                             <input type="tel" id="bookingPopupPhone" name="phone" required
                                    placeholder="+380 XX XXX XX XX"
                                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
-                                   autocomplete="tel">
+                                autocomplete="tel"
+                                inputmode="tel">
                             <span class="input-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                 </svg>
                             </span>
                         </div>
-                        <span class="error-message" id="bookingPopupPhoneError"></span>
+                        <span class="error-message" id="bookingPopupPhoneError" role="alert"></span>
                     </div>
 
                     <button type="submit" class="btn-callback-submit">
@@ -854,14 +852,15 @@
                             <input type="tel" id="callbackPhone" name="phone" required 
                                    placeholder="+380 XX XXX XX XX"
                                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
-                                   autocomplete="tel">
+                                autocomplete="tel"
+                                inputmode="tel">
                             <span class="input-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                 </svg>
                             </span>
                         </div>
-                        <span class="error-message" id="callbackPhoneError"></span>
+                        <span class="error-message" id="callbackPhoneError" role="alert"></span>
                     </div>
                     <button type="submit" class="btn-callback-submit">
                         <span class="btn-text">Передзвоніть мені</span>
@@ -910,7 +909,7 @@
                     <h4>Контакти</h4>
                     <ul class="footer-contacts">
                         <li><a href="tel:+380661829540">+38 (066) 182-95-40</a></li>
-                        <li>м. Київ, Предславинська вулиця, 49</li>
+                        <li>м. Київ, вул. Предславинська, 49</li>
                     </ul>
                 </div>
 
@@ -933,7 +932,7 @@
     "description": "Стоматологічна клініка в Києві. Якість, підтверджена вашою усмішкою.",
     "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Предславинська вулиця, 49",
+        "streetAddress": "вул. Предславинська, 49",
         "addressLocality": "Київ",
         "postalCode": "01001",
         "addressCountry": "UA"
@@ -1021,7 +1020,7 @@
 
 
 <!-- JavaScript -->
-<script src="js/script.js?v=2.1"></script>
+<script src="js/script.js?v=2.3"></script>
 
 <!-- Service Worker Registration -->
 <script>

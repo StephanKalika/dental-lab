@@ -37,6 +37,7 @@ exports.handler = async (event) => {
   const allowedOrigins = new Set([
     'https://dental-lab.site',
     'https://www.dental-lab.site',
+    'https://dental-lab.netlify.app',
     'https://dentalab.netlify.app',
   ]);
   const allowOrigin = allowedOrigins.has(origin) ? origin : 'https://dental-lab.site';
