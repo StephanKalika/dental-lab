@@ -17,7 +17,7 @@
     <meta property="og:locale" content="uk_UA">
     <meta property="og:title" content="Dental Lab — Стоматологічна клініка у Києві">
     <meta property="og:description" content="Якість, підтверджена вашою усмішкою. Професійна стоматологія з персональним підходом.">
-    <meta property="og:image" content="https://dental-lab.site/images/hero-image.jpg">
+    <meta property="og:image" content="https://dental-lab.site/images/hero-image.webp">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://dental-lab.site/">
@@ -27,7 +27,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dental Lab — Стоматологічна клініка">
     <meta name="twitter:description" content="Якість, підтверджена вашою усмішкою.">
-    <meta name="twitter:image" content="https://dental-lab.site/images/hero-image.jpg">
+    <meta name="twitter:image" content="https://dental-lab.site/images/hero-image.webp">
     
     <!-- Form endpoint for serverless submission (hosted on Netlify) -->
     <meta name="form-endpoint" content="https://dentalab.netlify.app/.netlify/functions/send-telegram">
@@ -45,6 +45,9 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dental-lab.site/">
     
+    <!-- Preload LCP hero image -->
+    <link rel="preload" as="image" href="images/dental-office-hero.png" fetchpriority="high">
+
     <!-- Preconnect for fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,6 +60,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Skip to main content (keyboard accessibility) -->
+    <a class="skip-link" href="#main-content">Перейти до основного вмісту</a>
+
     <!-- Sticky Floating Button -->
     <div class="floating-cta" id="floatingCta">
         <button class="floating-btn" aria-label="Записатися на прийом">
@@ -171,7 +177,7 @@
             <div class="promo-strip-card promo-open-booking" role="button" tabindex="0" aria-label="Відкрити форму запису по акції">
                 <div class="promo-strip-text">
                     <p class="promo-strip-label">🔥 Акція до кінця квітня</p>
-                    <h2 class="promo-strip-title">Комплексна профгігієна зубів: -50%</h2>
+                    <p class="promo-strip-title">Комплексна профгігієна зубів: -50%</p>
                     <p class="promo-strip-bullets">✓ Ультразвук ✓ AirFlow ✓ Полірування ✓ Огляд лікаря</p>
                     <div class="promo-price-line">
                         <span class="promo-old-price">2200 грн</span>
@@ -186,7 +192,7 @@
         </div>
     </section>
 
-    <section class="hero" role="banner">
+    <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
@@ -236,7 +242,7 @@
                 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-preserve-tooth.png" alt="Зуб з руками — символ збереження здоров'я" title="Лікуємо лише те, що потрібно">
+                        <img src="./images/benefits-preserve-tooth.png" alt="Зуб з руками — символ збереження здоров'я" title="Лікуємо лише те, що потрібно" loading="lazy" decoding="async">
                     </div>
                     <h3>Лікуємо лише те, що потрібно</h3>
                     <p>Ніяких нав'язаних процедур. Ми завжди боремося за те, щоб зберегти ваш рідний зуб, і пропонуємо втручання лише тоді, коли це дійсно необхідно.</p>
@@ -244,7 +250,7 @@
 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-time.png" alt="Годинник з руками — символ часу" title="Більше часу на кожного пацієнта">
+                        <img src="./images/benefits-time.png" alt="Годинник з руками — символ часу" title="Більше часу на кожного пацієнта" loading="lazy" decoding="async">
                     </div>
                     <h3>Більше часу на кожного пацієнта</h3>
                     <p>Ми не працюємо на потік. Виділяємо на прийом достатньо часу, щоб ви могли розслабитися, задати всі питання, а лікар міг виконати роботу ідеально і без поспіху.</p>
@@ -252,7 +258,7 @@
 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-pricing.png" alt="Чек-лист — символ прозорості" title="Зрозумілі ціни без прихованих доплат">
+                        <img src="./images/benefits-pricing.png" alt="Чек-лист — символ прозорості" title="Зрозумілі ціни без прихованих доплат" loading="lazy" decoding="async">
                     </div>
                     <h3>Зрозумілі ціни без прихованих доплат</h3>
                     <p>Ви знатимете точну вартість до початку лікування. Ми складаємо чіткий план, тому після прийому у вас не буде неприємних фінансових сюрпризів.</p>
@@ -260,7 +266,7 @@
 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-comfort.png" alt="Мікроскоп — символ точності та комфорту" title="Спокійне та безболісне лікування">
+                        <img src="./images/benefits-comfort.png" alt="Мікроскоп — символ точності та комфорту" title="Спокійне та безболісне лікування" loading="lazy" decoding="async">
                     </div>
                     <h3>Спокійне та безболісне лікування</h3>
                     <p>Використовуємо мікроскоп для ювелірної точності та якісну анестезію. Зробимо все, щоб у кріслі ви почувалися максимально комфортно і не відчували стресу.</p>
@@ -502,9 +508,9 @@
     </section>
 
     <!-- FAQ SECTION -->
-    <section class="faq" id="faq">
+    <section class="faq" id="faq" role="region" aria-labelledby="faq-title">
         <div class="container">
-            <h2 class="section-title">Поширені запитання</h2>
+            <h2 class="section-title" id="faq-title">Поширені запитання</h2>
             <p class="section-subtitle">Відповіді на найпоширеніші питання пацієнтів</p>
             
             <div class="faq-container">
@@ -716,14 +722,15 @@
     </main>
 
     <!-- Booking Form Modal -->
-    <div class="callback-overlay" id="bookingOverlay">
+    <div class="callback-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingPopupTitle">
         <div class="callback-popup">
             <button class="close-popup" id="closeBookingPopup" aria-label="Закрити">×</button>
             <div class="callback-content">
-                <h3>Записатися на прийом</h3>
+                <h3 id="bookingPopupTitle">Записатися на прийом</h3>
                 <p>Залиште ім'я та номер телефону, і ми зв'яжемося з вами найближчим часом</p>
                 <form id="bookingPopupForm" class="callback-form" novalidate>
                     <div class="form-group">
+                        <label for="bookingPopupName" class="sr-only">Ваше ім'я</label>
                         <div class="input-wrapper">
                             <input type="text" id="bookingPopupName" name="name" required
                                    placeholder="Ваше ім'я"
@@ -741,6 +748,7 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="bookingPopupPhone" class="sr-only">Телефон</label>
                         <div class="input-wrapper">
                             <input type="tel" id="bookingPopupPhone" name="phone" required
                                    placeholder="+380 XX XXX XX XX"
@@ -792,16 +800,17 @@
     </div>
 
     <!-- Callback Form Modal -->
-    <div class="callback-overlay" id="callbackOverlay">
+    <div class="callback-overlay" id="callbackOverlay" role="dialog" aria-modal="true" aria-labelledby="callbackPopupTitle">
         <div class="callback-popup">
             <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити">×</button>
             <div class="callback-content">
-                <h3>Передзвоніть мені</h3>
+                <h3 id="callbackPopupTitle">Передзвоніть мені</h3>
                 <p>Залиште номер телефону і ми зателефонуємо вам найближчим часом</p>
                 <form id="callbackForm" class="callback-form" novalidate>
                     <div class="form-group">
+                        <label for="callbackPhone" class="sr-only">Телефон</label>
                         <div class="input-wrapper">
-                            <input type="tel" id="callbackPhone" name="phone" required 
+                            <input type="tel" id="callbackPhone" name="phone" required
                                    placeholder="+380 XX XXX XX XX"
                                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
                                 autocomplete="tel"
@@ -881,7 +890,7 @@
     "@context": "https://schema.org",
     "@type": "Dentist",
     "name": "Dental Lab",
-    "image": "https://dental-lab.site/images/hero-image.jpg",
+    "image": "https://dental-lab.site/images/hero-image.webp",
     "description": "Стоматологічна клініка в Києві. Якість, підтверджена вашою усмішкою.",
     "address": {
         "@type": "PostalAddress",
