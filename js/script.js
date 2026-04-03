@@ -780,29 +780,36 @@ document.addEventListener('DOMContentLoaded', function() {
     let ticking = false;
 
     function clearAllNavActive() {
-        navLinks.forEach((link) => {
+        navMenu.querySelectorAll('.nav-link').forEach((link) => {
             link.classList.remove('nav-link--active');
             link.removeAttribute('aria-current');
         });
+    }
+
+    function setActiveLink(link) {
+        clearAllNavActive();
+        if (!link) return;
+        link.classList.add('nav-link--active');
+        link.setAttribute('aria-current', 'page');
     }
 
     function updateActiveNavByScroll() {
         const headerOffset = headerEl ? headerEl.offsetHeight + 20 : 100;
         const probeY = window.scrollY + headerOffset;
 
-        let active = trackedLinks[0];
+        let active = null;
         for (const item of trackedLinks) {
             if (item.target.offsetTop <= probeY) {
                 active = item;
             }
         }
 
-        clearAllNavActive();
-
         if (active && active.link) {
-            active.link.classList.add('nav-link--active');
-            active.link.setAttribute('aria-current', 'page');
+            setActiveLink(active.link);
+            return;
         }
+
+        setActiveLink(null);
     }
 
     function onScroll() {
@@ -814,9 +821,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function scheduleActiveUpdate() {
+        requestAnimationFrame(() => {
+            updateActiveNavByScroll();
+        });
+    }
+
     updateActiveNavByScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', updateActiveNavByScroll);
+    window.addEventListener('hashchange', scheduleActiveUpdate);
+
+    trackedLinks.forEach(({ link }) => {
+        link.addEventListener('click', () => {
+            // Wait for native anchor jump, then re-evaluate active item.
+            setTimeout(scheduleActiveUpdate, 0);
+            setTimeout(scheduleActiveUpdate, 140);
+        });
+    });
 });
 
 try {
