@@ -273,7 +273,7 @@ footer[id] {
 .ba-slider-container {
     position: relative;
     width: 100%;
-    max-width: 760px;
+    max-width: 600px;
     aspect-ratio: 4 / 3;
     margin: 40px auto;
     overflow: hidden;
@@ -510,7 +510,7 @@ footer[id] {
     }
 
     .ba-slider-container {
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 1 / 1;
         margin: 18px auto 0;
         border-radius: 14px;
     }
@@ -1261,12 +1261,24 @@ body.menu-open {
 
 /* ===== SERVICE LANDING PAGES ===== */
 .service-page .hero {
-    padding: 96px 0 72px;
+    padding: 24px 0 72px;
     min-height: auto;
 }
 
 .service-page .hero .container {
     min-height: auto;
+}
+
+.service-page .service-section {
+    padding: 48px 0;
+}
+
+.service-page .faq {
+    padding: 48px 0;
+}
+
+.service-page-hero + .service-section {
+    padding-top: 20px;
 }
 
 .service-page .hero-image img {
@@ -1457,7 +1469,7 @@ body.menu-open {
 
 @media (max-width: 768px) {
     .service-page .hero {
-        padding: 64px 0 28px;
+        padding: 16px 0 28px;
     }
 
     .service-page .section-title {
