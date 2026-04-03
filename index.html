@@ -30,7 +30,7 @@
     <meta name="twitter:image" content="https://dental-lab.site/images/hero-image.webp">
     
     <!-- Form endpoint for serverless submission (hosted on Netlify) -->
-    <meta name="form-endpoint" content="https://dentalab.netlify.app/.netlify/functions/send-telegram">
+    <meta name="form-endpoint" content="/.netlify/functions/send-telegram">
     
     <!-- Favicon -->
     <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" sizes="any">
@@ -44,9 +44,11 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dental-lab.site/">
+    <link rel="alternate" hreflang="uk-UA" href="https://dental-lab.site/">
+    <link rel="alternate" hreflang="x-default" href="https://dental-lab.site/">
     
     <!-- Preload LCP hero image -->
-    <link rel="preload" as="image" href="images/dental-office-hero.png" fetchpriority="high">
+    <link rel="preload" as="image" href="images/dental-office-hero.webp" fetchpriority="high">
 
     <!-- Preconnect for fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,10 +56,11 @@
 
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css?v=2.5">
+    <link rel="stylesheet" href="css/style.css?v=3.1">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 </head>
 <body>
     <!-- Skip to main content (keyboard accessibility) -->
@@ -110,9 +113,9 @@
                 <nav class="nav" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
                     <a href="#переваги" class="nav-link">Переваги</a>
                     <a href="#послуги" class="nav-link">Послуги</a>
-                    <a href="#акції" class="nav-link">Акції</a>
                     <a href="#ціни" class="nav-link">Ціни</a>
                     <a href="#faq" class="nav-link">Запитання</a>
+                    <a href="#відгуки" class="nav-link">Відгуки</a>
                     <a href="#контакти" class="nav-link">Контакти</a>
                     
                     <!-- Mobile CTA buttons -->
@@ -186,7 +189,7 @@
                     <button class="btn-cta promo-strip-btn" type="button">Забронювати час</button>
                 </div>
                 <div class="promo-strip-visual" aria-hidden="true">
-                    <img class="promo-tooth-visual" src="images/promo-smile.png" alt="" loading="lazy" decoding="async">
+                    <img class="promo-tooth-visual" src="images/promo-smile.webp" alt="Посмішка пацієнтки після професійної гігієни зубів" loading="lazy" decoding="async">
                 </div>
             </div>
         </div>
@@ -200,36 +203,12 @@
                     <p class="hero-subtitle">Якість, підтверджена вашою усмішкою.</p>
                 </div>
                 <div class="hero-image">
-                    <img src="images/dental-office-hero.png" alt="Сучасна стоматологічна лабораторія Dental Lab" loading="eager" fetchpriority="high" decoding="async" width="960" height="628">
+                    <img src="images/dental-office-hero.webp" alt="Сучасна стоматологічна лабораторія Dental Lab" loading="eager" fetchpriority="high" decoding="async" width="960" height="628">
                 </div>
                 <div class="hero-cta">
                     <button class="btn-cta">Записатися онлайн</button>
                     <p class="hero-contact">або телефонуйте: <a href="tel:+380661829540">+38 (066) 182-95-40</a></p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="promotions" id="акції" role="region" aria-labelledby="promotions-title">
-        <div class="container">
-            <h2 class="section-title" id="promotions-title">Акції</h2>
-            <p class="section-subtitle">Спеціальна пропозиція для нових та постійних пацієнтів</p>
-
-            <div class="promo-card promo-open-booking" role="button" tabindex="0" aria-label="Відкрити форму запису по акції">
-                <span class="promo-card-badge">-50%</span>
-                <h3>Комплексна профгігієна зубів: -50%</h3>
-                <div class="promo-price-line">
-                    <span class="promo-old-price">2200 грн</span>
-                    <span class="promo-new-price">1100 грн</span>
-                </div>
-                <p class="promo-includes-title">Що входить у ціну 1100 грн:</p>
-                <ul class="promo-includes">
-                    <li>Огляд лікаря-стоматолога</li>
-                    <li>Зняття зубного каменю ультразвуком</li>
-                    <li>Чистка AirFlow</li>
-                    <li>Полірування зубів</li>
-                </ul>
-                <button class="btn-cta promo-card-cta" type="button">Забронювати час</button>
             </div>
         </div>
     </section>
@@ -242,7 +221,7 @@
                 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-preserve-tooth.png" alt="Зуб з руками — символ збереження здоров'я" title="Лікуємо лише те, що потрібно" loading="lazy" decoding="async">
+                        <img src="./images/benefits-preserve-tooth.webp" alt="Зуб з руками — символ збереження здоров'я" title="Лікуємо лише те, що потрібно" loading="lazy" decoding="async">
                     </div>
                     <h3>Лікуємо лише те, що потрібно</h3>
                     <p>Ніяких нав'язаних процедур. Ми завжди боремося за те, щоб зберегти ваш рідний зуб, і пропонуємо втручання лише тоді, коли це дійсно необхідно.</p>
@@ -250,7 +229,7 @@
 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-time.png" alt="Годинник з руками — символ часу" title="Більше часу на кожного пацієнта" loading="lazy" decoding="async">
+                        <img src="./images/benefits-time.webp" alt="Годинник з руками — символ часу" title="Більше часу на кожного пацієнта" loading="lazy" decoding="async">
                     </div>
                     <h3>Більше часу на кожного пацієнта</h3>
                     <p>Ми не працюємо на потік. Виділяємо на прийом достатньо часу, щоб ви могли розслабитися, задати всі питання, а лікар міг виконати роботу ідеально і без поспіху.</p>
@@ -258,7 +237,7 @@
 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-pricing.png" alt="Чек-лист — символ прозорості" title="Зрозумілі ціни без прихованих доплат" loading="lazy" decoding="async">
+                        <img src="./images/benefits-pricing.webp" alt="Чек-лист — символ прозорості" title="Зрозумілі ціни без прихованих доплат" loading="lazy" decoding="async">
                     </div>
                     <h3>Зрозумілі ціни без прихованих доплат</h3>
                     <p>Ви знатимете точну вартість до початку лікування. Ми складаємо чіткий план, тому після прийому у вас не буде неприємних фінансових сюрпризів.</p>
@@ -266,7 +245,7 @@
 
                 <div class="advantage-card">
                     <div class="advantage-icon">
-                        <img src="./images/benefits-comfort.png" alt="Мікроскоп — символ точності та комфорту" title="Спокійне та безболісне лікування" loading="lazy" decoding="async">
+                        <img src="./images/benefits-comfort.webp" alt="Мікроскоп — символ точності та комфорту" title="Спокійне та безболісне лікування" loading="lazy" decoding="async">
                     </div>
                     <h3>Спокійне та безболісне лікування</h3>
                     <p>Використовуємо мікроскоп для ювелірної точності та якісну анестезію. Зробимо все, щоб у кріслі ви почувалися максимально комфортно і не відчували стресу.</p>
@@ -303,6 +282,7 @@
                     </ul>
                     <div class="service-card-actions">
                         <button class="btn-cta service-card-cta" type="button">Записатися</button>
+                        <a href="services/hygiene.html">Детальніше про послугу</a>
                     </div>
                 </div>
 
@@ -319,6 +299,7 @@
                     </ul>
                     <div class="service-card-actions">
                         <button class="btn-cta service-card-cta" type="button">Записатися</button>
+                        <a href="services/caries-treatment.html">Детальніше про послугу</a>
                     </div>
                 </div>
 
@@ -334,6 +315,7 @@
                     </ul>
                     <div class="service-card-actions">
                         <button class="btn-cta service-card-cta" type="button">Записатися</button>
+                        <a href="services/implantation.html">Детальніше про послугу</a>
                     </div>
                 </div>
 
@@ -504,6 +486,19 @@
                 <p>Точний план лікування та його вартість лікар складе після безкоштовного огляду та діагностики.</p>
                 <button type="button" class="price-estimate-btn">Отримати індивідуальний прорахунок</button>
             </div>
+
+            <div class="price-bottom-cta price-bottom-services" aria-label="Сторінки послуг для детального ознайомлення">
+                <p>Детальніше про послуги:</p>
+                <div class="service-links-container">
+                    <a href="services/hygiene.html" class="service-link-pill">Професійна гігієна</a>
+                    <a href="services/caries-treatment.html" class="service-link-pill">Лікування карієсу</a>
+                    <a href="services/implantation.html" class="service-link-pill">Імплантація під ключ</a>
+                    <a href="services/orthodontics.html" class="service-link-pill">Ортодонтія</a>
+                    <a href="services/whitening.html" class="service-link-pill">Відбілювання</a>
+                    <a href="services/extraction.html" class="service-link-pill">Видалення зубів</a>
+                    <a href="services/prosthetics.html" class="service-link-pill">Протезування</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -511,50 +506,220 @@
     <section class="faq" id="faq" role="region" aria-labelledby="faq-title">
         <div class="container">
             <h2 class="section-title" id="faq-title">Поширені запитання</h2>
-            <p class="section-subtitle">Відповіді на найпоширеніші питання пацієнтів</p>
+            <p class="section-subtitle">Відповіді на найпоширеніші питання пацієнтів про чистку, карієс і пломбування</p>
             
             <div class="faq-container">
                 
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
-                        <span>Чи безболісне лікування в вашій клініці?</span>
+                        <span>Як часто потрібно проводити професійну чистку зубів (профгігієну)?</span>
                         <span class="faq-icon" aria-hidden="true">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-1" aria-hidden="true">
-                        <p>Так, ми використовуємо сучасні методи знеболення. Всі процедури проводяться з якісною місцевою анестезією. Для особливо чутливих пацієнтів доступна седація.</p>
+                        <p>Рекомендується проходити професійну гігієну порожнини рота 1 раз на 6 місяців. Це дозволяє вчасно видалити зубний наліт і камінь, яких не прибирає домашнє чищення, і запобігти карієсу та запаленню ясен. Для пацієнтів з брекетами, імплантами або схильністю до каменю - частіше, за індивідуальним призначенням лікаря-гігієніста.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
-                        <span>Скільки триває лікування карієсу?</span>
+                        <span>Чи боляче робити професійну чистку зубів?</span>
                         <span class="faq-icon" aria-hidden="true">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-2" aria-hidden="true">
-                        <p>Залежно від складності: поверхневий карієс - 30-45 хвилин, середній - 45-60 хвилин, глибокий - може потребувати 2-3 візити. Точний час визначається після огляду.</p>
+                        <p>Процедура комфортна і безболісна. Ми використовуємо сучасні методи (ультразвук, Air Flow, полірування), які не пошкоджують емаль. Можливе лише легке відчуття під час зняття під'ясенного каменю, але воно мінімальне. Після чистки зуби стають гладкими і природно білими.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
-                        <span>Як часто потрібно проходити профілактичний огляд?</span>
+                        <span>Чи обов’язково лікувати карієс, якщо зуб не болить?</span>
                         <span class="faq-icon" aria-hidden="true">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-3" aria-hidden="true">
-                        <p>Рекомендуємо відвідувати стоматолога кожні 6 місяців для профілактичного огляду та професійної гігієни. При схильності до карієсу - кожні 4 місяці.</p>
+                        <p>Так, обов’язково. Карієс на ранній стадії майже ніколи не викликає болю, але поступово руйнує зуб. Своєчасне лікування - це просте пломбування, яке зберігає нерв і запобігає ускладненням (пульпіт, періодонтит). Чим раніше - тим дешевше і швидше.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
-                        <span>Чи лікуєте ви дітей? З якого віку?</span>
+                        <span>Чи потрібна анестезія при лікуванні карієсу та пломбуванні?</span>
                         <span class="faq-icon" aria-hidden="true">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-4" aria-hidden="true">
-                        <p>Так, ми приймаємо дітей з 3 років. Маємо спеціального дитячого стоматолога та створюємо комфортну атмосферу для маленьких пацієнтів.</p>
+                        <p>При поверхневому карієсі анестезія може не знадобитися. При середньому та глибокому - ми обов’язково використовуємо сучасну місцеву анестезію (найчастіше безболісну карпульну). Пацієнт нічого не відчуває під час лікування. Для тривожних пацієнтів пропонуємо седацію.</p>
                     </div>
                 </div>
 
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+                        <span>Скільки часу триває лікування одного зуба (пломбування)?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-5" aria-hidden="true">
+                        <p>Зазвичай від 30 до 60 хвилин залежно від складності. Це включає діагностику, анестезію, препарування каріозної порожнини, постановку сучасної естетичної пломби та фінішну обробку. Ми працюємо з преміум-матеріалами, які служать багато років.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section class="reviews" id="відгуки">
+        <div class="container">
+            <h2 class="section-title" id="reviews-title">Відгуки наших пацієнтів</h2>
+            <p class="section-subtitle">Ми цінуємо вашу довіру та зворотний зв'язок</p>
+            
+            <div class="reviews-grid">
+                <!-- Review 1 -->
+                <article class="review-card" role="region" aria-label="Відгук від Олени">
+                    <div class="review-header">
+                        <h3 class="review-author">Олена</h3>
+                        <div class="review-rating" aria-label="Оцінка: 5 з 5 зірок">
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="review-text">Вперше за довгий час процедура чистки пройшла абсолютно комфортно. Зазвичай у мене дуже чутливі зуби на ультразвук, але лікарка зробила все дуже делікатно. Після AirFlow зуби стали помітно білішими, наліт від кави повністю зник. Дуже сподобалося, що виділили багато часу на консультацію щодо домашнього догляду.</p>
+                </article>
+
+                <!-- Review 2 -->
+                <article class="review-card" role="region" aria-label="Відгук від Богдана">
+                    <div class="review-header">
+                        <h3 class="review-author">Богдан</h3>
+                        <div class="review-rating" aria-label="Оцінка: 5 з 5 зірок">
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="review-text">Регулярно ходжу на профгігієну, і це був один із найкращих досвідів. Усе професійно, стерильно, без поспіху. Після полірування зуби ідеально гладенькі. Приємна атмосфера, яка допомогає розслабитися.</p>
+                </article>
+
+                <!-- Review 3 -->
+                <article class="review-card" role="region" aria-label="Відгук від Марини">
+                    <div class="review-header">
+                        <h3 class="review-author">Марина</h3>
+                        <div class="review-rating" aria-label="Оцінка: 5 з 5 зірок">
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="review-text">Робила відбілювання перед важливою подією. Переживала, що емаль стане чутливою, але лікарка підібрала щадний варіант. Результат перевершив очікування – посмішка виглядає природно білою, а не "керамічною". Весь процес був безболісним, я навіть майже заснула в кріслі.</p>
+                </article>
+
+                <!-- Review 4 -->
+                <article class="review-card" role="region" aria-label="Відгук від Сергія">
+                    <div class="review-header">
+                        <h3 class="review-author">Сергій</h3>
+                        <div class="review-rating" aria-label="Оцінка: 5 з 5 зірок">
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="review-text">Потрібно було замінити стару пломбу на передньому зубі. Робота виконана ювелірно – форму і колір підібрано так, що взагалі неможливо відрізнити, де пломба, а де свій зуб. Анестезія подіяла миттєво, жодного дискомфорту під час лікування не було. Рекомендую за професіоналізм та увагу до деталей.</p>
+                </article>
+
+                <!-- Review 5 -->
+                <article class="review-card" role="region" aria-label="Відгук від Ірини">
+                    <div class="review-header">
+                        <h3 class="review-author">Ірина</h3>
+                        <div class="review-rating" aria-label="Оцінка: 5 з 5 зірок">
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="review-text">Дуже боялася лікувати зуби з дитинства, але після візиту сюди страх зник. Лікарка дуже спокійна, пояснює кожен крок, використовує мікроскоп. Лікували глибокий карієс, усе пройшло ідеально. Дякую за врятований зуб!</p>
+                </article>
+
+                <!-- Review 6 -->
+                <article class="review-card" role="region" aria-label="Відгук від Дарини">
+                    <div class="review-header">
+                        <h3 class="review-author">Дарина</h3>
+                        <div class="review-rating" aria-label="Оцінка: 5 з 5 зірок">
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="review-text">Я з тих пацієнтів, хто до останнього тягне з візитом до стоматолога через страх. Але тут я вперше відчула себе спокійно. Лікарка дуже чуйна, постійно запитувала, чи все добре, коментувала свої дії. Врятували мені складний зуб, який в іншій клініці радили видаляти. Тепер лікуватися буду тільки тут.</p>
+                </article>
             </div>
         </div>
     </section>
@@ -860,9 +1025,9 @@
                     <ul class="footer-links">
                         <li><a href="#переваги">Переваги</a></li>
                         <li><a href="#послуги">Послуги</a></li>
-                        <li><a href="#акції">Акції</a></li>
                         <li><a href="#ціни">Ціни</a></li>
                         <li><a href="#faq">Запитання</a></li>
+                        <li><a href="#відгуки">Відгуки</a></li>
                         <li><a href="#контакти">Контакти</a></li>
                     </ul>
                 </div>
@@ -884,100 +1049,114 @@
     </footer>
 
 
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "Dentist",
-    "name": "Dental Lab",
-    "image": "https://dental-lab.site/images/hero-image.webp",
-    "description": "Стоматологічна клініка в Києві. Якість, підтверджена вашою усмішкою.",
-    "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "вул. Предславинська, 49",
-        "addressLocality": "Київ",
-        "postalCode": "01001",
-        "addressCountry": "UA"
-    },
-    "sameAs": [
-        "https://www.google.com/maps/place/%D1%83%D0%BB.+%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F,+49,+%D0%9A%D0%B8%D0%B5%D0%B2,+02000/@50.4180447,30.5245842,18.97z"
-    ],
-    "areaServed": "Київ",
-    "telephone": "+380661829540",
-    "url": "https://dental-lab.site",
-    "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Стоматологічні послуги Dental Lab",
-        "itemListElement": [
-            {"@type": "Offer", "name": "Консультація стоматолога"},
-            {"@type": "Offer", "name": "Професійна гігієна"},
-            {"@type": "Offer", "name": "Лікування карієсу"},
-            {"@type": "Offer", "name": "Відбілювання зубів"}
-        ]
-    },
-    "openingHoursSpecification": [
+        <!-- Structured Data -->
+        <script type="application/ld+json">
         {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "opens": "09:00",
-        "closes": "20:00"
-        },
-        {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": "Saturday",
-        "opens": "10:00",
-        "closes": "16:00"
+            "@context": "https://schema.org",
+            "@type": ["Dentist", "LocalBusiness"],
+            "@id": "https://dental-lab.site/#dentist",
+            "name": "Dental Lab",
+            "url": "https://dental-lab.site/",
+            "image": "https://dental-lab.site/images/hero-image.webp",
+            "description": "Стоматологічна клініка в Києві. Професійне лікування зубів, гігієна, естетична стоматологія та імплантація.",
+            "telephone": "+380661829540",
+            "priceRange": "$$",
+            "areaServed": {
+                "@type": "City",
+                "name": "Київ"
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "вул. Предславинська, 49",
+                "addressLocality": "Київ",
+                "addressRegion": "Київ",
+                "postalCode": "01001",
+                "addressCountry": "UA"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 50.4182255,
+                "longitude": 30.525489
+            },
+            "openingHoursSpecification": [
+                {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                    "opens": "09:00",
+                    "closes": "20:00"
+                },
+                {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": "Saturday",
+                    "opens": "10:00",
+                    "closes": "16:00"
+                }
+            ],
+            "sameAs": [
+                "https://www.google.com/maps/place/%D1%83%D0%BB.+%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D0%BB%D0%B0%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F,+49,+%D0%9A%D0%B8%D0%B5%D0%B2,+02000/@50.4180447,30.5245842,18.97z"
+            ],
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Стоматологічні послуги Dental Lab",
+                "itemListElement": [
+                    {"@type": "Offer", "name": "Консультація стоматолога"},
+                    {"@type": "Offer", "name": "Професійна гігієна"},
+                    {"@type": "Offer", "name": "Лікування карієсу"},
+                    {"@type": "Offer", "name": "Імплантація зубів"},
+                    {"@type": "Offer", "name": "Відбілювання зубів"}
+                ]
+            }
         }
-    ],
-    "priceRange": "$$",
-    "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "50.4182255",
-        "longitude": "30.525489"
-    }
-    }
-    </script>
+        </script>
 
-    <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
+        <script type="application/ld+json">
         {
-            "@type": "Question",
-            "name": "Чи безболісне лікування в вашій клініці?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Так, ми використовуємо сучасні методи знеболення. Всі процедури проводяться з якісною місцевою анестезією. Для особливо чутливих пацієнтів доступна седація."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Скільки триває лікування карієсу?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Залежно від складності: поверхневий карієс - 30-45 хвилин, середній - 45-60 хвилин, глибокий - може потребувати 2-3 візити. Точний час визначається після огляду."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Як часто потрібно проходити профілактичний огляд?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Рекомендуємо відвідувати стоматолога кожні 6 місяців для профілактичного огляду та професійної гігієни. При схильності до карієсу - кожні 4 місяці."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Чи лікуєте ви дітей? З якого віку?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Так, ми приймаємо дітей з 3 років. Маємо спеціального дитячого стоматолога та створюємо комфортну атмосферу для маленьких пацієнтів."
-            }
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Як часто потрібно проводити професійну чистку зубів (профгігієну)?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Рекомендується проходити професійну гігієну порожнини рота 1 раз на 6 місяців. Це дозволяє вчасно видалити зубний наліт і камінь, яких не прибирає домашнє чищення, і запобігти карієсу та запаленню ясен. Для пацієнтів з брекетами, імплантами або схильністю до каменю - частіше, за індивідуальним призначенням лікаря-гігієніста."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Чи боляче робити професійну чистку зубів?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Процедура комфортна і безболісна. Ми використовуємо сучасні методи (ультразвук, Air Flow, полірування), які не пошкоджують емаль. Можливе лише легке відчуття під час зняття під'ясенного каменю, але воно мінімальне. Після чистки зуби стають гладкими і природно білими."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Чи обов’язково лікувати карієс, якщо зуб не болить?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Так, обов’язково. Карієс на ранній стадії майже ніколи не викликає болю, але поступово руйнує зуб. Своєчасне лікування - це просте пломбування, яке зберігає нерв і запобігає ускладненням (пульпіт, періодонтит). Чим раніше - тим дешевше і швидше."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Чи потрібна анестезія при лікуванні карієсу та пломбуванні?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "При поверхневому карієсі анестезія може не знадобитися. При середньому та глибокому - ми обов’язково використовуємо сучасну місцеву анестезію (найчастіше безболісну карпульну). Пацієнт нічого не відчуває під час лікування. Для тривожних пацієнтів пропонуємо седацію."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Скільки часу триває лікування одного зуба (пломбування)?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Зазвичай від 30 до 60 хвилин залежно від складності. Це включає діагностику, анестезію, препарування каріозної порожнини, постановку сучасної естетичної пломби та фінішну обробку. Ми працюємо з преміум-матеріалами, які служать багато років."
+                    }
+                }
+            ]
         }
-    ]
-    }
-    </script>
+        </script>
 
 
 

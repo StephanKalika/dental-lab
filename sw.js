@@ -1,23 +1,24 @@
 // Service Worker for Dental Lab  
-// Version 2.2.0
+// Version 3.4.0
 
-const CACHE_NAME = 'dental-lab-v2-3';
+const CACHE_NAME = 'dental-lab-v3-4';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/404.html',
   '/css/style.css',
-  '/css/style.css?v=2.5',
+  '/css/style.css?v=3.2',
   '/js/script.js',
-  '/js/script.js?v=2.6',
+  '/js/script.js?v=3.2',
   '/favicon.svg',
   '/site.webmanifest',
-  '/images/dental-office-hero.png',
+  '/images/dental-office-hero.webp',
   '/images/hero-image.webp',
-  '/images/promo-smile.png',
-  '/images/benefits-preserve-tooth.png',
-  '/images/benefits-time.png',
-  '/images/benefits-pricing.png',
-  '/images/benefits-comfort.png',
+  '/images/promo-smile.webp',
+  '/images/benefits-preserve-tooth.webp',
+  '/images/benefits-time.webp',
+  '/images/benefits-pricing.webp',
+  '/images/benefits-comfort.webp',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap'
 ];
 

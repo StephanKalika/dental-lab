@@ -43,6 +43,112 @@ function createFocusTrap(containerEl) {
     };
 }
 
+// ===== BEFORE/AFTER SLIDER LOGIC =====
+function initBASliders() {
+    const sliders = document.querySelectorAll('.ba-slider-container');
+    if (!sliders.length) return;
+
+    sliders.forEach((slider) => {
+        const handle = slider.querySelector('.ba-handle');
+        const beforeWrapper = slider.querySelector('.ba-before-wrapper');
+        const beforeLabel = slider.querySelector('.ba-label-before');
+        const afterLabel = slider.querySelector('.ba-label-after');
+        if (!handle || !beforeWrapper) return;
+
+        let isActive = false;
+
+        function syncLabelVisibility(percentage) {
+            if (beforeLabel) {
+                const hideBefore = percentage < 12;
+                beforeLabel.classList.toggle('ba-label-hidden', hideBefore);
+                beforeLabel.setAttribute('aria-hidden', hideBefore ? 'true' : 'false');
+            }
+
+            if (afterLabel) {
+                const hideAfter = percentage > 88;
+                afterLabel.classList.toggle('ba-label-hidden', hideAfter);
+                afterLabel.setAttribute('aria-hidden', hideAfter ? 'true' : 'false');
+            }
+        }
+
+        const moveHandler = (clientX) => {
+            const rect = slider.getBoundingClientRect();
+            if (!rect.width) return;
+
+            let positionX = clientX - rect.left;
+            if (positionX < 0) positionX = 0;
+            if (positionX > rect.width) positionX = rect.width;
+
+            const percentage = (positionX / rect.width) * 100;
+            handle.style.left = `${percentage}%`;
+            handle.setAttribute('aria-valuenow', Math.round(percentage));
+            beforeWrapper.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            syncLabelVisibility(percentage);
+        };
+
+        const startDrag = () => {
+            isActive = true;
+            slider.classList.add('is-dragging');
+            slider.classList.add('ba-interacted');
+            handle.style.transition = 'none';
+            beforeWrapper.style.transition = 'none';
+        };
+
+        const stopDrag = () => {
+            isActive = false;
+            slider.classList.remove('is-dragging');
+            handle.style.transition = '';
+            beforeWrapper.style.transition = '';
+        };
+
+        handle.addEventListener('mousedown', startDrag);
+        slider.addEventListener('mousedown', (e) => {
+            startDrag();
+            moveHandler(e.clientX);
+        });
+        slider.addEventListener('click', () => {
+            slider.classList.add('ba-interacted');
+        });
+        window.addEventListener('mouseup', stopDrag);
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isActive) return;
+            moveHandler(e.clientX);
+        });
+
+        handle.addEventListener('touchstart', startDrag, { passive: true });
+        slider.addEventListener('touchstart', (e) => {
+            startDrag();
+            moveHandler(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener('touchend', stopDrag, { passive: true });
+
+        slider.addEventListener('touchmove', (e) => {
+            if (!isActive) return;
+            moveHandler(e.touches[0].clientX);
+        }, { passive: true });
+
+        // One-time intro animation to hint interactivity.
+        const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReducedMotion) {
+            setTimeout(() => {
+                if (slider.classList.contains('ba-interacted')) return;
+                const sequence = [40, 60, 50];
+                sequence.forEach((value, index) => {
+                    setTimeout(() => {
+                        handle.style.left = `${value}%`;
+                        handle.setAttribute('aria-valuenow', value);
+                        beforeWrapper.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+                        syncLabelVisibility(value);
+                    }, index * 220);
+                });
+            }, 450);
+        }
+
+        syncLabelVisibility(50);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     const burgerBtn = document.getElementById('burgerBtn');
@@ -120,10 +226,13 @@ const formError = document.getElementById('formError');
 
 const endpointMeta = document.querySelector('meta[name="form-endpoint"]');
 const SAME_ORIGIN_ENDPOINT = '/.netlify/functions/send-telegram';
-const PRIMARY_REMOTE_ENDPOINT = 'https://dentalab.netlify.app/.netlify/functions/send-telegram';
+const REMOTE_ENDPOINTS = [
+    'https://dental-lab.site/.netlify/functions/send-telegram',
+    'https://dentalab.netlify.app/.netlify/functions/send-telegram'
+];
 const FUNCTION_ENDPOINT = (endpointMeta && endpointMeta.content && endpointMeta.content.trim().length > 0)
     ? endpointMeta.content.trim()
-    : PRIMARY_REMOTE_ENDPOINT;
+    : SAME_ORIGIN_ENDPOINT;
 
 function getFriendlySubmitError(errorPayload, statusCode) {
     const raw = (typeof errorPayload === 'string' ? errorPayload : (errorPayload && errorPayload.error) || '').toLowerCase();
@@ -157,8 +266,8 @@ async function sendFormRequest(payload) {
     const isLocalHost = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost === '::1';
 
     const endpoints = Array.from(new Set(isLocalHost
-        ? [FUNCTION_ENDPOINT, PRIMARY_REMOTE_ENDPOINT, SAME_ORIGIN_ENDPOINT]
-        : [FUNCTION_ENDPOINT, SAME_ORIGIN_ENDPOINT, PRIMARY_REMOTE_ENDPOINT]
+        ? [FUNCTION_ENDPOINT, ...REMOTE_ENDPOINTS, SAME_ORIGIN_ENDPOINT]
+        : [FUNCTION_ENDPOINT, SAME_ORIGIN_ENDPOINT, ...REMOTE_ENDPOINTS]
     ).values());
 
     let lastError = null;
@@ -233,7 +342,7 @@ if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
         formSuccess.style.display = 'flex';
         formSuccess.focus();
         bookingForm.reset();
-        setTimeout(() => { formSuccess.style.display = 'none'; }, 8000);
+        setTimeout(() => { formSuccess.style.display = 'none'; }, 12000);
     } catch (error) {
         console.error('Form submit error:', error);
         const errorText = formError?.querySelector('p');
@@ -242,7 +351,7 @@ if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
         }
         formError.style.display = 'flex';
         formError.focus();
-        setTimeout(() => { formError.style.display = 'none'; }, 8000);
+        setTimeout(() => { formError.style.display = 'none'; }, 12000);
     } finally {
         submitBtn.disabled = false;
         submitBtn.querySelector('.btn-text').style.display = 'inline';
@@ -376,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookingPopupForm = document.getElementById('bookingPopupForm');
     const bookingPopupName = document.getElementById('bookingPopupName');
     const bookingPopupPhone = document.getElementById('bookingPopupPhone');
-    const openBookingButtons = document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta:not(.open-callback), .promo-open-booking');
+    const openBookingButtons = document.querySelectorAll('.btn-primary, .btn-cta, .btn-mobile-cta:not(.open-callback), .promo-open-booking, .service-page .service-link-pill[href*="#контакти"]');
     const bookingFocusTrap = bookingOverlay ? createFocusTrap(bookingOverlay) : null;
     let bookingTrigger = null;
 
@@ -567,6 +676,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const faqItems = document.querySelectorAll('.faq-item');
+    initBASliders();
 
     function setFaqHeight(answer) {
         if (!answer) return;
@@ -577,6 +687,14 @@ document.addEventListener('DOMContentLoaded', function() {
         faqItems.forEach(item => {
             const answer = item.querySelector('.faq-answer');
             if (answer && answer.getAttribute('aria-hidden') === 'false') setFaqHeight(answer);
+        });
+    }
+
+    function openFaq(question, answer) {
+        question.setAttribute('aria-expanded', 'true');
+        answer.setAttribute('aria-hidden', 'false');
+        requestAnimationFrame(function() {
+            setFaqHeight(answer);
         });
     }
 
@@ -602,9 +720,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.setAttribute('aria-expanded', 'false');
                 answer.setAttribute('aria-hidden', 'true');
             } else {
-                this.setAttribute('aria-expanded', 'true');
-                setFaqHeight(answer);
-                answer.setAttribute('aria-hidden', 'false');
+                openFaq(this, answer);
             }
         });
 
@@ -616,7 +732,91 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    window.addEventListener('load', refreshOpenFaqHeights);
     window.addEventListener('resize', refreshOpenFaqHeights);
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(refreshOpenFaqHeights).catch(function() {});
+    }
+});
+
+// Nav scroll-spy: updates active menu item while scrolling on pages with same-page section anchors.
+document.addEventListener('DOMContentLoaded', function() {
+    const navMenu = document.getElementById('nav-menu') || document.getElementById('navMenu');
+    if (!navMenu) return;
+
+    const navLinks = Array.from(navMenu.querySelectorAll('.nav-link[href]'));
+    if (!navLinks.length) return;
+
+    function normalizePathname(pathname) {
+        const clean = (pathname || '').replace(/\/+$/, '');
+        if (!clean || clean === '/index.html') return '/';
+        return clean;
+    }
+
+    const currentPath = normalizePathname(window.location.pathname);
+
+    // Keep pre-set active state on pages where menu links lead to another page (e.g. service subpages).
+    const trackedLinks = navLinks
+        .map((link) => {
+            const href = link.getAttribute('href');
+            if (!href || !href.includes('#')) return null;
+
+            const url = new URL(href, window.location.href);
+            const samePage = normalizePathname(url.pathname) === currentPath;
+            if (!samePage || !url.hash || url.hash === '#') return null;
+
+            const targetId = decodeURIComponent(url.hash.slice(1));
+            const target = document.getElementById(targetId);
+            if (!target) return null;
+
+            return { link, target };
+        })
+        .filter(Boolean);
+
+    if (!trackedLinks.length) return;
+
+    const headerEl = document.querySelector('.header');
+    let ticking = false;
+
+    function clearAllNavActive() {
+        navLinks.forEach((link) => {
+            link.classList.remove('nav-link--active');
+            link.removeAttribute('aria-current');
+        });
+    }
+
+    function updateActiveNavByScroll() {
+        const headerOffset = headerEl ? headerEl.offsetHeight + 20 : 100;
+        const probeY = window.scrollY + headerOffset;
+
+        let active = trackedLinks[0];
+        for (const item of trackedLinks) {
+            if (item.target.offsetTop <= probeY) {
+                active = item;
+            }
+        }
+
+        clearAllNavActive();
+
+        if (active && active.link) {
+            active.link.classList.add('nav-link--active');
+            active.link.setAttribute('aria-current', 'page');
+        }
+    }
+
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            updateActiveNavByScroll();
+            ticking = false;
+        });
+    }
+
+    updateActiveNavByScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updateActiveNavByScroll);
 });
 
 try {

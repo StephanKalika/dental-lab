@@ -7,15 +7,65 @@
     <!-- Homepage -->
     <url>
         <loc>https://dental-lab.site/</loc>
-        <lastmod>2025-10-15</lastmod>
+        <lastmod>2026-04-03</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+    </url>
+
+    <!-- Key service landing pages -->
+    <url>
+        <loc>https://dental-lab.site/services/hygiene.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://dental-lab.site/services/caries-treatment.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://dental-lab.site/services/implantation.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dental-lab.site/services/orthodontics.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dental-lab.site/services/whitening.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dental-lab.site/services/extraction.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dental-lab.site/services/prosthetics.html</loc>
+        <lastmod>2026-04-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
     
     <!-- 404 Page -->
     <url>
         <loc>https://dental-lab.site/404.html</loc>
-        <lastmod>2025-10-15</lastmod>
+        <lastmod>2026-04-03</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.1</priority>
     </url>
