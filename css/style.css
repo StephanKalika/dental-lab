@@ -10,6 +10,9 @@
     --graphite: #2C3E50;
     --light-gray: #F5F7FA;
     --text-gray: #7F8C8D;
+    --header-muted: #5f6f76;
+    --header-hover: #6ea992;
+    --heading-font: 'Manrope', 'Inter', sans-serif;
 }
 
 /* Reset */
@@ -24,6 +27,16 @@ body {
     color: var(--graphite);
     line-height: 1.6;
     background: var(--white);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--heading-font);
+    letter-spacing: -0.01em;
 }
 
 html {
@@ -147,16 +160,17 @@ html {
     display: flex;
     align-items: center;
     gap: 5px;
-    color: var(--text-gray);
+    color: var(--header-muted);
     text-decoration: none;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.25;
     transition: color 0.3s ease;
     white-space: nowrap;
 }
 
 .address:hover {
-    color: var(--mint);
+    color: var(--header-hover);
 }
 
 .address svg {
@@ -167,7 +181,7 @@ html {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 5px;
+    gap: 6px;
 }
 
 .contact-info .phone {
@@ -175,17 +189,17 @@ html {
     align-items: center;
     align-content: center;
     gap: 5px;
-    color: var(--text-gray);
+    color: var(--header-muted);
     text-decoration: none;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 14px;
     transition: color 0.3s ease;
     white-space: nowrap;
-    line-height: 1;
+    line-height: 1.25;
 }
 
 .contact-info .phone:hover {
-    color: var(--mint);
+    color: var(--header-hover);
 }
 
 .contact-info .phone svg {
@@ -427,10 +441,20 @@ html {
 }
 
 .ba-arrow-left {
+    width: 11px;
+    height: 11px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(-135deg);
     margin-right: 2px;
 }
 
 .ba-arrow-right {
+    width: 11px;
+    height: 11px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
     margin-left: 2px;
 }
 
@@ -479,14 +503,18 @@ html {
     }
 
     .ba-arrows {
-        width: 40px;
-        height: 40px;
-        font-size: 14px;
+        width: 34px;
+        height: 34px;
+        font-size: 12px;
         border-width: 2px;
+        background: rgba(255, 255, 255, 0.68);
+        border-color: rgba(143, 217, 191, 0.8);
+        box-shadow: 0 2px 8px rgba(16, 32, 46, 0.16);
     }
 
     .ba-handle {
-        width: 3px;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.85);
     }
 
     .ba-hint {
@@ -655,8 +683,8 @@ body.menu-open {
         align-items: center;
         gap: 4px;
         font-size: 10px;
-        font-weight: 400;
-        color: var(--text-gray);
+        font-weight: 500;
+        color: var(--header-muted);
         text-decoration: none;
         transition: color 0.3s ease;
         line-height: 1.2;
@@ -682,7 +710,7 @@ body.menu-open {
     
     .mobile-address-top:hover,
     .mobile-phone-top:hover {
-        color: var(--mint);
+        color: var(--header-hover);
     }
     
     .mobile-address-top svg,
@@ -690,6 +718,7 @@ body.menu-open {
         flex-shrink: 0;
         width: 10px;
         height: 10px;
+        color: #55666d;
         vertical-align: middle;
     }
     
@@ -827,7 +856,7 @@ body.menu-open {
     }
     
     .mobile-phone-link:hover {
-        color: #45a049;
+        color: var(--header-hover);
         text-decoration: none;
     }
     
@@ -861,7 +890,7 @@ body.menu-open {
     }
     
     .mobile-address-link:hover {
-        color: var(--mint);
+        color: var(--header-hover);
         text-decoration: none;
     }
 }
@@ -1141,15 +1170,17 @@ body.menu-open {
 
 .hero-title {
     font-size: clamp(22px, 5vw, 48px);
-    font-weight: 700;
-    line-height: 1.2;
+    font-weight: 800;
+    line-height: 1.14;
+    letter-spacing: -0.02em;
     margin-bottom: 24px;
     color: var(--graphite);
 }
 
 .hero-subtitle {
     font-size: 20px;
-    color: var(--text-gray);
+    color: #66777d;
+    font-weight: 500;
     margin-bottom: 30px;
 }
 
@@ -1851,7 +1882,9 @@ section {
 .section-title {
     text-align: center;
     font-size: clamp(24px, 4.2vw, 40px);
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
     margin-bottom: 15px;
     color: var(--graphite);
 }
@@ -1859,7 +1892,8 @@ section {
 .section-subtitle {
     text-align: center;
     font-size: 18px;
-    color: var(--text-gray);
+    color: #6d7b80;
+    font-weight: 500;
     margin-bottom: 50px;
 }
 
