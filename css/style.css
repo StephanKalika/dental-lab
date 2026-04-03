@@ -39,7 +39,10 @@ h6 {
     letter-spacing: -0.01em;
 }
 
-html {
+section[id],
+main[id],
+footer[id] {
+    scroll-margin-top: 88px;
 }
 
 .container {
@@ -144,14 +147,22 @@ html {
     transition: color 0.3s;
 }
 
-.nav a:hover {
-    color: var(--mint);
+.nav a:visited {
+    color: var(--graphite);
 }
 
-.nav .nav-link--active {
+.nav .nav-link:hover {
+    color: #4f6671;
+}
+
+.nav .nav-link[aria-current="page"] {
     color: var(--mint);
     font-weight: 600;
     pointer-events: none;
+}
+
+.nav .nav-link[aria-current="page"]:visited {
+    color: var(--mint);
 }
 
 
@@ -221,6 +232,29 @@ html {
 
 .btn-primary:hover {
     transform: translateY(-2px);
+}
+
+.header .btn-primary.btn-desktop {
+    background: linear-gradient(135deg, #8fd9bf 0%, #a8e6cf 100%);
+    color: #1f3444;
+    border: 1px solid rgba(123, 196, 172, 0.55);
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 18px rgba(44, 93, 76, 0.14);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+    white-space: nowrap;
+}
+
+.header .btn-primary.btn-desktop:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(34, 74, 60, 0.2);
+    filter: saturate(1.05);
+}
+
+.header .btn-primary.btn-desktop:focus-visible {
+    outline: 2px solid #3f6d5a;
+    outline-offset: 2px;
 }
 
 /* ===== BEFORE/AFTER SLIDER ===== */
@@ -664,6 +698,12 @@ body.menu-open {
 
 /* ===== MOBILE ===== */
 @media (max-width: 968px) {
+    section[id],
+    main[id],
+    footer[id] {
+        scroll-margin-top: 108px;
+    }
+
     
     /* Показуємо мобільні елементи на мобільних пристроях */
     
@@ -1595,7 +1635,7 @@ body.menu-open {
 
 /* ===== GENERIC SECTION STYLES ===== */
 section {
-    padding: 80px 0;
+    padding: 64px 0;
 }
 .promo-price-line {
     display: flex;
@@ -1783,12 +1823,22 @@ section {
         padding: 18px;
     }
 
+    .promo-strip-text {
+        display: contents;
+    }
+
+    .promo-strip-label {
+        order: -2;
+        justify-self: start;
+        margin-bottom: 12px;
+    }
+
     .promo-strip-visual {
         order: -1;
         width: 138px;
         height: 138px;
         justify-self: center;
-        margin: 0 auto;
+        margin: 0 auto 12px;
     }
 
     .promo-tooth-visual {
@@ -2600,7 +2650,7 @@ section {
 /* ===== REVIEWS ===== */
 .reviews {
     background: var(--white);
-    padding: 80px 0;
+    padding: 64px 0;
 }
 
 .reviews-grid {
@@ -2695,7 +2745,7 @@ section {
 /* ===== FAQ SECTION ===== */
 .faq {
     background: var(--light-gray);
-    padding: 80px 0;
+    padding: 64px 0;
 }
 
 .faq-container {
