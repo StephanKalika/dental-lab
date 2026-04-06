@@ -149,6 +149,173 @@ function initBASliders() {
     });
 }
 
+function initReviewsCarousel() {
+    const carousel = document.querySelector('[data-reviews-carousel]');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('.reviews-grid');
+    const slides = Array.from(carousel.querySelectorAll('.review-card'));
+    const prevBtn = carousel.querySelector('.reviews-nav-prev');
+    const nextBtn = carousel.querySelector('.reviews-nav-next');
+    const dotsRoot = carousel.querySelector('#reviewsDots');
+
+    if (!track || !prevBtn || !nextBtn || !dotsRoot || slides.length < 2) return;
+
+    let currentIndex = 0;
+    let slidesPerView = 3;
+    let maxIndex = 0;
+    let swipeStartX = null;
+    let swipeDeltaX = 0;
+    let autoplayTimer = null;
+    const AUTOPLAY_DELAY = 5000;
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function getSlidesPerView() {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 968) return 2;
+        return 3;
+    }
+
+    function getSlideStep() {
+        const firstSlide = slides[0];
+        if (!firstSlide) return 0;
+        const gap = parseFloat(window.getComputedStyle(track).gap || '0') || 0;
+        return firstSlide.getBoundingClientRect().width + gap;
+    }
+
+    function updateButtons() {
+        const shouldDisable = maxIndex === 0;
+        prevBtn.disabled = shouldDisable;
+        nextBtn.disabled = shouldDisable;
+    }
+
+    function updateDots() {
+        const dots = Array.from(dotsRoot.querySelectorAll('.reviews-dot'));
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+            dot.setAttribute('aria-current', index === currentIndex ? 'true' : 'false');
+        });
+    }
+
+    function render() {
+        const offset = getSlideStep() * currentIndex;
+        track.style.transform = `translateX(-${offset}px)`;
+        updateButtons();
+        updateDots();
+    }
+
+    function stopAutoplay() {
+        if (!autoplayTimer) return;
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = null;
+    }
+
+    function startAutoplay() {
+        if (prefersReducedMotion || maxIndex <= 0 || autoplayTimer || document.hidden) return;
+        autoplayTimer = window.setInterval(function() {
+            setIndex(currentIndex + 1, { restartAutoplay: false });
+        }, AUTOPLAY_DELAY);
+    }
+
+    function restartAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+    }
+
+    function setIndex(nextIndex, options) {
+        const settings = options || {};
+        if (maxIndex <= 0) {
+            currentIndex = 0;
+            render();
+            return;
+        }
+
+        let targetIndex = nextIndex;
+        if (nextIndex > maxIndex) targetIndex = 0;
+        if (nextIndex < 0) targetIndex = maxIndex;
+
+        if (targetIndex === currentIndex) return;
+        currentIndex = targetIndex;
+        render();
+        if (settings.restartAutoplay !== false) restartAutoplay();
+    }
+
+    function rebuildDots() {
+        dotsRoot.innerHTML = '';
+        for (let i = 0; i <= maxIndex; i += 1) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'reviews-dot';
+            dot.setAttribute('aria-label', `Перейти до слайда ${i + 1}`);
+            dot.addEventListener('click', function() {
+                setIndex(i);
+            });
+            dotsRoot.appendChild(dot);
+        }
+    }
+
+    function recalc() {
+        slidesPerView = getSlidesPerView();
+        maxIndex = Math.max(0, slides.length - slidesPerView);
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        rebuildDots();
+        render();
+        restartAutoplay();
+    }
+
+    prevBtn.addEventListener('click', function() {
+        setIndex(currentIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', function() {
+        setIndex(currentIndex + 1);
+    });
+
+    carousel.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') setIndex(currentIndex - 1);
+        if (e.key === 'ArrowRight') setIndex(currentIndex + 1);
+    });
+
+    carousel.setAttribute('tabindex', '0');
+
+    track.addEventListener('touchstart', function(e) {
+        stopAutoplay();
+        swipeStartX = e.touches[0].clientX;
+        swipeDeltaX = 0;
+    }, { passive: true });
+
+    track.addEventListener('touchmove', function(e) {
+        if (swipeStartX == null) return;
+        swipeDeltaX = e.touches[0].clientX - swipeStartX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', function() {
+        if (swipeStartX == null) return;
+        if (swipeDeltaX < -40) setIndex(currentIndex + 1);
+        if (swipeDeltaX > 40) setIndex(currentIndex - 1);
+        swipeStartX = null;
+        swipeDeltaX = 0;
+        startAutoplay();
+    }, { passive: true });
+
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+    carousel.addEventListener('focusin', stopAutoplay);
+    carousel.addEventListener('focusout', function() {
+        if (!carousel.contains(document.activeElement)) startAutoplay();
+    });
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) stopAutoplay();
+        else startAutoplay();
+    });
+
+    window.addEventListener('resize', recalc);
+
+    carousel.classList.add('is-ready');
+    recalc();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     const burgerBtn = document.getElementById('burgerBtn');
@@ -218,6 +385,62 @@ document.addEventListener('DOMContentLoaded', function() {
             if (window.innerWidth > 968 && isOpen) closeMenu();
         }, 100);
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+
+    const mobileQuery = window.matchMedia('(max-width: 968px)');
+    let lastScrollY = window.scrollY || 0;
+    let ticking = false;
+
+    function updateHeaderState() {
+        ticking = false;
+
+        if (!mobileQuery.matches) {
+            header.classList.remove('is-hidden');
+            lastScrollY = window.scrollY || 0;
+            return;
+        }
+
+        if (document.body.classList.contains('menu-open')) {
+            header.classList.remove('is-hidden');
+            lastScrollY = window.scrollY || 0;
+            return;
+        }
+
+        const currentScrollY = window.scrollY || 0;
+        const delta = currentScrollY - lastScrollY;
+
+        if (currentScrollY <= 20) {
+            header.classList.remove('is-hidden');
+        } else if (delta > 8) {
+            header.classList.add('is-hidden');
+        } else if (delta < -8) {
+            header.classList.remove('is-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+    }
+
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(updateHeaderState);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function() {
+        header.classList.remove('is-hidden');
+        lastScrollY = window.scrollY || 0;
+    });
+    mobileQuery.addEventListener('change', function() {
+        header.classList.remove('is-hidden');
+        lastScrollY = window.scrollY || 0;
+    });
+
+    updateHeaderState();
 });
 
 const bookingForm = document.getElementById('bookingForm');
@@ -326,6 +549,7 @@ if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
     const data = {
         name: formData.get('name'),
         phone: formData.get('phone'),
+        comment: (formData.get('comment') || '').toString().trim(),
         website: formData.get('website') || ''  // spam honeypot
     };
 
@@ -677,6 +901,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const faqItems = document.querySelectorAll('.faq-item');
     initBASliders();
+    initReviewsCarousel();
 
     function setFaqHeight(answer) {
         if (!answer) return;
