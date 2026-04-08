@@ -1,8 +1,8 @@
 // Netlify Function: send-telegram
 // Securely forwards booking form data to Telegram without exposing bot token to the client
 
-const RATE_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX = 5;
+const RATE_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS || 10 * 60 * 1000);
+const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || 20);
 const rateStore = new Map();
 
 function getClientIp(event) {

@@ -457,6 +457,18 @@ const FUNCTION_ENDPOINT = (endpointMeta && endpointMeta.content && endpointMeta.
     ? endpointMeta.content.trim()
     : SAME_ORIGIN_ENDPOINT;
 
+function redirectToThankYou() {
+    // Local file preview resolves absolute paths like /thank-you to C:/thank-you.
+    if (window.location.protocol === 'file:') {
+        const pathname = (window.location.pathname || '').replace(/\\/g, '/').toLowerCase();
+        const localTarget = pathname.includes('/services/') ? '../thank-you.html' : './thank-you.html';
+        window.location.assign(localTarget);
+        return;
+    }
+
+    window.location.assign('/thank-you');
+}
+
 function getFriendlySubmitError(errorPayload, statusCode) {
     const raw = (typeof errorPayload === 'string' ? errorPayload : (errorPayload && errorPayload.error) || '').toLowerCase();
 
@@ -563,10 +575,8 @@ if (bookingForm) bookingForm.addEventListener('submit', async (e) => {
 
     try {
         await sendFormRequest(data);
-        formSuccess.style.display = 'flex';
-        formSuccess.focus();
         bookingForm.reset();
-        setTimeout(() => { formSuccess.style.display = 'none'; }, 12000);
+        redirectToThankYou();
     } catch (error) {
         console.error('Form submit error:', error);
         const errorText = formError?.querySelector('p');
@@ -819,11 +829,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             bookingPopupForm.reset();
             if (successBox) successBox.style.display = 'flex';
-
-            setTimeout(function() {
-                if (successBox) successBox.style.display = 'none';
-                closeBookingOverlay();
-            }, 1800);
+            redirectToThankYou();
         } catch (error) {
             console.error('Booking popup error:', error);
             const popupErrorText = errorBox?.querySelector('p');
@@ -1180,15 +1186,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 website: ''
             });
 
-            document.getElementById('callbackSuccess').style.display = 'flex';
-            callbackForm.style.display = 'none';
-
-            setTimeout(() => {
-                closeCallbackOverlay();
-                callbackForm.style.display = 'block';
-                document.getElementById('callbackSuccess').style.display = 'none';
-                callbackForm.reset();
-            }, 3000);
+            callbackForm.reset();
+            redirectToThankYou();
         } catch (error) {
             phoneError.textContent = error?.userMessage || 'Помилка відправки. Спробуйте ще раз.';
         } finally {
