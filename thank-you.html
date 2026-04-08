@@ -65,11 +65,9 @@
         }
 
         .thank-you-actions {
-            margin-top: 24px;
+            margin-top: 20px;
             display: flex;
-            gap: 12px;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
         .thank-you-link {
@@ -80,22 +78,11 @@
             border-radius: 12px;
             padding: 12px 18px;
             border: 1px solid #c9dfd2;
-            color: #1f3f33;
-            background: #f8fffb;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .thank-you-link:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 22px rgba(24, 70, 43, 0.12);
-        }
-
-        .thank-you-link-primary {
-            background: linear-gradient(135deg, #a8e6cf, #8cddb9);
-            border-color: #8cddb9;
             color: #123224;
+            background: linear-gradient(135deg, #a8e6cf, #8cddb9);
             font-weight: 600;
         }
+
     </style>
 </head>
 <body>
@@ -111,8 +98,7 @@
             <h1 id="thankyou-title">Дякуємо! Заявку успішно надіслано</h1>
             <p>Ми отримали ваше звернення та зв'яжемося з вами найближчим часом для підтвердження запису.</p>
             <div class="thank-you-actions">
-                <a class="thank-you-link thank-you-link-primary" href="./">Повернутися на головну</a>
-                <a class="thank-you-link" href="https://t.me/" target="_blank" rel="noopener">Перейти в Telegram-канал</a>
+                <a class="thank-you-link" href="./">Повернутися на головну</a>
             </div>
         </section>
     </main>
