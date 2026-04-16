@@ -85,8 +85,13 @@ exports.handler = async (event) => {
     }
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
-    if (!token || !chatId) {
+    const groupChatId = '-5210901120';
+    const configuredChatIds = (process.env.TELEGRAM_CHAT_IDS || process.env.TELEGRAM_CHAT_ID || '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
+    const chatIds = Array.from(new Set([groupChatId, ...configuredChatIds]));
+    if (!token || chatIds.length === 0) {
       return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ error: 'Server misconfigured' }) };
     }
 
@@ -115,18 +120,32 @@ exports.handler = async (event) => {
 
     const message = `\n🦷 <b>Нова заявка з сайту Dental Lab</b>\n\n👤 <b>Ім'я:</b> ${safeName}\n📞 <b>Телефон:</b> ${safePhone}\n🏥 <b>Послуга:</b> ${safeService}\n📅 <b>Бажана дата:</b> ${safeDate}\n${safeComment ? `💬 <b>Коментар:</b> ${safeComment}` : ''}`.trim();
 
-    const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' }),
-    });
+    const sendResults = await Promise.allSettled(
+      chatIds.map((chatId) => fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' }),
+      }))
+    );
 
-    if (!tgRes.ok) {
-      const text = await tgRes.text();
-      return { statusCode: 502, headers: jsonHeaders, body: JSON.stringify({ error: 'Telegram error', details: text }) };
+    const failedSends = [];
+    for (let index = 0; index < sendResults.length; index += 1) {
+      const result = sendResults[index];
+      if (result.status === 'rejected') {
+        failedSends.push({ chatId: chatIds[index], error: String(result.reason) });
+        continue;
+      }
+
+      if (!result.value.ok) {
+        failedSends.push({ chatId: chatIds[index], error: await result.value.text() });
+      }
     }
 
-    return { statusCode: 200, headers: jsonHeaders, body: JSON.stringify({ ok: true }) };
+    if (failedSends.length === chatIds.length) {
+      return { statusCode: 502, headers: jsonHeaders, body: JSON.stringify({ error: 'Telegram error', details: failedSends }) };
+    }
+
+    return { statusCode: 200, headers: jsonHeaders, body: JSON.stringify({ ok: true, failedSends }) };
   } catch (err) {
     return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ error: 'Unexpected error', details: String(err) }) };
   }
