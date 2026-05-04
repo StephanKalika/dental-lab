@@ -1202,3 +1202,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const el = document.getElementById('footerCopyright');
     if (el) el.textContent = `© ${new Date().getFullYear()} Dental Lab.`;
 })();
+
+// Promo Timer - countdown to end of May
+(function initPromoTimer() {
+    const timerElement = document.getElementById('promoTimer');
+    if (!timerElement) return;
+
+    function updateTimer() {
+        const now = new Date();
+        const endDate = new Date(2026, 4, 31, 23, 59, 59); // May 31, 2026, 23:59:59
+        
+        // If timer expired, hide it
+        if (now >= endDate) {
+            timerElement.style.display = 'none';
+            return;
+        }
+
+        const diff = endDate - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.querySelector('[data-type="days"]').textContent = String(days).padStart(2, '0');
+        document.querySelector('[data-type="hours"]').textContent = String(hours).padStart(2, '0');
+        document.querySelector('[data-type="minutes"]').textContent = String(minutes).padStart(2, '0');
+    }
+
+    // Initial update
+    updateTimer();
+    // Update every minute
+    setInterval(updateTimer, 60000);
+})();
