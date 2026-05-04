@@ -195,24 +195,33 @@
     <section class="promo-strip" aria-label="Акційна пропозиція">
         <div class="container">
             <div class="promo-strip-card promo-open-booking" role="button" tabindex="0" aria-label="Відкрити форму запису по акції">
+                <div class="promo-strip-bg" aria-hidden="true">
+                    <img class="promo-bg-image" src="images/promo-smile.webp" alt="Фонова фотографія" loading="lazy" decoding="async">
+                </div>
+
                 <div class="promo-strip-text">
                     <p class="promo-strip-label">🔥 Акція до кінця травня</p>
-                    <div class="promo-timer" id="promoTimer">
-                        <div class="timer-item"><span class="timer-value" data-type="days">28</span><span class="timer-label">днів</span></div>
-                        <div class="timer-item"><span class="timer-value" data-type="hours">00</span><span class="timer-label">годин</span></div>
-                        <div class="timer-item"><span class="timer-value" data-type="minutes">00</span><span class="timer-label">хвилин</span></div>
-                    </div>
-                    <p class="promo-strip-title">Комплексна профгігієна зубів: -50%</p>
+                    <p class="promo-strip-title">Комплексна профгігієна зубів</p>
                     <p class="promo-strip-bullets">✓ Ультразвук ✓ AirFlow ✓ Полірування ✓ Огляд лікаря</p>
-                    <div class="promo-price-line">
-                        <span class="promo-old-price">2200 грн</span>
-                        <span class="promo-new-price">1100 грн</span>
+                    <div class="promo-strip-price-wrap" aria-label="Акційна ціна послуги">
+                        <div class="promo-price-line">
+                            <span class="promo-old-price">2200 грн</span>
+                            <div class="promo-price-main">
+                                <span class="promo-price-badge">-50%</span>
+                                <span class="promo-new-price">1100 грн</span>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn-cta promo-strip-btn" type="button">Забронювати час</button>
+                    <div class="promo-timer" id="promoTimer" aria-live="polite">
+                        <span class="promo-timer-icon" aria-hidden="true">⏳</span>
+                        <span class="promo-timer-text">Залишилось:</span>
+                        <span class="timer-unit"><span class="timer-value" data-type="days">28</span><span class="timer-label">д</span></span>
+                        <span class="timer-unit"><span class="timer-value" data-type="hours">00</span><span class="timer-label">г</span></span>
+                        <span class="timer-unit"><span class="timer-value" data-type="minutes">00</span><span class="timer-label">хв</span></span>
+                    </div>
+                    <button class="btn-cta promo-strip-btn" type="button">Записатися зараз</button>
                 </div>
-                <div class="promo-strip-visual" aria-hidden="true">
-                    <img class="promo-tooth-visual" src="images/promo-smile.webp" alt="Посмішка пацієнтки після професійної гігієни зубів" loading="lazy" decoding="async">
-                </div>
+                <!-- visual moved to background for full-bleed effect -->
             </div>
         </div>
     </section>

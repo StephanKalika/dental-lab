@@ -1223,9 +1223,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-        document.querySelector('[data-type="days"]').textContent = String(days).padStart(2, '0');
-        document.querySelector('[data-type="hours"]').textContent = String(hours).padStart(2, '0');
-        document.querySelector('[data-type="minutes"]').textContent = String(minutes).padStart(2, '0');
+        const daysEl = timerElement.querySelector('[data-type="days"]');
+        const hoursEl = timerElement.querySelector('[data-type="hours"]');
+        const minutesEl = timerElement.querySelector('[data-type="minutes"]');
+
+        if (!daysEl || !hoursEl || !minutesEl) return;
+
+        daysEl.textContent = String(days).padStart(2, '0');
+        hoursEl.textContent = String(hours).padStart(2, '0');
+        minutesEl.textContent = String(minutes).padStart(2, '0');
     }
 
     // Initial update
