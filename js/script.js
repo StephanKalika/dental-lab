@@ -316,6 +316,105 @@ function initReviewsCarousel() {
     recalc();
 }
 
+function initAdvantagesCarousel() {
+    const grid = document.querySelector('.advantages-grid');
+    const dotsRoot = document.getElementById('advantagesDots');
+
+    if (!grid || !dotsRoot) return;
+
+    const cards = Array.from(grid.querySelectorAll('.advantage-card'));
+    const dots = Array.from(dotsRoot.querySelectorAll('.advantages-dot'));
+
+    if (cards.length < 2 || dots.length !== cards.length) return;
+
+    let currentIndex = 0;
+    let swipeStartX = null;
+    let swipeDeltaX = 0;
+
+    function setActive(index) {
+        currentIndex = index;
+        dots.forEach((dot, dotIndex) => {
+            const isActive = dotIndex === index;
+            dot.classList.toggle('active', isActive);
+            dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+    }
+
+    function getClosestCardIndex() {
+        const gridRect = grid.getBoundingClientRect();
+        const gridCenter = gridRect.left + gridRect.width / 2;
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const distance = Math.abs(cardCenter - gridCenter);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = index;
+            }
+        });
+
+        return closestIndex;
+    }
+
+    function syncDots() {
+        setActive(getClosestCardIndex());
+    }
+
+    function goToIndex(index) {
+        const targetIndex = (index + cards.length) % cards.length;
+        cards[targetIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        setActive(targetIndex);
+    }
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            goToIndex(index);
+        });
+    });
+
+    grid.addEventListener('scroll', function() {
+        window.requestAnimationFrame(syncDots);
+    }, { passive: true });
+
+    grid.addEventListener('touchstart', function(e) {
+        swipeStartX = e.touches[0].clientX;
+        swipeDeltaX = 0;
+    }, { passive: true });
+
+    grid.addEventListener('touchmove', function(e) {
+        if (swipeStartX == null) return;
+        swipeDeltaX = e.touches[0].clientX - swipeStartX;
+    }, { passive: true });
+
+    grid.addEventListener('touchend', function() {
+        if (swipeStartX == null) return;
+
+        const activeIndex = getClosestCardIndex();
+        const lastIndex = cards.length - 1;
+
+        if (swipeDeltaX < -40) {
+            if (activeIndex === lastIndex) goToIndex(0);
+            else goToIndex(activeIndex + 1);
+        } else if (swipeDeltaX > 40) {
+            if (activeIndex === 0) goToIndex(lastIndex);
+            else goToIndex(activeIndex - 1);
+        } else {
+            syncDots();
+        }
+
+        swipeStartX = null;
+        swipeDeltaX = 0;
+    }, { passive: true });
+
+    window.addEventListener('resize', syncDots);
+
+    syncDots();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     const burgerBtn = document.getElementById('burgerBtn');
@@ -907,6 +1006,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const faqItems = document.querySelectorAll('.faq-item');
     initBASliders();
+    initAdvantagesCarousel();
     initReviewsCarousel();
 
     function setFaqHeight(answer) {
