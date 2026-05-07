@@ -23,8 +23,8 @@
     <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml" sizes="any">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"></noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="../css/style.css">
     <!-- Meta Pixel Code -->
     <script>
@@ -46,97 +46,69 @@
     src="https://www.facebook.com/tr?id=1515232536899488&ev=PageView&noscript=1"
     /></noscript>
 <header class="header">
-        <div class="container">
-            <!-- Mobile contact info (top) -->
-            <div class="mobile-contact-top">
-                <!-- Mobile address -->
-                <a href="https://maps.app.goo.gl/dAD4tSzBwCE2gsNu7" class="mobile-address-top" target="_blank" rel="noopener">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="top-bar" aria-label="Службова інформація">
+            <div class="container top-bar-content">
+                <div class="top-bar-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M12 7v5l3 2"></path>
+                    </svg>
+                    <span>Пн-Пт: 9:00 - 20:00</span>
+                </div>
+                <a href="https://maps.app.goo.gl/dAD4tSzBwCE2gsNu7" class="top-bar-item top-bar-link top-bar-address" target="_blank" rel="noopener">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
                     </svg>
                     <span>м. Київ, вул. Предславинська, 49</span>
+                    <span class="top-bar-metro-list" aria-label="Найближчі станції метро">
+                        <span class="top-bar-metro-item"><span class="metro-badge" aria-hidden="true">M</span><span>Палац «Україна»</span></span>
+                        <span class="top-bar-metro-item"><span class="metro-badge" aria-hidden="true">M</span><span>Либідська</span></span>
+                    </span>
                 </a>
-                
-                <!-- Mobile phone -->
-                <a href="tel:+380661829540" class="mobile-phone-top">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                <a href="tel:+380661829540" class="top-bar-item top-bar-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.79 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
                     <span>+38 (066) 182-95-40</span>
                 </a>
             </div>
-            
-            <div class="header-content">
-                <!-- Logo -->
-                <div class="logo">
-                    <a href="../" aria-label="Dental Lab Home">
-                        <span class="logo-text" aria-label="Dental Lab logo">
-                            Dental <span class="logo-strong">Lab</span>
-                        </span>
-                    </a>
-                </div>
-                
-                <!-- Navigation -->
-                <nav class="nav" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
-                    <a href="../index.html#переваги" class="nav-link">Переваги</a>
-                    <a href="../index.html#послуги" class="nav-link nav-link--active" aria-current="page">Послуги</a>
-                    <a href="../index.html#ціни" class="nav-link">Ціни</a>
-                    <a href="../index.html#faq" class="nav-link">Запитання</a>
-                    <a href="../index.html#відгуки" class="nav-link">Відгуки</a>
-                    <a href="../index.html#контакти" class="nav-link">Контакти</a>
-                    
-                    <!-- Mobile CTA buttons -->
-                    <div class="mobile-cta-buttons">
-                        <button class="btn-mobile-cta">Записатися онлайн</button>
-                        <button class="btn-mobile-cta btn-mobile-secondary open-callback" type="button">Передзвоніть мені</button>
-                        <div class="mobile-phone-text">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                            </svg>
-                            <span>або телефонуйте:</span>
-                            <a href="tel:+380661829540" class="mobile-phone-link">+38 (066) 182-95-40</a>
-                        </div>
-                        
-                        <div class="mobile-address-menu">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <a href="https://maps.app.goo.gl/dAD4tSzBwCE2gsNu7" target="_blank" rel="noopener" class="mobile-address-link">м. Київ, вул. Предславинська, 49</a>
-                        </div>
+        </div>
+
+        <div class="main-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="../" aria-label="Dental Lab Home">
+                            <span class="logo-text" aria-label="Dental Lab logo">
+                                Dental <span class="logo-strong">Lab</span>
+                            </span>
+                        </a>
                     </div>
-                </nav>
-                
-                <!-- Contact Info Container (desktop) -->
-                <div class="contact-info">
-                    <!-- Address (desktop) -->
-                    <a href="https://maps.app.goo.gl/dAD4tSzBwCE2gsNu7" class="address address-desktop" target="_blank" rel="noopener">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <span>м. Київ, вул. Предславинська, 49</span>
-                    </a>
-                    
-                    <!-- Phone (desktop) -->
-                    <a href="tel:+380661829540" class="phone phone-desktop">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                        <span>+38 (066) 182-95-40</span>
-                    </a>
+
+                    <nav class="nav" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
+                        <button class="nav-close" aria-label="Закрити меню">&times;</button>
+                        <a href="../index.html#переваги" class="nav-link">Переваги</a>
+                        <a href="../index.html#послуги" class="nav-link nav-link--active" aria-current="page">Послуги</a>
+                        <a href="../index.html#ціни" class="nav-link">Ціни</a>
+                        <a href="../index.html#faq" class="nav-link">Запитання</a>
+                        <a href="../index.html#відгуки" class="nav-link">Відгуки</a>
+                        <a href="../index.html#контакти" class="nav-link">Контакти</a>
+
+                        <div class="mobile-cta-buttons">
+                            <button class="btn-mobile-cta">Записатися онлайн</button>
+                            <button class="btn-mobile-cta btn-mobile-secondary open-callback" type="button">Передзвоніть мені</button>
+                        </div>
+                    </nav>
+
+                    <button class="btn-primary btn-desktop">Записатися</button>
+
+                    <button class="burger" id="burgerBtn" aria-label="Меню" aria-controls="nav-menu" aria-expanded="false">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
-                
-                <!-- CTA (desktop) -->
-                <button class="btn-primary btn-desktop">Записатися</button>
-                
-                <!-- Burger button -->
-                <button class="burger" id="burgerBtn" aria-label="Меню" aria-controls="nav-menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
             </div>
         </div>
     </header>
@@ -572,8 +544,34 @@
   </div>
 
 <script src="../js/script.js"></script>
+    <!-- Callback Form Modal -->
+    <div class="callback-overlay" id="callbackOverlay" role="dialog" aria-modal="true" aria-labelledby="callbackPopupTitle">
+        <div class="callback-popup">
+            <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити">×</button>
+            <div class="callback-content">
+                <h3 id="callbackPopupTitle">Передзвоніть мені</h3>
+                <p>Залиште номер телефону і ми зателефонуємо вам найближчим часом</p>
+                <form id="callbackForm" class="callback-form" novalidate>
+                    <div class="form-group">
+                        <label for="callbackPhone" class="sr-only">Телефон</label>
+                        <div class="input-wrapper">
+                            <input type="tel" id="callbackPhone" name="phone" required placeholder="+380 XX XXX XX XX" pattern="^+?380s?d{2}s?d{3}s?d{2}s?d{2}$" autocomplete="tel" inputmode="tel">
+                            <span class="input-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
+                        </div>
+                        <span class="error-message" id="callbackPhoneError" role="alert"></span>
+                    </div>
+                    <button type="submit" class="btn-callback-submit"><span class="btn-text">Передзвоніть мені</span><span class="btn-loader" style="display:none;"><svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg></span></button>
+                </form>
+                <div id="callbackSuccess" class="form-message success" style="display:none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><div><strong>Дякуємо!</strong><p>Ми зателефонуємо вам найближчим часом.</p></div></div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+
+
+
 
 
 

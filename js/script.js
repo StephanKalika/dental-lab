@@ -463,6 +463,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     navMenu.addEventListener('click', function(e) {
+        if (e.target.closest('.nav-close')) {
+            closeMenu();
+            return;
+        }
         e.stopPropagation();
     });
 
@@ -475,6 +479,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && isOpen) closeMenu();
+    });
+
+    document.addEventListener('forceCloseMobileMenu', function() {
+        isOpen = false;
     });
 
     let resizeTimer;
@@ -490,20 +498,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('.header');
     if (!header) return;
 
-    const mobileQuery = window.matchMedia('(max-width: 968px)');
     let lastScrollY = window.scrollY || 0;
     let ticking = false;
 
     function updateHeaderState() {
         ticking = false;
 
-        if (!mobileQuery.matches) {
-            header.classList.remove('is-hidden');
-            lastScrollY = window.scrollY || 0;
-            return;
-        }
-
         if (document.body.classList.contains('menu-open')) {
+            header.classList.remove('is-compact');
             header.classList.remove('is-hidden');
             lastScrollY = window.scrollY || 0;
             return;
@@ -511,12 +513,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const currentScrollY = window.scrollY || 0;
         const delta = currentScrollY - lastScrollY;
+        const isMobile = window.innerWidth <= 968;
 
         if (currentScrollY <= 20) {
+            header.classList.remove('is-compact');
             header.classList.remove('is-hidden');
-        } else if (delta > 8) {
+        } else if (isMobile && delta > 6 && currentScrollY > 64) {
             header.classList.add('is-hidden');
-        } else if (delta < -8) {
+        } else if (!isMobile && delta > 6 && currentScrollY > 64) {
+            header.classList.add('is-compact');
+        } else if (delta < -6) {
+            header.classList.remove('is-compact');
             header.classList.remove('is-hidden');
         }
 
@@ -531,10 +538,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', function() {
-        header.classList.remove('is-hidden');
-        lastScrollY = window.scrollY || 0;
-    });
-    mobileQuery.addEventListener('change', function() {
+        header.classList.remove('is-compact');
         header.classList.remove('is-hidden');
         lastScrollY = window.scrollY || 0;
     });
@@ -790,14 +794,16 @@ if (nameInput) {
 }
 
 function closeMobileMenuState() {
+    document.dispatchEvent(new Event('forceCloseMobileMenu'));
     const burgerBtn = document.getElementById('burgerBtn');
     const navMenu = document.getElementById('nav-menu') || document.getElementById('navMenu');
     const overlay = document.querySelector('.nav-overlay');
 
-    if (burgerBtn && navMenu) {
+    if (burgerBtn) {
         burgerBtn.classList.remove('active');
-        navMenu.classList.remove('active');
+        burgerBtn.setAttribute('aria-expanded', 'false');
     }
+    if (navMenu) navMenu.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
     document.body.classList.remove('menu-open');
 }
@@ -1009,24 +1015,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initAdvantagesCarousel();
     initReviewsCarousel();
 
-    function setFaqHeight(answer) {
-        if (!answer) return;
-        answer.style.setProperty('--faq-content-height', `${answer.scrollHeight}px`);
-    }
-
-    function refreshOpenFaqHeights() {
-        faqItems.forEach(item => {
-            const answer = item.querySelector('.faq-answer');
-            if (answer && answer.getAttribute('aria-hidden') === 'false') setFaqHeight(answer);
-        });
-    }
-
     function openFaq(question, answer) {
         question.setAttribute('aria-expanded', 'true');
         answer.setAttribute('aria-hidden', 'false');
-        requestAnimationFrame(function() {
-            setFaqHeight(answer);
-        });
     }
 
     faqItems.forEach(item => {
@@ -1063,12 +1054,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    window.addEventListener('load', refreshOpenFaqHeights);
-    window.addEventListener('resize', refreshOpenFaqHeights);
-
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(refreshOpenFaqHeights).catch(function() {});
-    }
 });
 
 // Nav scroll-spy: updates active menu item while scrolling on pages with same-page section anchors.

@@ -32,57 +32,154 @@
     }
     </script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
-        .thank-you-page {
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', 'Inter', sans-serif;
+            background: #f4f7f8;
+            color: #333333;
             min-height: 100vh;
-            display: grid;
-            place-items: center;
-            padding: 24px;
-            background: linear-gradient(180deg, #f6fff9 0%, #ffffff 100%);
         }
 
-        .thank-you-card {
-            width: min(100%, 680px);
-            border: 1px solid #dcefe4;
-            border-radius: 20px;
-            background: #ffffff;
-            box-shadow: 0 18px 45px rgba(24, 70, 43, 0.08);
-            padding: 36px 28px;
+        /* ── Page layout ── */
+        .ty-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 16px 48px;
+        }
+
+        /* ── Shared column — logo + card share the same axis ── */
+        .ty-wrapper {
+            width: min(100%, 560px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── Logo bar ── */
+        .ty-logo {
+            margin-bottom: 28px;
+            width: 100%;
             text-align: center;
         }
 
-        .thank-you-card h1 {
-            margin: 0 0 12px;
-            color: #1e3a2f;
-            font-size: clamp(1.7rem, 4vw, 2.3rem);
-        }
-
-        .thank-you-card p {
-            margin: 0;
-            color: #365246;
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-
-        .thank-you-actions {
-            margin-top: 20px;
+        /* ── Card ── */
+        .ty-card {
+            width: min(100%, 560px);
+            background: #ffffff;
+            border: 1px solid rgba(76, 160, 171, 0.18);
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(58, 84, 103, 0.1);
+            padding: clamp(32px, 6vw, 52px) clamp(24px, 6vw, 52px);
+            text-align: center;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
         }
 
-        .thank-you-link {
+        /* ── Animated checkmark ── */
+        .ty-icon {
+            width: 88px;
+            height: 88px;
+            margin-bottom: 28px;
+            /* Circle pops in, then checkmark draws */
+            animation: ty-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+        }
+
+        /* Circle is always drawn — no dasharray trick */
+        .ty-icon .circle {
+            stroke: #4ca0ab;
+            stroke-width: 2.5;
+            fill: rgba(76, 160, 171, 0.06);
+        }
+
+        /* Checkmark draws in after icon appears */
+        .ty-icon .check {
+            stroke: #4ca0ab;
+            stroke-width: 3.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 50;
+            stroke-dashoffset: 50;
+            animation: ty-draw-check 0.4s ease-out 0.5s forwards;
+        }
+
+        @keyframes ty-draw-check {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes ty-pop {
+            0%   { transform: scale(0.4); opacity: 0; }
+            100% { transform: scale(1);   opacity: 1; }
+        }
+
+        /* ── Heading ── */
+        .ty-card h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            line-height: 1.25;
+            color: #3a5467;
+            margin-bottom: 16px;
+        }
+
+        /* ── Body text ── */
+        .ty-card p {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 420px;
+            margin-bottom: 32px;
+        }
+
+        /* ── Button ── */
+        .ty-btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
             text-decoration: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            border: 1px solid #c9dfd2;
-            color: #123224;
-            background: linear-gradient(135deg, #a8e6cf, #8cddb9);
+            background: #4ca0ab;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
             font-weight: 600;
+            font-size: 15px;
+            padding: 14px 28px;
+            border-radius: 50px;
+            border: none;
+            transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            min-height: 48px;
         }
 
+        .ty-btn:hover {
+            background: #5eb0ba;
+            box-shadow: 0 6px 18px rgba(76, 160, 171, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .ty-btn svg {
+            flex-shrink: 0;
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 480px) {
+            .ty-page { padding: 24px 12px 40px; }
+            .ty-logo { margin-bottom: 28px; }
+            .ty-logo a { font-size: 24px; }
+            .ty-card { padding: 28px 20px 32px; }
+            .ty-icon { width: 68px; height: 68px; margin-bottom: 22px; }
+            .ty-btn { width: 100%; justify-content: center; font-size: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -93,14 +190,37 @@
     src="https://www.facebook.com/tr?id=1515232536899488&ev=Lead&noscript=1"
     /></noscript>
 
-    <main class="thank-you-page">
-        <section class="thank-you-card" aria-labelledby="thankyou-title">
-            <h1 id="thankyou-title">Дякуємо! Заявку успішно надіслано</h1>
-            <p>Ми отримали ваше звернення та зв'яжемося з вами найближчим часом для підтвердження запису.</p>
-            <div class="thank-you-actions">
-                <a class="thank-you-link" href="./">Повернутися на головну</a>
-            </div>
-        </section>
-    </main>
+    <div class="ty-page">
+      <div class="ty-wrapper">
+
+        <div class="ty-logo">
+            <a class="logo-text" href="./" aria-label="Dental Lab — повернутися на головну">Dental <span class="logo-strong">Lab</span></a>
+        </div>
+
+        <main style="width:100%">
+            <section class="ty-card" aria-labelledby="thankyou-title">
+
+                <!-- Animated checkmark -->
+                <svg class="ty-icon" viewBox="0 0 88 88" fill="none" aria-hidden="true">
+                    <circle class="circle" cx="44" cy="44" r="38"/>
+                    <polyline class="check" points="27,45 39,57 61,33"/>
+                </svg>
+
+                <h1 id="thankyou-title">Дякуємо! Ми отримали вашу заявку.</h1>
+                <p>Наш адміністратор зв'яжеться з вами найближчим часом для підтвердження дати та часу прийому.</p>
+
+                <a class="ty-btn" href="./">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                         stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 3L5 8l5 5"/>
+                    </svg>
+                    На головну
+                </a>
+
+            </section>
+        </main>
+
+      </div><!-- /.ty-wrapper -->
+    </div><!-- /.ty-page -->
 </body>
 </html>
