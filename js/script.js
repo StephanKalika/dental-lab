@@ -1288,16 +1288,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (el) el.textContent = `© ${new Date().getFullYear()} Dental Lab.`;
 })();
 
-// Promo Timer - countdown to end of May
+// Promo Timer - countdown to last day of current month (auto-updates each month)
 (function initPromoTimer() {
     const timerElement = document.getElementById('promoTimer');
     if (!timerElement) return;
 
+    function getEndOfMonth() {
+        const now = new Date();
+        // Last day of current month at 23:59:59
+        return new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+    }
+
+    function updateLabel(endDate) {
+        const labelEl = document.getElementById('promoDeadlineLabel');
+        if (!labelEl) return;
+        const dd = String(endDate.getDate()).padStart(2, '0');
+        const mm = String(endDate.getMonth() + 1).padStart(2, '0');
+        const yyyy = endDate.getFullYear();
+        labelEl.textContent = '\uD83D\uDD25 Акція до ' + dd + '.' + mm + '.' + yyyy;
+    }
+
     function updateTimer() {
         const now = new Date();
-        const endDate = new Date(2026, 4, 31, 23, 59, 59); // May 31, 2026, 23:59:59
-        
-        // If timer expired, hide it
+        const endDate = getEndOfMonth();
+
+        updateLabel(endDate);
+
         if (now >= endDate) {
             timerElement.style.display = 'none';
             return;
@@ -1319,8 +1335,6 @@ document.addEventListener('DOMContentLoaded', function() {
         minutesEl.textContent = String(minutes).padStart(2, '0');
     }
 
-    // Initial update
     updateTimer();
-    // Update every minute
     setInterval(updateTimer, 60000);
 })();
