@@ -872,6 +872,54 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+    // --- Validation helpers ---
+    function validatePopupName(value) {
+        const v = value.trim();
+        if (v.length < 2) return 'Будь ласка, введіть ваше ім\'я (мінімум 2 символи)';
+        if (!/^[A-Za-zА-ЯІЇЄҐа-яіїєґ'' -]+$/.test(v)) return 'Ім\'я може містити тільки літери, пробіли та дефіс';
+        if (v.length > 50) return 'Ім\'я занадто довге (максимум 50 символів)';
+        return '';
+    }
+
+    function validatePopupPhone(value) {
+        if (!value.trim()) return 'Будь ласка, введіть номер телефону';
+        const digits = value.replace(/\D/g, '');
+        if (digits.length !== 12 || !digits.startsWith('380')) return 'Введіть коректний номер (+380 XX XXX XX XX)';
+        return '';
+    }
+
+    function setFieldError(input, errorEl, message) {
+        const wrapper = input.closest('.input-wrapper');
+        if (message) {
+            if (wrapper) wrapper.classList.add('error');
+            if (errorEl) { errorEl.textContent = message; errorEl.classList.add('has-error'); }
+            input.setAttribute('aria-invalid', 'true');
+        } else {
+            if (wrapper) wrapper.classList.remove('error');
+            if (errorEl) { errorEl.textContent = ''; errorEl.classList.remove('has-error'); }
+            input.removeAttribute('aria-invalid');
+        }
+    }
+
+    function clearBookingPopup() {
+        bookingPopupForm.reset();
+        const nameError = document.getElementById('bookingPopupNameError');
+        const phoneError = document.getElementById('bookingPopupPhoneError');
+        const successBox = document.getElementById('bookingPopupSuccess');
+        const errorBox = document.getElementById('bookingPopupError');
+        setFieldError(bookingPopupName, nameError, '');
+        setFieldError(bookingPopupPhone, phoneError, '');
+        if (successBox) successBox.style.display = 'none';
+        if (errorBox) errorBox.style.display = 'none';
+    }
+
+    // Extend openBookingFlow to reset form state each time
+    const _origOpen = openBookingFlow;
+    openBookingFlow = function(triggerEl) {
+        clearBookingPopup();
+        _origOpen(triggerEl);
+    };
+
     closeBookingBtn.addEventListener('click', closeBookingOverlay);
 
     bookingOverlay.addEventListener('click', function(e) {
@@ -882,39 +930,59 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') closeBookingOverlay();
     });
 
+    // Phone formatting
     bookingPopupPhone.addEventListener('input', function(e) {
         e.target.value = formatPhoneValue(e.target.value);
+        const phoneError = document.getElementById('bookingPopupPhoneError');
+        const msg = validatePopupPhone(e.target.value);
+        // Clear error as soon as input becomes valid
+        if (!msg) setFieldError(bookingPopupPhone, phoneError, '');
+    });
+
+    // Blur validation
+    bookingPopupName.addEventListener('blur', function() {
+        const nameError = document.getElementById('bookingPopupNameError');
+        setFieldError(bookingPopupName, nameError, validatePopupName(bookingPopupName.value));
+    });
+
+    bookingPopupPhone.addEventListener('blur', function() {
+        const phoneError = document.getElementById('bookingPopupPhoneError');
+        setFieldError(bookingPopupPhone, phoneError, validatePopupPhone(bookingPopupPhone.value));
+    });
+
+    // Clear name error while typing once it becomes valid
+    bookingPopupName.addEventListener('input', function() {
+        const nameError = document.getElementById('bookingPopupNameError');
+        if (nameError && nameError.textContent) {
+            const msg = validatePopupName(bookingPopupName.value);
+            if (!msg) setFieldError(bookingPopupName, nameError, '');
+        }
     });
 
     bookingPopupForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-
-        const nameValue = bookingPopupName.value.trim();
-        const phoneValue = bookingPopupPhone.value.trim();
-        const phoneDigits = phoneValue.replace(/\D/g, '');
 
         const nameError = document.getElementById('bookingPopupNameError');
         const phoneError = document.getElementById('bookingPopupPhoneError');
         const successBox = document.getElementById('bookingPopupSuccess');
         const errorBox = document.getElementById('bookingPopupError');
 
-        if (nameError) nameError.textContent = '';
-        if (phoneError) phoneError.textContent = '';
         if (successBox) successBox.style.display = 'none';
         if (errorBox) errorBox.style.display = 'none';
 
-        let valid = true;
-        if (nameValue.length < 2) {
-            valid = false;
-            if (nameError) nameError.textContent = 'Введіть ім\'я (мінімум 2 символи)';
-        }
-        if (phoneDigits.length !== 12 || !phoneDigits.startsWith('380')) {
-            valid = false;
-            if (phoneError) phoneError.textContent = 'Введіть коректний номер телефону';
-        }
-        if (!valid) return;
+        const namMsg = validatePopupName(bookingPopupName.value);
+        const phMsg = validatePopupPhone(bookingPopupPhone.value);
 
-        const submitBtn = bookingPopupForm.querySelector('.btn-callback-submit');
+        setFieldError(bookingPopupName, nameError, namMsg);
+        setFieldError(bookingPopupPhone, phoneError, phMsg);
+
+        if (namMsg || phMsg) {
+            const firstInvalid = bookingPopupForm.querySelector('.input-wrapper.error input');
+            if (firstInvalid) firstInvalid.focus();
+            return;
+        }
+
+        const submitBtn = bookingPopupForm.querySelector('.btn-submit');
         if (!submitBtn) return;
 
         submitBtn.disabled = true;
@@ -923,23 +991,26 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btnText) btnText.style.display = 'none';
         if (btnLoader) btnLoader.style.display = 'inline-flex';
 
+        const commentField = document.getElementById('bookingPopupComment');
+
         try {
             await sendFormRequest({
-                name: nameValue,
-                phone: phoneValue,
-                service: 'booking_popup',
-                comment: 'Запис через поп-ап форму',
+                name: bookingPopupName.value.trim(),
+                phone: bookingPopupPhone.value.trim(),
+                comment: commentField ? (commentField.value || '').trim() : '',
                 website: ''
             });
 
-            bookingPopupForm.reset();
+            clearBookingPopup();
             if (successBox) successBox.style.display = 'flex';
             redirectToThankYou();
         } catch (error) {
             console.error('Booking popup error:', error);
-            const popupErrorText = errorBox?.querySelector('p');
+            const popupErrorText = errorBox ? errorBox.querySelector('p') : null;
             if (popupErrorText) {
-                popupErrorText.textContent = error?.userMessage || 'Помилка відправки. Спробуйте ще раз або зателефонуйте нам: +38 (066) 182-95-40';
+                popupErrorText.textContent = error && error.userMessage
+                    ? error.userMessage
+                    : 'Помилка відправки. Спробуйте ще раз або зателефонуйте нам: +38 (066) 182-95-40';
             }
             if (errorBox) errorBox.style.display = 'flex';
         } finally {
@@ -1000,11 +1071,50 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!accordionItems.length) return;
 
     accordionItems.forEach(function(item) {
-        item.addEventListener('toggle', function() {
-            if (!item.open) return;
-            accordionItems.forEach(function(otherItem) {
-                if (otherItem !== item) otherItem.open = false;
-            });
+        const summary = item.querySelector('summary');
+        const content = item.querySelector('.price-group-list');
+        if (!summary || !content) return;
+
+        // Set initial state for closed items
+        if (!item.open) {
+            content.style.height = '0px';
+            content.style.overflow = 'hidden';
+        }
+
+        summary.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            if (!item.open) {
+                // Open: set open first so content is in DOM, then animate height
+                item.open = true;
+                const targetHeight = content.scrollHeight;
+                content.style.height = '0px';
+                content.style.overflow = 'hidden';
+                requestAnimationFrame(function() {
+                    content.style.transition = 'height 0.32s ease';
+                    content.style.height = targetHeight + 'px';
+                    content.addEventListener('transitionend', function cb() {
+                        content.removeEventListener('transitionend', cb);
+                        content.style.height = '';
+                        content.style.overflow = '';
+                        content.style.transition = '';
+                    });
+                });
+            } else {
+                // Close: animate height to 0, then remove open
+                content.style.height = content.offsetHeight + 'px';
+                content.style.overflow = 'hidden';
+                requestAnimationFrame(function() {
+                    content.style.transition = 'height 0.28s ease';
+                    content.style.height = '0px';
+                    content.addEventListener('transitionend', function cb() {
+                        content.removeEventListener('transitionend', cb);
+                        item.open = false;
+                        content.style.height = '0px';
+                        content.style.transition = '';
+                    });
+                });
+            }
         });
     });
 });
@@ -1015,9 +1125,38 @@ document.addEventListener('DOMContentLoaded', function() {
     initAdvantagesCarousel();
     initReviewsCarousel();
 
-    function openFaq(question, answer) {
+    function closeFaqItem(question, answer) {
+        question.setAttribute('aria-expanded', 'false');
+        answer.style.height = answer.offsetHeight + 'px';
+        answer.style.overflow = 'hidden';
+        requestAnimationFrame(function() {
+            answer.style.transition = 'height 0.28s ease';
+            answer.style.height = '0px';
+            answer.addEventListener('transitionend', function cb() {
+                answer.removeEventListener('transitionend', cb);
+                answer.style.transition = '';
+                answer.style.paddingBottom = '';
+            });
+        });
+    }
+
+    function openFaqItem(question, answer) {
         question.setAttribute('aria-expanded', 'true');
-        answer.setAttribute('aria-hidden', 'false');
+        answer.style.height = 'auto';
+        answer.style.paddingBottom = '24px';
+        var targetHeight = answer.offsetHeight;
+        answer.style.height = '0px';
+        answer.style.overflow = 'hidden';
+        requestAnimationFrame(function() {
+            answer.style.transition = 'height 0.32s ease';
+            answer.style.height = targetHeight + 'px';
+            answer.addEventListener('transitionend', function cb() {
+                answer.removeEventListener('transitionend', cb);
+                answer.style.height = 'auto';
+                answer.style.overflow = '';
+                answer.style.transition = '';
+            });
+        });
     }
 
     faqItems.forEach(item => {
@@ -1033,16 +1172,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 const otherQuestion = otherItem.querySelector('.faq-question');
                 const otherAnswer = otherItem.querySelector('.faq-answer');
                 if (otherQuestion && otherAnswer && otherItem !== item) {
-                    otherQuestion.setAttribute('aria-expanded', 'false');
-                    otherAnswer.setAttribute('aria-hidden', 'true');
+                    if (otherQuestion.getAttribute('aria-expanded') === 'true') {
+                        closeFaqItem(otherQuestion, otherAnswer);
+                    }
                 }
             });
 
             if (isExpanded) {
-                this.setAttribute('aria-expanded', 'false');
-                answer.setAttribute('aria-hidden', 'true');
+                closeFaqItem(this, answer);
             } else {
-                openFaq(this, answer);
+                openFaqItem(this, answer);
             }
         });
 
@@ -1175,11 +1314,23 @@ try {
 // Floating CTA
 document.addEventListener('DOMContentLoaded', function() {
     const floatingCta = document.getElementById('floatingCta');
+    const contactsSection = document.getElementById('контакти');
+    let contactsVisible = false;
+
+    if (contactsSection && typeof IntersectionObserver !== 'undefined') {
+        const observer = new IntersectionObserver(function(entries) {
+            contactsVisible = entries[0].isIntersecting;
+            const scrolled = window.pageYOffset;
+            const heroHeight = (document.querySelector('.hero') || {}).offsetHeight || 600;
+            floatingCta.classList.toggle('visible', scrolled > heroHeight / 2 && !contactsVisible);
+        }, { threshold: 0.2 });
+        observer.observe(contactsSection);
+    }
 
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
-        const heroHeight = document.querySelector('.hero').offsetHeight || 600;
-        floatingCta.classList.toggle('visible', scrolled > heroHeight / 2);
+        const heroHeight = (document.querySelector('.hero') || {}).offsetHeight || 600;
+        floatingCta.classList.toggle('visible', scrolled > heroHeight / 2 && !contactsVisible);
     });
 
     floatingCta.addEventListener('click', function(e) {
@@ -1240,22 +1391,57 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') closeCallbackOverlay();
     });
 
+    function validateCbPhone(value) {
+        if (!value.trim()) return 'Будь ласка, введіть номер телефону';
+        const digits = value.replace(/\D/g, '');
+        if (digits.length !== 12 || !digits.startsWith('380')) return 'Введіть коректний номер (+380 XX XXX XX XX)';
+        return '';
+    }
+
+    function setCbPhoneError(message) {
+        const phoneError = document.getElementById('callbackPhoneError');
+        const wrapper = callbackPhone.closest('.input-wrapper');
+        if (message) {
+            if (wrapper) wrapper.classList.add('error');
+            if (phoneError) { phoneError.textContent = message; phoneError.classList.add('has-error'); }
+            callbackPhone.setAttribute('aria-invalid', 'true');
+        } else {
+            if (wrapper) wrapper.classList.remove('error');
+            if (phoneError) { phoneError.textContent = ''; phoneError.classList.remove('has-error'); }
+            callbackPhone.removeAttribute('aria-invalid');
+        }
+    }
+
+    function clearCallbackForm() {
+        callbackForm.reset();
+        setCbPhoneError('');
+        const successBox = document.getElementById('callbackSuccess');
+        if (successBox) successBox.style.display = 'none';
+    }
+
+    // Reset form each time the overlay opens
+    openCallbackButtons.forEach(function(btn) {
+        btn.addEventListener('click', clearCallbackForm, { capture: true });
+    });
+
     callbackPhone.addEventListener('input', function(e) {
         e.target.value = formatPhoneValue(e.target.value);
+        if (!validateCbPhone(e.target.value)) setCbPhoneError('');
+    });
+
+    callbackPhone.addEventListener('blur', function() {
+        setCbPhoneError(validateCbPhone(callbackPhone.value));
     });
 
     callbackForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const phone = callbackPhone.value;
-        const phoneDigits = phone.replace(/\D/g, '');
-        const phoneError = document.getElementById('callbackPhoneError');
-
-        if (phoneDigits.length !== 12 || !phoneDigits.startsWith('380')) {
-            phoneError.textContent = 'Введіть коректний номер телефону';
+        const phoneMsg = validateCbPhone(callbackPhone.value);
+        setCbPhoneError(phoneMsg);
+        if (phoneMsg) {
+            callbackPhone.focus();
             return;
         }
-        phoneError.textContent = '';
 
         const submitBtn = callbackForm.querySelector('.btn-callback-submit');
         submitBtn.disabled = true;
@@ -1265,16 +1451,18 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             await sendFormRequest({
                 name: 'Зворотний дзвінок',
-                phone: phone,
+                phone: callbackPhone.value.trim(),
                 service: 'callback',
                 comment: 'Запит на зворотний дзвінок',
                 website: ''
             });
 
-            callbackForm.reset();
+            clearCallbackForm();
+            const successBox = document.getElementById('callbackSuccess');
+            if (successBox) successBox.style.display = 'flex';
             redirectToThankYou();
         } catch (error) {
-            phoneError.textContent = error?.userMessage || 'Помилка відправки. Спробуйте ще раз.';
+            setCbPhoneError(error && error.userMessage ? error.userMessage : 'Помилка відправки. Спробуйте ще раз.');
         } finally {
             submitBtn.disabled = false;
             submitBtn.querySelector('.btn-text').style.display = 'inline';
@@ -1305,7 +1493,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dd = String(endDate.getDate()).padStart(2, '0');
         const mm = String(endDate.getMonth() + 1).padStart(2, '0');
         const yyyy = endDate.getFullYear();
-        labelEl.textContent = '\uD83D\uDD25 Акція до ' + dd + '.' + mm + '.' + yyyy;
+        labelEl.textContent = 'Акція до ' + dd + '.' + mm + '.' + yyyy;
     }
 
     function updateTimer() {
@@ -1323,18 +1511,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
         const daysEl = timerElement.querySelector('[data-type="days"]');
         const hoursEl = timerElement.querySelector('[data-type="hours"]');
         const minutesEl = timerElement.querySelector('[data-type="minutes"]');
+        const secondsEl = timerElement.querySelector('[data-type="seconds"]');
 
         if (!daysEl || !hoursEl || !minutesEl) return;
 
         daysEl.textContent = String(days).padStart(2, '0');
         hoursEl.textContent = String(hours).padStart(2, '0');
         minutesEl.textContent = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
     }
 
     updateTimer();
-    setInterval(updateTimer, 60000);
+    setInterval(updateTimer, 1000);
 })();

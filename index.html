@@ -86,8 +86,11 @@
     <!-- Sticky Floating Button -->
     <div class="floating-cta" id="floatingCta">
         <button class="floating-btn" aria-label="Записатися на прийом">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
             <span>Записатися</span>
         </button>
@@ -172,7 +175,7 @@
                 </div>
 
                 <div class="promo-strip-text">
-                    <p class="promo-strip-label" id="promoDeadlineLabel">🔥 Акція до 31.05.2026</p>
+                    <p class="promo-strip-label" id="promoDeadlineLabel">Акція до 31.05.2026</p>
                     <p class="promo-strip-title">КОМПЛЕКСНА ПРОФГІГІЄНА ЗУБІВ</p>
                     <div class="promo-strip-bullets">
                         <span class="promo-pill">Ультразвук</span>
@@ -190,11 +193,11 @@
                         </div>
                     </div>
                     <div class="promo-timer" id="promoTimer" aria-live="polite">
-                        <span class="promo-timer-icon" aria-hidden="true">⏳</span>
                         <span class="promo-timer-text">Залишилось:</span>
                         <span class="timer-unit"><span class="timer-value" data-type="days">28</span><span class="timer-label">д</span></span>
                         <span class="timer-unit"><span class="timer-value" data-type="hours">00</span><span class="timer-label">г</span></span>
                         <span class="timer-unit"><span class="timer-value" data-type="minutes">00</span><span class="timer-label">хв</span></span>
+                        <span class="timer-unit"><span class="timer-value" data-type="seconds">00</span><span class="timer-label">с</span></span>
                     </div>
                     <button class="btn-cta promo-strip-btn" type="button">Записатися зараз</button>
                 </div>
@@ -213,7 +216,11 @@
                     </div>
                     <div class="hero-cta">
                         <button class="btn-cta">Записатися онлайн</button>
-                        <p class="hero-contact">або телефонуйте: <a href="tel:+380661829540">+38 (066) 182-95-40</a></p>
+                        <a href="tel:+380661829540" class="hero-contact">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            +38 (066) 182-95-40
+                        </a>
+                        <p class="hero-trust" aria-label="Рейтинг клініки"><span class="hero-stars">★★★★★</span> 4.9 · 1000+ пацієнтів</p>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -331,7 +338,7 @@
 
                 <!-- Aesthetics -->
                 <div class="service-card">
-                    <a class="service-card-overlay-link" href="services/implantation.html" aria-label="Детальніше: Естетична стоматологія"></a>
+                    <a class="service-card-overlay-link" href="services/whitening.html" aria-label="Детальніше: Естетична стоматологія"></a>
                     <h3>Естетична стоматологія</h3>
                     <div class="service-card-body">
                         <ul class="service-list">
@@ -344,7 +351,7 @@
                             <p class="service-price">Від 3500 грн</p>
                             <div class="service-card-actions">
                                 <button class="btn-cta service-card-cta" type="button">Записатися</button>
-                                <a class="service-more-link" href="services/implantation.html">Детальніше</a>
+                                <a class="service-more-link" href="services/whitening.html">Детальніше</a>
                             </div>
                         </div>
                     </div>
@@ -544,7 +551,7 @@
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
                         <span>Як часто потрібно проводити професійну чистку зубів (профгігієну)?</span>
-                        <span class="faq-icon" aria-hidden="true">+</span>
+                        <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
                     </button>
                     <div class="faq-answer" id="faq-answer-1" aria-hidden="true">
                         <p>Рекомендується проходити професійну гігієну порожнини рота 1 раз на 6 місяців. Це дозволяє вчасно видалити зубний наліт і камінь, яких не прибирає домашнє чищення, і запобігти карієсу та запаленню ясен. Для пацієнтів з брекетами, імплантами або схильністю до каменю - частіше, за індивідуальним призначенням лікаря-гігієніста.</p>
@@ -554,7 +561,7 @@
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
                         <span>Чи боляче робити професійну чистку зубів?</span>
-                        <span class="faq-icon" aria-hidden="true">+</span>
+                        <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
                     </button>
                     <div class="faq-answer" id="faq-answer-2" aria-hidden="true">
                         <p>Процедура комфортна і безболісна. Ми використовуємо сучасні методи (ультразвук, Air Flow, полірування), які не пошкоджують емаль. Можливе лише легке відчуття під час зняття під'ясенного каменю, але воно мінімальне. Після чистки зуби стають гладкими і природно білими.</p>
@@ -564,7 +571,7 @@
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
                         <span>Чи обов’язково лікувати карієс, якщо зуб не болить?</span>
-                        <span class="faq-icon" aria-hidden="true">+</span>
+                        <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
                     </button>
                     <div class="faq-answer" id="faq-answer-3" aria-hidden="true">
                         <p>Так, обов’язково. Карієс на ранній стадії майже ніколи не викликає болю, але поступово руйнує зуб. Своєчасне лікування - це просте пломбування, яке зберігає нерв і запобігає ускладненням (пульпіт, періодонтит). Чим раніше - тим дешевше і швидше.</p>
@@ -574,7 +581,7 @@
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
                         <span>Чи потрібна анестезія при лікуванні карієсу та пломбуванні?</span>
-                        <span class="faq-icon" aria-hidden="true">+</span>
+                        <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
                     </button>
                     <div class="faq-answer" id="faq-answer-4" aria-hidden="true">
                         <p>При поверхневому карієсі анестезія може не знадобитися. При середньому та глибокому - ми обов’язково використовуємо сучасну місцеву анестезію (найчастіше безболісну карпульну). Пацієнт нічого не відчуває під час лікування. Для тривожних пацієнтів пропонуємо седацію.</p>
@@ -584,7 +591,7 @@
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
                         <span>Скільки часу триває лікування одного зуба (пломбування)?</span>
-                        <span class="faq-icon" aria-hidden="true">+</span>
+                        <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
                     </button>
                     <div class="faq-answer" id="faq-answer-5" aria-hidden="true">
                         <p>Зазвичай від 30 до 60 хвилин залежно від складності. Це включає діагностику, анестезію, препарування каріозної порожнини, постановку сучасної естетичної пломби та фінішну обробку. Ми працюємо з преміум-матеріалами, які служать багато років.</p>
@@ -864,7 +871,7 @@
                                 <label for="phone">Телефон *</label>
                                 <div class="input-wrapper">
                      <input type="tel" id="phone" name="phone" required 
-                                           placeholder="+380 66 182 95 40"
+                                           placeholder="+38 (0XX) XXX-XX-XX"
                                            pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
                          autocomplete="tel"
                          inputmode="tel"
@@ -943,16 +950,20 @@
                 <h3 id="bookingPopupTitle">Записатися на прийом</h3>
                 <p>Залиште ім'я та номер телефону, і ми зв'яжемося з вами найближчим часом</p>
                 <form id="bookingPopupForm" class="callback-form" novalidate>
+                    <!-- spam honeypot -->
+                    <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
+
                     <div class="form-group">
-                        <label for="bookingPopupName" class="sr-only">Ваше ім'я</label>
+                        <label for="bookingPopupName">Ваше ім'я *</label>
                         <div class="input-wrapper">
                             <input type="text" id="bookingPopupName" name="name" required
-                                   placeholder="Ваше ім'я"
+                                   placeholder="Введіть ваше ім'я"
                                    minlength="2" maxlength="50"
-                                autocomplete="name"
-                                inputmode="text">
+                                   autocomplete="name"
+                                   inputmode="text"
+                                   aria-describedby="bookingPopupNameError">
                             <span class="input-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
@@ -962,15 +973,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="bookingPopupPhone" class="sr-only">Телефон</label>
+                        <label for="bookingPopupPhone">Телефон *</label>
                         <div class="input-wrapper">
                             <input type="tel" id="bookingPopupPhone" name="phone" required
-                                   placeholder="+380 XX XXX XX XX"
+                                   placeholder="+38 (0XX) XXX-XX-XX"
                                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
-                                autocomplete="tel"
-                                inputmode="tel">
+                                   autocomplete="tel"
+                                   inputmode="tel"
+                                   aria-describedby="bookingPopupPhoneError">
                             <span class="input-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                 </svg>
                             </span>
@@ -978,12 +990,23 @@
                         <span class="error-message" id="bookingPopupPhoneError" role="alert"></span>
                     </div>
 
-                    <button type="submit" class="btn-callback-submit">
+                    <div class="form-group">
+                        <label for="bookingPopupComment">Коментар (необов'язково)</label>
+                        <div class="input-wrapper">
+                            <textarea id="bookingPopupComment" name="comment" rows="3"
+                                      placeholder="Наприклад: зручний час дзвінка або побажання"
+                                      maxlength="300"
+                                      autocomplete="off"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
                         <span class="btn-text">Записатися</span>
                         <span class="btn-loader" style="display: none;">
-                            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
                             </svg>
+                            Відправка...
                         </span>
                     </button>
                 </form>
@@ -1025,7 +1048,7 @@
                         <label for="callbackPhone" class="sr-only">Телефон</label>
                         <div class="input-wrapper">
                             <input type="tel" id="callbackPhone" name="phone" required
-                                   placeholder="+380 XX XXX XX XX"
+                                   placeholder="+38 (0XX) XXX-XX-XX"
                                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
                                 autocomplete="tel"
                                 inputmode="tel">
@@ -1070,13 +1093,13 @@
                         </a>
                         <p>Ваша ідеальна усмішка у самому серці столиці — професійно, безпечно та з любов’ю</p>
                         <div class="footer-social" aria-label="Соціальні мережі Dental Lab">
-                            <a class="footer-social-link" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+                            <a class="footer-social-link" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram Dental Lab">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.51 5.51 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18.3 6.2a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1z"/></svg>
                             </a>
-                            <a class="footer-social-link" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+                            <a class="footer-social-link" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook Dental Lab">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.5c-.3 0-1.4-.1-2.7-.1-2.7 0-4.6 1.7-4.6 4.8V11H7v3.1h2.5v8h4z"/></svg>
                             </a>
-                            <a class="footer-social-link" href="https://t.me/" target="_blank" rel="noopener" aria-label="Telegram">
+                            <a class="footer-social-link" href="https://t.me/" target="_blank" rel="noopener" aria-label="Telegram Dental Lab">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 4.6 18.6 19c-.2.9-.8 1.1-1.6.7l-4.2-3.1-2 1.9c-.2.2-.4.4-.8.4l.3-4.3 7.9-7.1c.3-.3-.1-.4-.5-.1L9.5 14l-4.2-1.3c-.9-.3-.9-.9.2-1.3L20 4c.7-.3 1.2.2 1 0z"/></svg>
                             </a>
                         </div>

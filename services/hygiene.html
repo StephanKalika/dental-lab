@@ -113,6 +113,15 @@
         </div>
     </header>
 <main id="main-content">
+  <nav class="breadcrumb" aria-label="Навігаційний шлях">
+    <div class="container">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item"><a href="../" class="breadcrumb-link">Dental Lab</a></li>
+        <li class="breadcrumb-item" aria-current="page">Професійна гігієна зубів</li>
+      </ol>
+    </div>
+  </nav>
+
   <section class="hero service-page-hero">
         <div class="container">
             <div class="hero-content">
@@ -236,7 +245,7 @@
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
             <span>Як часто потрібно проводити професійну чистку зубів?</span>
-            <span class="faq-icon" aria-hidden="true">+</span>
+            <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
           </button>
           <div class="faq-answer" id="faq-answer-1" aria-hidden="true">
             <p>Зазвичай 1 раз на 6 місяців. Якщо є брекети, імпланти або швидко утворюється камінь, інтервал може бути коротшим.</p>
@@ -246,7 +255,7 @@
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
             <span>Чи боляче робити професійну чистку?</span>
-            <span class="faq-icon" aria-hidden="true">+</span>
+            <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
           </button>
           <div class="faq-answer" id="faq-answer-2" aria-hidden="true">
             <p>Процедура зазвичай комфортна. Може бути легка чутливість лише в окремих зонах із підясенним каменем.</p>
@@ -256,7 +265,7 @@
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
             <span>Чи відбілює чистка зуби?</span>
-            <span class="faq-icon" aria-hidden="true">+</span>
+            <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
           </button>
           <div class="faq-answer" id="faq-answer-3" aria-hidden="true">
             <p>Так, візуально зуби стають світлішими, бо знімається пігментований наліт, але це не заміна професійному відбілюванню.</p>
@@ -266,7 +275,7 @@
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
             <span>Що краще: ультразвук чи Air Flow?</span>
-            <span class="faq-icon" aria-hidden="true">+</span>
+            <span class="faq-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
           </button>
           <div class="faq-answer" id="faq-answer-4" aria-hidden="true">
             <p>Це різні етапи одного комплексу: ультразвук знімає камінь, Air Flow прибирає м’який наліт і пігментацію.</p>
@@ -495,7 +504,7 @@
             <label for="bookingPopupPhone" class="sr-only">Телефон</label>
             <div class="input-wrapper">
               <input type="tel" id="bookingPopupPhone" name="phone" required
-                   placeholder="+380 XX XXX XX XX"
+                   placeholder="+38 (0XX) XXX-XX-XX"
                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
                 autocomplete="tel"
                 inputmode="tel">
@@ -555,7 +564,7 @@
                     <div class="form-group">
                         <label for="callbackPhone" class="sr-only">Телефон</label>
                         <div class="input-wrapper">
-                            <input type="tel" id="callbackPhone" name="phone" required placeholder="+380 XX XXX XX XX" pattern="^+?380s?d{2}s?d{3}s?d{2}s?d{2}$" autocomplete="tel" inputmode="tel">
+                            <input type="tel" id="callbackPhone" name="phone" required placeholder="+38 (0XX) XXX-XX-XX" pattern="^+?380s?d{2}s?d{3}s?d{2}s?d{2}$" autocomplete="tel" inputmode="tel">
                             <span class="input-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
                         </div>
                         <span class="error-message" id="callbackPhoneError" role="alert"></span>
