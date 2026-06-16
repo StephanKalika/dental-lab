@@ -139,9 +139,22 @@
                     </div>
 
                     <nav class="nav" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
-                        <button class="nav-close" aria-label="Закрити меню">&times;</button>
+                        <button class="nav-close" aria-label="Закрити меню">×</button>
                         <a href="#переваги" class="nav-link">Переваги</a>
-                        <a href="#послуги" class="nav-link">Послуги</a>
+                        <div class="nav-dropdown">
+                            <button class="nav-dropdown-toggle" aria-expanded="false">
+                                Послуги <svg class="nav-dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <div class="nav-dropdown-list">
+                                <a href="services/hygiene.html" class="nav-dropdown-item">Гігієна та профілактика</a>
+                                <a href="services/caries-treatment.html" class="nav-dropdown-item">Лікування карієсу</a>
+                                <a href="services/whitening.html" class="nav-dropdown-item">Відбілювання зубів</a>
+                                <a href="services/prosthetics.html" class="nav-dropdown-item">Протезування зубів</a>
+                                <a href="services/implantation.html" class="nav-dropdown-item">Імплантація зубів</a>
+                                <a href="services/orthodontics.html" class="nav-dropdown-item">Ортодонтія</a>
+                                <a href="services/extraction.html" class="nav-dropdown-item">Видалення зубів</a>
+                            </div>
+                        </div>
                         <a href="#ціни" class="nav-link">Ціни</a>
                         <a href="#faq" class="nav-link">Запитання</a>
                         <a href="#відгуки" class="nav-link">Відгуки</a>
@@ -160,6 +173,8 @@
                         <span></span>
                         <span></span>
                     </button>
+
+                    <button class="nav-close-header" id="closeMenuBtn" aria-label="Закрити меню"></button>
                 </div>
             </div>
         </div>
@@ -945,7 +960,7 @@
     <!-- Booking Form Modal -->
     <div class="callback-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingPopupTitle">
         <div class="callback-popup">
-            <button class="close-popup" id="closeBookingPopup" aria-label="Закрити">×</button>
+            <button class="close-popup" id="closeBookingPopup" aria-label="Закрити"></button>
             <div class="callback-content">
                 <h3 id="bookingPopupTitle">Записатися на прийом</h3>
                 <p>Залиште ім'я та номер телефону, і ми зв'яжемося з вами найближчим часом</p>
@@ -1039,7 +1054,7 @@
     <!-- Callback Form Modal -->
     <div class="callback-overlay" id="callbackOverlay" role="dialog" aria-modal="true" aria-labelledby="callbackPopupTitle">
         <div class="callback-popup">
-            <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити">×</button>
+            <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити"></button>
             <div class="callback-content">
                 <h3 id="callbackPopupTitle">Передзвоніть мені</h3>
                 <p>Залиште номер телефону і ми зателефонуємо вам найближчим часом</p>

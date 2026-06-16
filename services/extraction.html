@@ -87,9 +87,22 @@
                     </div>
 
                     <nav class="nav" id="nav-menu" role="navigation" aria-label="Головна навігація сайту">
-                        <button class="nav-close" aria-label="Закрити меню">&times;</button>
+                        <button class="nav-close" aria-label="Закрити меню">×</button>
                         <a href="../index.html#переваги" class="nav-link">Переваги</a>
-                        <a href="../index.html#послуги" class="nav-link nav-link--active" aria-current="page">Послуги</a>
+                        <div class="nav-dropdown">
+                            <button class="nav-dropdown-toggle" aria-expanded="false">
+                                Послуги <svg class="nav-dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <div class="nav-dropdown-list">
+                                <a href="hygiene.html" class="nav-dropdown-item">Гігієна та профілактика</a>
+                                <a href="caries-treatment.html" class="nav-dropdown-item">Лікування карієсу</a>
+                                <a href="whitening.html" class="nav-dropdown-item">Відбілювання зубів</a>
+                                <a href="prosthetics.html" class="nav-dropdown-item">Протезування зубів</a>
+                                <a href="implantation.html" class="nav-dropdown-item">Імплантація зубів</a>
+                                <a href="orthodontics.html" class="nav-dropdown-item">Ортодонтія</a>
+                                <a href="extraction.html" class="nav-dropdown-item nav-dropdown-item--active">Видалення зубів</a>
+                            </div>
+                        </div>
                         <a href="../index.html#ціни" class="nav-link">Ціни</a>
                         <a href="../index.html#faq" class="nav-link">Запитання</a>
                         <a href="../index.html#відгуки" class="nav-link">Відгуки</a>
@@ -108,6 +121,8 @@
                         <span></span>
                         <span></span>
                     </button>
+
+                    <button class="nav-close-header" id="closeMenuBtn" aria-label="Закрити меню"></button>
                 </div>
             </div>
         </div>
@@ -116,7 +131,7 @@
   <nav class="breadcrumb" aria-label="Навігаційний шлях">
     <div class="container">
       <ol class="breadcrumb-list">
-        <li class="breadcrumb-item"><a href="../" class="breadcrumb-link">Dental Lab</a></li>
+        <li class="breadcrumb-item"><a href="../" class="breadcrumb-link">Головна</a></li>
         <li class="breadcrumb-item" aria-current="page">Видалення зубів</li>
       </ol>
     </div>
@@ -398,21 +413,25 @@
   <!-- Booking Form Modal -->
   <div class="callback-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingPopupTitle">
     <div class="callback-popup">
-      <button class="close-popup" id="closeBookingPopup" aria-label="Закрити">×</button>
+      <button class="close-popup" id="closeBookingPopup" aria-label="Закрити"></button>
       <div class="callback-content">
         <h3 id="bookingPopupTitle">Записатися на прийом</h3>
         <p>Залиште ім'я та номер телефону, і ми зв'яжемося з вами найближчим часом</p>
         <form id="bookingPopupForm" class="callback-form" novalidate>
+          <!-- spam honeypot -->
+          <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
+
           <div class="form-group">
-            <label for="bookingPopupName" class="sr-only">Ваше ім'я</label>
+            <label for="bookingPopupName">Ваше ім'я *</label>
             <div class="input-wrapper">
               <input type="text" id="bookingPopupName" name="name" required
-                   placeholder="Ваше ім'я"
+                   placeholder="Введіть ваше ім'я"
                    minlength="2" maxlength="50"
-                autocomplete="name"
-                inputmode="text">
+                   autocomplete="name"
+                   inputmode="text"
+                   aria-describedby="bookingPopupNameError">
               <span class="input-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
@@ -422,15 +441,16 @@
           </div>
 
           <div class="form-group">
-            <label for="bookingPopupPhone" class="sr-only">Телефон</label>
+            <label for="bookingPopupPhone">Телефон *</label>
             <div class="input-wrapper">
               <input type="tel" id="bookingPopupPhone" name="phone" required
                    placeholder="+38 (0XX) XXX-XX-XX"
                    pattern="^\+?380\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$"
-                autocomplete="tel"
-                inputmode="tel">
+                   autocomplete="tel"
+                   inputmode="tel"
+                   aria-describedby="bookingPopupPhoneError">
               <span class="input-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                 </svg>
               </span>
@@ -438,12 +458,23 @@
             <span class="error-message" id="bookingPopupPhoneError" role="alert"></span>
           </div>
 
-          <button type="submit" class="btn-callback-submit">
+          <div class="form-group">
+            <label for="bookingPopupComment">Коментар (необов'язково)</label>
+            <div class="input-wrapper">
+              <textarea id="bookingPopupComment" name="comment" rows="3"
+                        placeholder="Наприклад: зручний час дзвінка або побажання"
+                        maxlength="300"
+                        autocomplete="off"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">
             <span class="btn-text">Записатися</span>
             <span class="btn-loader" style="display: none;">
-              <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
               </svg>
+              Відправка...
             </span>
           </button>
         </form>
@@ -477,7 +508,7 @@
     <!-- Callback Form Modal -->
     <div class="callback-overlay" id="callbackOverlay" role="dialog" aria-modal="true" aria-labelledby="callbackPopupTitle">
         <div class="callback-popup">
-            <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити">×</button>
+            <button class="close-popup" id="closeCallbackPopup" aria-label="Закрити"></button>
             <div class="callback-content">
                 <h3 id="callbackPopupTitle">Передзвоніть мені</h3>
                 <p>Залиште номер телефону і ми зателефонуємо вам найближчим часом</p>

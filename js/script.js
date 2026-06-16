@@ -432,8 +432,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let isOpen = false;
 
+    let scrollYBeforeMenu = 0;
+
     function openMenu() {
         isOpen = true;
+        scrollYBeforeMenu = window.scrollY || 0;
+        body.style.top = `-${scrollYBeforeMenu}px`;
         burgerBtn.classList.add('active');
         navMenu.classList.add('active');
         overlay.classList.add('active');
@@ -446,8 +450,17 @@ document.addEventListener('DOMContentLoaded', function() {
         burgerBtn.classList.remove('active');
         navMenu.classList.remove('active');
         overlay.classList.remove('active');
+        const dl = navMenu.querySelector('.nav-dropdown-list');
+        const dt = navMenu.querySelector('.nav-dropdown-toggle');
+        if (dl) dl.classList.remove('open');
+        if (dt) dt.setAttribute('aria-expanded', 'false');
         body.classList.remove('menu-open');
+        body.style.top = '';
+        document.documentElement.style.scrollBehavior = 'auto';
+        window.scrollTo(0, scrollYBeforeMenu);
+        document.documentElement.style.scrollBehavior = '';
         burgerBtn.setAttribute('aria-expanded', 'false');
+        window.dispatchEvent(new CustomEvent('menu-closed'));
     }
 
     function toggleMenu(e) {
@@ -458,6 +471,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
     burgerBtn.addEventListener('click', toggleMenu);
 
+    const dropdownToggle = navMenu.querySelector('.nav-dropdown-toggle');
+    const dropdownList = navMenu.querySelector('.nav-dropdown-list');
+    const dropdownContainer = navMenu.querySelector('.nav-dropdown');
+
+    function closeDropdown() {
+        if (!dropdownList) return;
+        dropdownList.classList.remove('open');
+        if (dropdownToggle) dropdownToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    if (dropdownToggle && dropdownList) {
+        dropdownToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (window.innerWidth < 969) {
+                // Mobile: toggle
+                const isExpanded = dropdownToggle.getAttribute('aria-expanded') === 'true';
+                dropdownToggle.setAttribute('aria-expanded', !isExpanded);
+                dropdownList.classList.toggle('open', !isExpanded);
+            } else {
+                // Desktop: toggle on click
+                const isOpen = dropdownList.classList.contains('open');
+                if (isOpen) {
+                    closeDropdown();
+                } else {
+                    dropdownList.classList.add('open');
+                    dropdownToggle.setAttribute('aria-expanded', 'true');
+                }
+            }
+        });
+    }
+
+    // Desktop: close when mouse leaves the container
+    if (dropdownContainer) {
+        dropdownContainer.addEventListener('mouseleave', function() {
+            if (window.innerWidth >= 969) closeDropdown();
+        });
+    }
+
+    // Close on outside click
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth < 969) return;
+        if (dropdownContainer && !dropdownContainer.contains(e.target)) {
+            closeDropdown();
+        }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && dropdownList && dropdownList.classList.contains('open')) {
+            closeDropdown();
+        }
+    });
+
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) closeMenu();
     });
@@ -465,15 +531,31 @@ document.addEventListener('DOMContentLoaded', function() {
     navMenu.addEventListener('click', function(e) {
         if (e.target.closest('.nav-close')) {
             closeMenu();
-            return;
         }
-        e.stopPropagation();
     });
+
+    const closeMenuHeaderBtn = document.getElementById('closeMenuBtn');
+    if (closeMenuHeaderBtn) {
+        closeMenuHeaderBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+        });
+    }
 
     navMenu.querySelectorAll('a').forEach(function(link) {
         link.addEventListener('click', function(e) {
-            e.stopPropagation();
-            setTimeout(closeMenu, 300);
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                closeMenu();
+                requestAnimationFrame(function() {
+                    const target = document.querySelector(href);
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                });
+            } else {
+                setTimeout(closeMenu, 300);
+            }
         });
     });
 
@@ -539,6 +621,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', function() {
         header.classList.remove('is-compact');
+        header.classList.remove('is-hidden');
+        lastScrollY = window.scrollY || 0;
+    });
+    window.addEventListener('menu-closed', function() {
         header.classList.remove('is-hidden');
         lastScrollY = window.scrollY || 0;
     });
@@ -1250,12 +1336,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateActiveNavByScroll() {
         const headerOffset = headerEl ? headerEl.offsetHeight + 20 : 100;
-        const probeY = window.scrollY + headerOffset;
 
         let active = null;
+        let closestDist = Infinity;
+
         for (const item of trackedLinks) {
-            if (item.target.offsetTop <= probeY) {
-                active = item;
+            const top = item.target.getBoundingClientRect().top - headerOffset;
+            // Section has scrolled past the threshold (is above or at the probe line)
+            if (top <= 0) {
+                const dist = Math.abs(top);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    active = item;
+                }
             }
         }
 
