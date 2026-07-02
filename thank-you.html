@@ -28,7 +28,8 @@
 
     <script>
     if (typeof fbq === 'function') {
-        fbq('track', 'Lead');
+        fbq('track', 'Lead', { source: 'site-form' });
+        console.log('Meta Pixel: Lead event sent (source=site-form)');
     }
     </script>
 
