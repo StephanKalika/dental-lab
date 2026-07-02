@@ -856,13 +856,24 @@ function validateField(fieldId) {
     return true;
 }
 
+let bookingNameTouched = false;
+let bookingPhoneTouched = false;
+
+function shouldValidateBookingField(value, touched) {
+    return touched || value.trim().length > 0;
+}
+
 const phoneInput = document.getElementById('phone');
 if (phoneInput) {
     phoneInput.addEventListener('input', (e) => {
         e.target.value = formatPhoneValue(e.target.value);
+        bookingPhoneTouched = bookingPhoneTouched || e.target.value.trim().length > 0;
+        if (!shouldValidateBookingField(e.target.value, bookingPhoneTouched)) return;
+        validateField('phone');
     });
 
     phoneInput.addEventListener('blur', () => {
+        if (!shouldValidateBookingField(phoneInput.value, bookingPhoneTouched)) return;
         validateField('phone');
     });
 
@@ -876,7 +887,16 @@ if (phoneInput) {
 
 const nameInput = document.getElementById('name');
 if (nameInput) {
-    nameInput.addEventListener('blur', () => validateField('name'));
+    nameInput.addEventListener('input', () => {
+        bookingNameTouched = bookingNameTouched || nameInput.value.trim().length > 0;
+        if (!shouldValidateBookingField(nameInput.value, bookingNameTouched)) return;
+        validateField('name');
+    });
+
+    nameInput.addEventListener('blur', () => {
+        if (!shouldValidateBookingField(nameInput.value, bookingNameTouched)) return;
+        validateField('name');
+    });
 }
 
 function closeMobileMenuState() {
@@ -987,12 +1007,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    let bookingPopupNameTouched = false;
+    let bookingPopupPhoneTouched = false;
+
+    function shouldValidatePopupField(value, touched) {
+        return touched || value.trim().length > 0;
+    }
+
     function clearBookingPopup() {
         bookingPopupForm.reset();
         const nameError = document.getElementById('bookingPopupNameError');
         const phoneError = document.getElementById('bookingPopupPhoneError');
         const successBox = document.getElementById('bookingPopupSuccess');
         const errorBox = document.getElementById('bookingPopupError');
+        bookingPopupNameTouched = false;
+        bookingPopupPhoneTouched = false;
         setFieldError(bookingPopupName, nameError, '');
         setFieldError(bookingPopupPhone, phoneError, '');
         if (successBox) successBox.style.display = 'none';
@@ -1021,28 +1050,30 @@ document.addEventListener('DOMContentLoaded', function() {
         e.target.value = formatPhoneValue(e.target.value);
         const phoneError = document.getElementById('bookingPopupPhoneError');
         const msg = validatePopupPhone(e.target.value);
-        // Clear error as soon as input becomes valid
-        if (!msg) setFieldError(bookingPopupPhone, phoneError, '');
+        bookingPopupPhoneTouched = bookingPopupPhoneTouched || e.target.value.trim().length > 0;
+        if (!shouldValidatePopupField(e.target.value, bookingPopupPhoneTouched)) return;
+        setFieldError(bookingPopupPhone, phoneError, msg);
     });
 
     // Blur validation
     bookingPopupName.addEventListener('blur', function() {
         const nameError = document.getElementById('bookingPopupNameError');
+        if (!shouldValidatePopupField(bookingPopupName.value, bookingPopupNameTouched)) return;
         setFieldError(bookingPopupName, nameError, validatePopupName(bookingPopupName.value));
     });
 
     bookingPopupPhone.addEventListener('blur', function() {
         const phoneError = document.getElementById('bookingPopupPhoneError');
+        if (!shouldValidatePopupField(bookingPopupPhone.value, bookingPopupPhoneTouched)) return;
         setFieldError(bookingPopupPhone, phoneError, validatePopupPhone(bookingPopupPhone.value));
     });
 
     // Clear name error while typing once it becomes valid
     bookingPopupName.addEventListener('input', function() {
         const nameError = document.getElementById('bookingPopupNameError');
-        if (nameError && nameError.textContent) {
-            const msg = validatePopupName(bookingPopupName.value);
-            if (!msg) setFieldError(bookingPopupName, nameError, '');
-        }
+        bookingPopupNameTouched = bookingPopupNameTouched || bookingPopupName.value.trim().length > 0;
+        if (!shouldValidatePopupField(bookingPopupName.value, bookingPopupNameTouched)) return;
+        setFieldError(bookingPopupName, nameError, validatePopupName(bookingPopupName.value));
     });
 
     bookingPopupForm.addEventListener('submit', async function(e) {
@@ -1056,6 +1087,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (successBox) successBox.style.display = 'none';
         if (errorBox) errorBox.style.display = 'none';
 
+        bookingPopupNameTouched = true;
+        bookingPopupPhoneTouched = true;
         const namMsg = validatePopupName(bookingPopupName.value);
         const phMsg = validatePopupPhone(bookingPopupPhone.value);
 
